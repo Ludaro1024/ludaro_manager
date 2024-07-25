@@ -1,216 +1,81 @@
-<div align="center">
-    <img href="https://projecterror.dev" width="150" src="https://i.tasoagc.dev/c1pD" alt="Material-UI logo" />
-</div>
-<h1 align="center">FiveM React and Lua Boilerplate</h1>
+# Ludaro-Manager
 
-<div align="center">
-A simple and extendable React (TypeScript) boilerplate designed around the Lua ScRT
-</div>
+A Manager for Not-so-Tech-Savvy FiveM RP Individuals, for Free!
 
-<div align="center">
+## Roadmap
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/project-error/pe-utils/master/LICENSE)
-![Discord](https://img.shields.io/discord/791854454760013827?label=Our%20Discord)
-![David](https://img.shields.io/david/project-error/fivem-react-boilerplate-lua)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=project-error/fivem-react-boilerplate-lua)](https://dependabot.com)
-</div>
+- Additional browser support
+- More integrations
+- **Job Creation:** Implement a user-friendly interface for creating jobs with customizable attributes.
+- **Job Editing:** Develop tools for modifying existing jobs.
+- **Job Managing:** Integrate comprehensive management features for jobs, including boss menus, grades, and salaries.
+- **Farming Creation:** Create detailed configurations for developing farming activities.
+- **Farming Managing:** Build management tools for overseeing farming operations and resources.
+- **Farming Editing:** Add advanced settings to enhance farming complexity.
+- **Shop Management:** Develop features to manage in-game shops, including inventory and pricing.
+- **Door Lock Configuration:** Implement management tools for configuring and securing door locks.
+- **Data Handling:** Enhance MySQL data and character data management capabilities.
+- **User Management:** Create features for managing user accounts, permissions, and roles.
+- **Vehicle Management:** Develop tools for vehicle management, including spawning, customization, and ownership.
 
-This repository is a basic boilerplate for getting started
-with React in NUI. It contains several helpful utilities and
-is bootstrapped using `create-react-app`. It is for both browser
-and in-game based development workflows.
+## Dependencies
 
-For in-game workflows, Utilizing `craco` to override CRA, we can have hot
-builds that just require a resource restart instead of a full
-production build
+This script is dependent on:
+- [es_extended (prior version 1.6.0)](https://github.com/esx-framework/esx_core)
+- [ox_lib](https://github.com/overextended/ox_lib)
+- [oxmysql](https://github.com/overextended/ox_lib)
 
-This version of the boilerplate is meant for the CfxLua runtime.
+## Technologies Used
 
-## Requirements
-* [Node > v10.6](https://nodejs.org/en/)
-* [Yarn](https://yarnpkg.com/getting-started/install) (Preferred but not required)
+- DaisyUI
+- React
+- React Router
 
-*A basic understanding of the modern web development workflow. If you don't 
-know this yet, React might not be for you just yet.*
+## Screenshots
 
-## Getting Started
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
-First clone the repository or use the template option and place
-it within your `resources` folder
+## Documentation
 
-### Installation
-
-*The boilerplate was made using `yarn` but is still compatible with
-`npm`.*
-
-Install dependencies by navigating to the `web` folder within
-a terminal of your choice and type `npm i` or `yarn`.
+[Documentation](https://ludaro.de)
 
 ## Features
 
-This boilerplate comes with some utilities and examples to work off of.
+- Light/dark mode toggle
+- Live previews
+- Fullscreen mode
+- Cross-platform
 
-### Lua Utils
+### JOBS
 
-**SendReactMessage**
+- **Job Creation:** Easily create new jobs for your RP server with customizable attributes.
+- **Job Editing:** Modify existing jobs to fit the evolving needs of your community.
+- **Job Managing:** Comprehensive tools for managing job-related aspects such as boss menus, grades, and salaries.
 
-This is a small wrapper for dispatching NUI messages. This is designed
-to be used with the `useNuiEvent` React hook.
+### FARMING
 
-Signature
-```lua
----@param action string The action you wish to target
----@param data any The data you wish to send along with this action
-SendReactMessage(action, data)
-```
+- **Farming Creation:** Develop farming activities with detailed configurations.
+- **Farming Managing:** Oversee farming operations and resources.
+- **Farming Editing:** Enhance farming complexity with advanced settings and options.
 
-Usage
-```lua
-SendReactMessage('setVisible', true)
-```
+### SHOPS
 
-**debugPrint**
+- Manage in-game shops, including inventory, pricing, and more.
 
-A debug printing utility that is dependent on a convar,
-if the convar is set this will print out to the console.
+### DOORLOCK
 
-The convar is dependent on the name given to the resource.
-It follows this format `YOUR_RESOURCE_NAME-debugMode`
+- Configure and manage door locks to secure various locations within your RP environment.
 
-To turn on debugMode add `setr YOUR_RESOURCE_NAME-debugMode 1` to 
-your server.cfg or use the `setr` console command instead.
+### DATA (MYSQL, CHARDATA)
 
-Signature (Replicates `print`)
-```lua
----@param ... any[] The arguments you wish to send
-debugPrint(...)
-```
+- Efficiently handle MySQL data and character data for smooth server operations.
 
-Usage
-```lua
-debugPrint('wow cool string to print', true, someOtherVar)
-```
+### USERS
 
-### React Utils
+- Manage user accounts, permissions, and roles with ease.
 
-Signatures are not included for these utilities as the type definitions
-are sufficient enough.
+### VEHICLES
 
-**useNuiEvent**
+- Oversee vehicle management, including spawning, customization, and ownership.
 
-This is a custom React hook that is designed to intercept and handle
-messages dispatched by the game scripts. This is the primary
-way of creating passive listeners.
-
-
-*Note: For now handlers can only be registered a single time. I haven't
-come across a personal usecase for a cascading event system*
-
-**Usage**
-```jsx
-const MyComp: React.FC = () => {
-  const [state, setState] = useState('')
-  
-  useNuiEvent<string>('myAction', (data) => {
-    // the first argument to the handler function
-    // is the data argument sent using SendReactMessage
-    
-    // do whatever logic u want here
-    setState(data)
-  })
-  
-  return(
-    <div>
-      <h1>Some component</h1>
-      <p>{state}</p>
-    </div>
-  )
-}
-
-```
-
-**fetchNui**
-
-This is a simple NUI focused wrapper around the standard `fetch` API.
-This is the main way to accomplish active NUI data fetching 
-or to trigger NUI callbacks in the game scripts.
-
-When using this, you must always at least callback using `{}`
-in the gamescripts.
-
-*This can be heavily customized to your use case*
-
-**Usage**
-```ts
-// First argument is the callback event name. 
-fetchNui<ReturnData>('getClientData').then(retData => {
-  console.log('Got return data from client scripts:')
-  console.dir(retData)
-  setClientData(retData)
-}).catch(e => {
-  console.error('Setting mock data due to error', e)
-  setClientData({ x: 500, y: 300, z: 200})
-})
-```
-
-**debugData**
-
-This is a function allowing for mocking dispatched game script
-actions in a browser environment. It will trigger `useNuiEvent` handlers
-as if they were dispatched by the game scripts. **It will only fire if the current
-environment is a regular browser and not CEF**
-
-**Usage**
-```ts
-// This will target the useNuiEvent hooks registered with `setVisible`
-// and pass them the data of `true`
-debugData([
-  {
-    action: 'setVisible',
-    data: true,
-  }
-])
-```
-
-**Misc Utils**
-
-These are small but useful included utilities.
-
-* `isEnvBrowser()` - Will return a boolean indicating if the current 
-  environment is a regular browser. (Useful for logic in development)
-
-## Development Workflow
-
-This boilerplate was designed with development workflow in mind.
-It includes some helpful scripts to accomplish that.
-
-**Hot Builds In-Game**
-
-When developing in-game, you can use the hot build system by
-running the `start:game` script. This is essentially the start
-script but it writes to disk. Meaning all that is required is a
-resource restart to update the game script
-
-**Usage**
-```sh
-# yarn
-yarn start:game
-# npm
-npm run start:game
-```
-
-**Production Builds**
-
-When you are done with development phase for your resource. You
-must create a production build that is optimized and minimized.
-
-You can do this by running the following:
-
-```sh
-npm run build
-yarn build 
-```
-
-## Additional Notes
-
-Need further support? Join our [Discord](https://discord.com/invite/HYwBjTbAY5)!
+Join the community and help improve Ludaro-Manager by contributing to its development!
