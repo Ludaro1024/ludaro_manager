@@ -27,9 +27,9 @@ This script is dependent on:
 
 ## Technologies Used
 
-- DaisyUI
-- React
-- React Router
+- TailwindCSS
+- Vue
+- Vue Router
 
 ## Screenshots
 
