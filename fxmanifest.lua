@@ -7,17 +7,19 @@ description("Ludaro Vue Boilerplate")
 version("1.0.0")
 
 client_scripts({
-	"client/*.lua",
+	"client/game/framework.lua",
+	"client/**/*",
 })
 
 server_scripts({
 	"@oxmysql/lib/MySQL.lua",
-	"server/*.lua",
+	"server/framework.lua",
+	"server/**/*",
 })
 
 shared_scripts({
 	"@ox_lib/init.lua",
-	"config/*.lua"
+	"config/**/*"
 })
 
 ui_page({
