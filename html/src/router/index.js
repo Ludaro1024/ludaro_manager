@@ -53,7 +53,7 @@ const router = createRouter({
       path: "/interactions",
       name: "interactions",
       component: () => import("../components/sites/society.vue")
-    }
+    },
   ]
 })
 

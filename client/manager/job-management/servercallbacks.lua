@@ -1,36 +1,155 @@
+--- Get all jobs from the database.
+-- @return table The jobs data.
 function getJobs()
-    local jobs = lib.callback.await("ludaro_manager:getJobs", false)
-    return jobs
+    Debug(3, "Fetching jobs from the database")
+    return lib.callback.await("ludaro_manager:getJobs", false)
 end
 
-function AddJob(job)
-    local success, jobName = lib.callback.await("ludaro_manager:addJob", false, job)
-    return success, jobName
+--- Get all interactions from the database.
+-- @return table The interactions data.
+function getInteractions()
+    Debug(3, "Fetching interactions from the database")
+    return lib.callback.await("ludaro_manager:getInteractions", false)
 end
 
-function saveJob(job)
-    local success = lib.callback.await("ludaro_manager:saveJob", false, job)
-    return success
-end
-
-function deleteJob(jobId)
-    print(jobId)
-    local success = lib.callback.await("ludaro_manager:deleteJob", false, jobId)
-    return success
-end
-
+--- Add a new job to the database.
+-- @param table job The job data.
+-- @return boolean, string Success status and job name.
 function addJob(job)
-    local success, jobName = lib.callback.await("ludaro_manager:addJob", false, job)
-    return success, jobName
+    Debug(3, "Adding new job to the database: " .. ESX.DumpTable(job))
+    return lib.callback.await("ludaro_manager:addJob", false, job)
 end
 
-function addGrade(jobName, grade)
-    local success = lib.callback.await("ludaro_manager:addGrade", false, jobName, grade)
+--- Save a job to the database.
+-- @param table job The job data.
+-- @return boolean Success status.
+function saveJob(job)
+    Debug(3, "Saving job to the database: " .. ESX.DumpTable(job))
+    return lib.callback.await("ludaro_manager:saveJob", false, job)
+end
+
+--- Delete a job from the database.
+-- @param string jobName The job name.
+-- @return boolean Success status.
+function deleteJob(jobName)
+    Debug(3, "Deleting job from the database: " .. jobName)
+    return lib.callback.await("ludaro_manager:deleteJob", false, jobName)
+end
+
+--- Add a grade to a job in the database.
+-- @param string jobName The job name.
+-- @param string gradeName The grade name.
+-- @param string gradeLabel The grade label.
+-- @param number Salary The grade salary.
+function addGrade(jobName, gradeName, gradeLabel, Salary)
+    Debug(3, "Adding grade to job in the database: " .. jobName .. " - " .. gradeName .. " - " .. gradeLabel .. " - " .. Salary)
+    return lib.callback.await("ludaro_manager:addGrade", false, jobName, gradeName, gradeLabel, Salary)
+end
+
+--- Delete a grade from a job in the database.
+-- @param string jobName The job name.
+-- @param number index The grade index.
+-- @return boolean Success status.
+function deleteGrade(jobName, index)
+    Debug(3, "Deleting grade from job in the database: " .. jobName .. " - Index: " .. index)
+    return lib.callback.await("ludaro_manager:deleteGrade", false, jobName, index)
+end
+
+--- Add an interaction to a job in the database.
+-- @param string jobName The job name.
+-- @param string interaction The interaction name.
+-- @return boolean Success status.
+function addInteraction(jobName, interaction)
+    Debug(3, "Adding interaction to job in the database: " .. jobName .. " - " .. interaction)
+    return lib.callback.await("ludaro_manager:addInteractionfromjob", false, jobName, interaction)
+end
+
+--- Delete an interaction from a job in the database.
+-- @param string jobName The job name.
+-- @param number index The interaction index.
+-- @return boolean Success status.
+function deleteInteraction(jobName, index)
+    Debug(3, "Deleting interaction from job in the database: " .. jobName .. " - Index: " .. index)
+    return lib.callback.await("ludaro_manager:deleteInteractionfromjob", false, jobName, index)
+end
+
+--- Add a vehicle to a job in the database.
+-- @param string jobName The job name.
+-- @param table vehicle The vehicle data.
+-- @return boolean Success status.
+function addVehicle(jobName, vehicle)
+    Debug(3, "Adding vehicle to job in the database: " .. jobName .. " - " .. ESX.DumpTable(vehicle))
+    return lib.callback.await("ludaro_manager:addVehicle", false, jobName, vehicle)
+end
+
+--- Delete a vehicle from a job in the database.
+-- @param string jobName The job name.
+-- @param number index The vehicle index.
+-- @return boolean Success status.
+function deleteVehicle(jobName, index)
+    Debug(3, "Deleting vehicle from job in the database: " .. jobName .. " - Index: " .. index)
+    return lib.callback.await("ludaro_manager:deleteVehicle", false, jobName, index)
+end
+
+--- Get the current coordinates of the player.
+-- @return table The current coordinates.
+function getCurrentCoords()
+    Debug(3, "Fetching current player coordinates")
+    return lib.callback.await("ludaro_manager:getCurrentCoords", false)
+end
+
+--- Save the armory data for a job.
+-- @param string jobName The job name.
+-- @param table armory The armory data.
+-- @return boolean Success status.
+function saveArmory(jobName, armory)
+    Debug(3, "Saving armory data for job: " .. jobName)
+    return lib.callback.await("ludaro_manager:saveArmory", false, jobName, armory)
+end
+
+--- Save the clothing data for a job.
+-- @param string jobName The job name.
+-- @param table clothing The clothing data.
+-- @return boolean Success status.
+function saveClothing(jobName, clothing)
+    Debug(3, "Saving clothing data for job: " .. jobName)
+    return lib.callback.await("ludaro_manager:saveClothing", false, jobName, clothing)
+end
+
+--- Save the stashes data for a job.
+-- @param string jobName The job name.
+-- @param table stashes The stashes data.
+-- @return boolean Success status.
+function saveStashes(jobName, stashes)
+    Debug(3, "Saving stashes data for job: " .. jobName)
+    return lib.callback.await("ludaro_manager:saveStashes", false, jobName, stashes)
+end
+
+--- Save the shop data for a job.
+-- @param string jobName The job name.
+-- @param table shop The shop data.
+-- @return boolean Success status.
+function saveShop(jobName, shop)
+    Debug(3, "Saving shop data for job: " .. jobName)
+    return lib.callback.await("ludaro_manager:saveShop", false, jobName, shop)
+end
+
+-- Get all grades
+-- @return table The grades data.
+function getAllGrades()
+    return lib.callback.await("ludaro_manager:getAllGrades", false)
+end
+
+function saveGrades(jobName, grades)
+    local success = false
+    for _, grade in ipairs(grades) do
+        local result = lib.callback.await("ludaro_manager:saveGrade", false, jobName, grade)
+        if result then
+            success = true
+        else
+            success = false
+            break
+        end
+    end
     return success
 end
-
-function deleteGrade(jobName, grade)
-    local success = lib.callback.await("ludaro_manager:deleteGrade", false, jobName, grade)
-    return success
-end
-

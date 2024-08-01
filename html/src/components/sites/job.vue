@@ -1,90 +1,61 @@
 <template>
   <div>
-    <div v-if="loading" class="loading-message">
-      <span class="text">Loading...</span>
+    <div v-if="loading" class="flex justify-center items-center h-screen">
+      <span class="text-2xl text-white">Loading...</span>
     </div>
     <div v-else class="container mx-auto p-4">
-      <div class="job-list-container overflow-y-auto max-h-[70vh]">
-        <table class="job-table w-full table-auto">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
           <thead>
             <tr>
-              <th class="px-4 py-2 text-white">Job Name</th>
-              <th class="px-4 py-2 text-white">Job Label</th>
-              <th class="px-4 py-2 text-white">Whitelisted</th>
-              <th class="px-4 py-2 text-white">Actions</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Job Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Job Label</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Whitelisted</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Active Players</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="(job, jobName) in jobs" :key="jobName" @click="editJob(jobName)" class="cursor-pointer hover:bg-gray-700 text-white">
-              <td class="px-4 py-2">{{ job.name }}</td>
-              <td class="px-4 py-2">{{ job.label }}</td>
-              <td class="px-4 py-2">{{ job.whitelisted ? '✔️' : '❌' }}</td>
-              <td class="px-4 py-2">
-                <button @click.stop="confirmDeleteJob(jobName)" class="text-white">🗑️</button>
+          <tbody class="bg-gray-700 divide-y divide-gray-600">
+            <tr v-for="(job, jobName) in jobs" :key="jobName" @click="editJob(jobName)"
+              class="hover:bg-gray-600 cursor-pointer">
+              <td class="px-6 py-4 whitespace-nowrap">{{ job.name }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ job.label }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ job.whitelisted ? '✔️' : '❌' }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ job.activeplayers }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <button @click.stop="confirmDeleteJob(jobName)" class="text-red-500 hover:text-red-700">🗑️</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <button class="add-job-button mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="openAddJobPopup">Add New Job</button>
+      <button class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="openAddJobPopup">Add New Job</button>
     </div>
 
     <!-- Job Edit Popup -->
-    <div v-if="editingJobName !== null" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="popup-content bg-gray-800 text-white p-4 rounded w-3/4">
+    <div v-if="editingJobName !== null" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-gray-800 text-white p-4 rounded w-3/4 overflow-auto max-h-[90vh]">
         <h3 class="text-lg font-bold mb-4">Edit Job</h3>
         <div class="mb-4">
           <label class="block mb-2">Job Name</label>
-          <input type="text" v-model="jobs[editingJobName].name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="jobs[editingJobName].name"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Job Label</label>
-          <input type="text" v-model="jobs[editingJobName].label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="jobs[editingJobName].label"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Whitelisted</label>
           <input type="checkbox" v-model="jobs[editingJobName].whitelisted">
         </div>
         <div class="mb-4">
-          <nav class="flex mb-4">
-            <a v-for="tab in tabs" :key="tab" @click="activeTab = tab" class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : 'bg-gray-600'">{{ tab }}</a>
+          <nav class="flex mb-4 border-b border-gray-600">
+            <a v-for="tab in tabs" :key="tab" @click="activeTab = tab"
+              class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : ''">{{ tab }}</a>
           </nav>
-          <div v-if="activeTab === 'Grades'" class="overflow-y-auto max-h-[50vh]">
-            <table class="w-full table-auto">
-              <thead>
-                <tr>
-                  <th class="px-4 py-2 text-white">Grade Name</th>
-                  <th class="px-4 py-2 text-white">Grade Label</th>
-                  <th class="px-4 py-2 text-white">Salary</th>
-                  <th class="px-4 py-2 text-white">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(grade, index) in jobs[editingJobName].grades || []" :key="index" class="text-white">
-                  <td class="px-4 py-2">
-                    <input type="text" v-model="grade.name" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
-                  </td>
-                  <td class="px-4 py-2">
-                    <input type="text" v-model="grade.label" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
-                  </td>
-                  <td class="px-4 py-2">
-                    <input type="number" v-model="grade.salary" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
-                  </td>
-                  <td class="px-4 py-2">
-                    <button @click="removeGrade(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Remove</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button @click="showAddGradePopup = true" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Grade</button>
-          </div>
-          <div v-else-if="activeTab === 'Boss Menu'" class="overflow-y-auto max-h-[50vh]">
-            <div>
-              <label class="block mb-2">Boss Menu Coords</label>
-              <input type="text" v-model="jobs[editingJobName].bossMenuCoords" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-            </div>
-          </div>
-          <!-- Add similar blocks for other tabs here -->
+          <component :is="activeTabComponent" :job="jobs[editingJobName]" @update-job="updateJob"></component>
         </div>
         <div class="mt-4">
           <button @click="saveJob(editingJobName)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
@@ -94,16 +65,18 @@
     </div>
 
     <!-- Add Job Popup -->
-    <div v-if="showAddJobPopup" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
+    <div v-if="showAddJobPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
         <h3 class="text-lg font-bold mb-4">Add New Job</h3>
         <div class="mb-4">
           <label class="block mb-2">Job Name</label>
-          <input type="text" v-model="newJob.name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="newJob.name"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Job Label</label>
-          <input type="text" v-model="newJob.label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="newJob.label"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Whitelisted</label>
@@ -113,12 +86,13 @@
           <button @click="addNewJob" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Job</button>
           <button @click="showAddJobPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
         </div>
+        <div v-if="error" class="mt-4 text-red-500">{{ error }}</div>
       </div>
     </div>
 
     <!-- Confirm Delete Job Popup -->
-    <div v-if="jobToDelete !== null" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
+    <div v-if="jobToDelete !== null" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
         <h3 class="text-lg font-bold mb-4">Confirm Delete Job</h3>
         <p>Are you sure you want to delete this job?</p>
         <div class="mt-4">
@@ -129,20 +103,28 @@
     </div>
 
     <!-- Add Grade Popup -->
-    <div v-if="showAddGradePopup" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
+    <div v-if="showAddGradePopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
         <h3 class="text-lg font-bold mb-4">Add New Grade</h3>
         <div class="mb-4">
-          <label class="block mb-2">Grade Name</label>
-          <input type="text" v-model="newGrade.name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <label class="block mb-2">Grade ID</label>
+          <input type="text" v-model="newGrade.grade"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Grade Label</label>
-          <input type="text" v-model="newGrade.label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <label class="block mb-2">Grade Spawn Name</label>
+          <input type="text" v-model="newGrade.name"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Grade Name</label>
+          <input type="text" v-model="newGrade.label"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Salary</label>
-          <input type="number" v-model="newGrade.salary" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="number" v-model="newGrade.salary"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mt-4">
           <button @click="addNewGrade" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Grade</button>
@@ -150,65 +132,378 @@
         </div>
       </div>
     </div>
+
+    <!-- Add Stash Popup -->
+    <div v-if="showAddStashPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
+        <h3 class="text-lg font-bold mb-4">Add New Stash</h3>
+        <div class="mb-4">
+          <label class="block mb-2">Coords</label>
+          <input type="number" v-model="newStash.coords.x"
+            class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
+          <input type="number" v-model="newStash.coords.y"
+            class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
+          <input type="number" v-model="newStash.coords.z"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Private</label>
+          <input type="checkbox" v-model="newStash.private">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Weight</label>
+          <input type="number" v-model="newStash.weight"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Min Grade</label>
+          <select v-model="newStash.minimumGrade"
+            class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
+            <option v-for="grade in jobs[editingJobName].grades" :key="grade.grade" :value="grade.grade">
+              {{ grade.label }} (ID: {{ grade.grade }})
+            </option>
+          </select>
+        </div>
+        <div class="mt-4">
+          <button @click="addNewStash" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Stash</button>
+          <button @click="showAddStashPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Shop Popup -->
+    <div v-if="showAddShopPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
+        <h3 class="text-lg font-bold mb-4">Add New Shop</h3>
+        <div class="mb-4">
+          <label class="block mb-2">Item</label>
+          <input type="text" v-model="newShop.item"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Price</label>
+          <input type="number" v-model="newShop.price"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Job Only</label>
+          <input type="checkbox" v-model="newShop.jobOnly">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Min Grade</label>
+          <select v-model="newShop.minimumGrade"
+            class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
+            <option v-for="grade in jobs[editingJobName].grades" :key="grade.grade" :value="grade.grade">
+              {{ grade.label }} (ID: {{ grade.grade }})
+            </option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">NPC/Marker</label>
+          <select v-model="newShop.type" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
+            <option value="npc">NPC</option>
+            <option value="marker">Marker</option>
+          </select>
+          <div v-if="newShop.type === 'npc'">
+            <input type="text" v-model="newShop.npcModel"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
+            <input type="number" v-model="newShop.npcHeading"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
+            <input type="number" v-model="newShop.npcRange"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
+          </div>
+          <div v-else-if="newShop.type === 'marker'">
+            <input type="number" v-model="newShop.markerId"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
+            <div>
+              <label class="block mb-2">Marker Color (RGB)</label>
+              <input type="number" v-model="newShop.markerColor.r"
+                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
+              <input type="number" v-model="newShop.markerColor.g"
+                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
+              <input type="number" v-model="newShop.markerColor.b"
+                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
+            </div>
+            <input type="number" v-model="newShop.markerScale"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
+          </div>
+        </div>
+        <div class="mt-4">
+          <button @click="addNewShop" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Shop</button>
+          <button @click="showAddShopPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Processing Popup -->
+    <div v-if="showAddProcessingPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
+        <h3 class="text-lg font-bold mb-4">Add New Processing</h3>
+        <div class="mb-4">
+          <label class="block mb-2">Input Items</label>
+          <input type="text" v-model="newProcessing.inputItems"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Output Item</label>
+          <input type="text" v-model="newProcessing.outputItem"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Seconds</label>
+          <input type="number" v-model="newProcessing.seconds"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Animation Dir</label>
+          <input type="text" v-model="newProcessing.animationDir"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Animation</label>
+          <input type="text" v-model="newProcessing.animation"
+            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Min Grade</label>
+          <select v-model="newProcessing.minimumGrade"
+            class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
+            <option v-for="grade in jobs[editingJobName].grades" :key="grade.grade" :value="grade.grade">
+              {{ grade.label }} (ID: {{ grade.grade }})
+            </option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">NPC/Marker</label>
+          <select v-model="newProcessing.type"
+            class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
+            <option value="npc">NPC</option>
+            <option value="marker">Marker</option>
+          </select>
+          <div v-if="newProcessing.type === 'npc'">
+            <input type="text" v-model="newProcessing.npcModel"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
+            <input type="number" v-model="newProcessing.npcHeading"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
+            <input type="number" v-model="newProcessing.npcRange"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
+          </div>
+          <div v-else-if="newProcessing.type === 'marker'">
+            <input type="number" v-model="newProcessing.markerId"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
+            <div>
+              <label class="block mb-2">Marker Color (RGB)</label>
+              <input type="number" v-model="newProcessing.markerColor.r"
+                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
+              <input type="number" v-model="newProcessing.markerColor.g"
+                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
+              <input type="number" v-model="newProcessing.markerColor.b"
+                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
+            </div>
+            <input type="number" v-model="newProcessing.markerScale"
+              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
+          </div>
+        </div>
+        <div class="mt-4">
+          <button @click="addNewProcessing" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Processing</button>
+          <button @click="showAddProcessingPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div v-if="loadingData" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+      <div class="text-center">
+        <svg class="animate-spin h-8 w-8 text-white mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span class="text-2xl text-white">Loading...</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import JobInfo from './JobTabs/JobInfo.vue';
+import Grades from './JobTabs/Grades.vue';
+import BossMenu from './JobTabs/BossMenu.vue';
+import Interactions from './JobTabs/Interactions.vue';
+import Garage from './JobTabs/Garage.vue';
+import OnOffDuty from './JobTabs/OnOffDuty.vue';
+import Employees from './JobTabs/Employees.vue';
+import Stashes from './JobTabs/Stashes.vue';
+import Shops from './JobTabs/Shops.vue';
+import Processing from './JobTabs/Processing.vue';
+
 export default {
   data() {
     return {
       loading: true,
+      loadingData: false,
       jobs: {},
+      interactions: [],
       editingJobName: null,
-      activeTab: 'Job Info',
+      activeTab: 'JobInfo',
       showAddJobPopup: false,
       showAddGradePopup: false,
+      showAddInteractionPopup: false,
+      showAddVehiclePopup: false,
+      showAddStashPopup: false,
+      showAddShopPopup: false,
+      showAddProcessingPopup: false,
       newJob: {
         name: '',
         label: '',
         whitelisted: false,
-        salary: 0
+        grades: [],
+        vehicles: [],
+        bossMenuCoords: { x: null, y: null, z: null },
+        onOffDutyCoords: { x: null, y: null, z: null },
+        garageCoords: { x: null, y: null, z: null },
+        stashes: [],
+        shops: [],
+        processing: []
+      },
+      newStash: {
+        coords: { x: null, y: null, z: null },
+        private: false,
+        weight: 0,
+        minimumGrade: ''
+      },
+      newShop: {
+        item: '',
+        price: 0,
+        jobOnly: false,
+        minimumGrade: '',
+        type: 'npc',
+        npcModel: '',
+        npcHeading: '',
+        npcRange: '',
+        markerId: '',
+        markerColor: { r: 0, g: 0, b: 0 },
+        markerScale: ''
+      },
+      newProcessing: {
+        inputItems: '',
+        outputItem: '',
+        seconds: 0,
+        animationDir: '',
+        animation: '',
+        minimumGrade: '',
+        type: 'npc',
+        npcModel: '',
+        npcHeading: '',
+        npcRange: '',
+        markerId: '',
+        markerColor: { r: 0, g: 0, b: 0 },
+        markerScale: ''
       },
       newGrade: {
+        grade: '',
         name: '',
         label: '',
         salary: 0
       },
+      newInteraction: '',
+      newVehicle: {
+        name: '',
+        price: 0,
+        paidBy: 'society',
+        grade: ''
+      },
       jobToDelete: null,
-      tabs: ['Job Info', 'Grades', 'Boss Menu', 'Garage', 'On/Off Duty']
+      tabs: ['JobInfo', 'Grades', 'BossMenu', 'Interactions', 'Garage', 'OnOffDuty', 'Employees', 'Stashes', 'Shops', 'Processing'],
+      error: ''
     };
   },
   mounted() {
-    this.fetchJobs();
+    this.fetchJobsAndInteractions();
+  },
+  computed: {
+    activeTabComponent() {
+      const tabComponents = {
+        JobInfo,
+        Grades,
+        BossMenu,
+        Interactions,
+        Garage,
+        OnOffDuty,
+        Employees,
+        Stashes,
+        Shops,
+        Processing
+      };
+      return tabComponents[this.activeTab] || 'div';
+    }
   },
   methods: {
-    async fetchJobs() {
+    async fetchJobsAndInteractions() {
       try {
-        const response = await fetch(`https://${GetParentResourceName()}/getJobData`, {
+        this.loading = true;
+        const jobsResponse = await fetch(`https://${GetParentResourceName()}/getJobData`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
+            'Content-Type': 'application/json; charset=UTF-8'
           },
           body: JSON.stringify({})
         });
-        const data = await response.json();
-        this.jobs = data;
+        const jobsData = await jobsResponse.json();
+
+        const interactionsResponse = await fetch(`https://${GetParentResourceName()}/getInteractions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: JSON.stringify({})
+        });
+        const interactionsData = await interactionsResponse.json();
+
+        Object.keys(jobsData).forEach(jobName => {
+          if (!jobsData[jobName].grades) {
+            jobsData[jobName].grades = [];
+          }
+          if (!jobsData[jobName].interactions || jobsData[jobName].interactions.length === 0) {
+            jobsData[jobName].interactions = [];
+          }
+          if (!jobsData[jobName].vehicles) {
+            jobsData[jobName].vehicles = [];
+          }
+          if (!jobsData[jobName].bossMenuCoords) {
+            jobsData[jobName].bossMenuCoords = { x: null, y: null, z: null };
+          }
+          if (!jobsData[jobName].onOffDutyCoords) {
+            jobsData[jobName].onOffDutyCoords = { x: null, y: null, z: null };
+          }
+          if (!jobsData[jobName].garageCoords) {
+            jobsData[jobName].garageCoords = { x: null, y: null, z: null };
+          }
+          if (!jobsData[jobName].employees) {
+            jobsData[jobName].employees = [];
+          }
+          if (!jobsData[jobName].marker) {
+            jobsData[jobName].marker = { r: 0, g: 0, b: 0 };
+          }
+        });
+
+        this.jobs = jobsData;
+        this.interactions = interactionsData.filter(interaction => interaction !== '[]');
         this.loading = false;
       } catch (error) {
-        console.error('Failed to fetch job data:', error);
+        console.error('Failed to fetch job or interaction data:', error);
         this.loading = false;
       }
     },
     editJob(jobName) {
       this.editingJobName = jobName;
-      this.activeTab = 'Job Info';
+      this.activeTab = 'JobInfo';
     },
     saveJob(jobName) {
       const job = this.jobs[jobName];
       fetch(`https://${GetParentResourceName()}/saveJob`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json; charset=UTF-8'
         },
         body: JSON.stringify(job)
       })
@@ -216,7 +511,7 @@ export default {
         .then((result) => {
           if (result.success) {
             this.editingJobName = null;
-            this.fetchJobs();
+            this.refreshData();
           }
         })
         .catch((error) => {
@@ -225,121 +520,101 @@ export default {
     },
     cancelEdit() {
       this.editingJobName = null;
-      this.fetchJobs();
+      this.fetchJobsAndInteractions();
     },
     confirmDeleteJob(jobName) {
       this.jobToDelete = jobName;
     },
     deleteJob(jobName) {
-  const job = this.jobs[jobName];
-  fetch(`https://${GetParentResourceName()}/deleteJob`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: JSON.stringify({ jobName: job.name })
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      if (result.success) {
-        // Create a new jobs object excluding the deleted job
-        const newJobs = { ...this.jobs };
-        delete newJobs[jobName];
-        
-        // Assign the new object to the jobs property
-        this.jobs = newJobs;
-
-        // Trigger a component re-render (if needed)
-        this.$forceUpdate();  // Ensure Vue reactivity picks up the change
-        this.jobToDelete = null;
-      }
-    })
-    .catch((error) => {
-      console.error('Failed to delete job:', error);
-    });
-},
-
-    openAddJobPopup() {
-      this.showAddJobPopup = true;
-    },
-    addNewJob() {
-  fetch(`https://${GetParentResourceName()}/addJob`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: JSON.stringify(this.newJob)
-  })
-    .then(response => response.json())
-    .then(result => {
-      if (result.success) {
-        // Directly update the jobs object with the new job
-        this.jobs = { ...this.jobs, [result.jobName]: this.newJob };
-        
-        // Close the popup and reset the newJob data
-        this.showAddJobPopup = false;
-        this.newJob = {
-          name: '',
-          label: '',
-          whitelisted: false,
-          salary: 0
-        };
-      }
-    })
-    .catch(error => {
-      console.error('Failed to add new job:', error);
-    });
-},
-    addNewGrade() {
-      if (this.editingJobName) {
-        const job = this.jobs[this.editingJobName];
-        if (!Array.isArray(job.grades)) {
-          job.grades = [];
-        }
-        job.grades.push(this.newGrade);
-        fetch(`https://${GetParentResourceName()}/addGrade`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: JSON.stringify({ jobName: this.editingJobName, grade: this.newGrade })
-        })
-          .then((response) => response.json())
-          .then((result) => {
-            if (result.success) {
-              this.showAddGradePopup = false;
-              this.newGrade = {
-                name: '',
-                label: '',
-                salary: 0
-              };
-              this.fetchJobs();
-            }
-          })
-          .catch((error) => {
-            console.error('Failed to add new grade:', error);
-          });
-      }
-    },
-    removeGrade(index) {
-      const job = this.jobs[this.editingJobName];
-      job.grades.splice(index, 1);
-      fetch(`https://${GetParentResourceName()}/removeGrade`, {
+      const job = this.jobs[jobName];
+      fetch(`https://${GetParentResourceName()}/deleteJob`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify({ jobName: this.editingJobName, index })
+        body: JSON.stringify({ jobName: job.name })
       })
         .then((response) => response.json())
         .then((result) => {
           if (result.success) {
-            this.fetchJobs();
+            const newJobs = { ...this.jobs };
+            delete newJobs[jobName];
+            this.jobs = newJobs;
+            this.$forceUpdate();
+            this.jobToDelete = null;
           }
         })
         .catch((error) => {
-          console.error('Failed to remove grade:', error);
+          console.error('Failed to delete job:', error);
         });
+    },
+    openAddJobPopup() {
+      this.showAddJobPopup = true;
+    },
+    addNewJob() {
+      const jobExists = Object.values(this.jobs).some(job => job.name === this.newJob.name || job.label === this.newJob.label);
+
+      if (jobExists) {
+        this.error = 'A job with the same name or label already exists. Please use a different name or label.';
+        return;
+      }
+
+      fetch(`https://${GetParentResourceName()}/addJob`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify(this.newJob)
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.success) {
+            const newJobs = {};
+            const keys = Object.keys(this.jobs).sort();
+
+            let inserted = false;
+            for (let key of keys) {
+              if (!inserted && key > result.jobName) {
+                newJobs[result.jobName] = this.newJob;
+                inserted = true;
+              }
+              newJobs[key] = this.jobs[key];
+            }
+            if (!inserted) {
+              newJobs[result.jobName] = this.newJob;
+            }
+
+            this.jobs = newJobs;
+
+            this.showAddJobPopup = false;
+            this.newJob = {
+              name: '',
+              label: '',
+              whitelisted: false,
+              grades: [],
+              vehicles: [],
+              bossMenuCoords: { x: null, y: null, z: null },
+              onOffDutyCoords: { x: null, y: null, z: null },
+              garageCoords: { x: null, y: null, z: null }
+            };
+            this.refreshData();
+          } else {
+            this.error = 'Failed to add new job. Please try again.';
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to add new job:', error);
+          this.error = 'Failed to add new job. Please try again.';
+        });
+    },
+    refreshData() {
+      this.loadingData = true;
+      this.fetchJobsAndInteractions().then(() => {
+        this.loadingData = false;
+      });
+    },
+    updateJob(updatedJob) {
+      this.jobs[this.editingJobName] = updatedJob;
     }
   }
 };
@@ -350,117 +625,5 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: transparent;
-}
-
-.loading-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  color: white;
-}
-
-.job-list-container {
-  max-height: 70vh;
-}
-
-.job-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.job-table th,
-.job-table td {
-  padding: 0.5rem;
-  border-bottom: 1px solid #555;
-  text-align: left;
-}
-
-.job-table th {
-  background-color: #555;
-  color: white;
-}
-
-.job-table tr:hover {
-  background-color: #444;
-}
-
-.add-job-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #28a745;
-  color: white;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-
-.add-job-button:hover {
-  background-color: #218838;
-}
-
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
-.popup-content {
-  background-color: #333;
-  color: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.delete-icon {
-  font-size: 1.2rem;
-  color: white;
-}
-
-.edit-icon {
-  font-size: 1.2rem;
-  color: white;
-}
-
-.nav-tabs {
-  display: flex;
-  border-bottom: 1px solid #555;
-}
-
-.nav-tabs a {
-  padding: 1rem;
-  cursor: pointer;
-}
-
-.nav-tabs a.active {
-  background-color: #007bff;
-  border-bottom: 4px solid #0056b3;
-}
-
-.nav-tabs a:not(.active):hover {
-  background-color: #555;
 }
 </style>

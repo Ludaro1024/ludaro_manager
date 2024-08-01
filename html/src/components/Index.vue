@@ -15,7 +15,7 @@ const items = ref([
   { route: "door", name: 'Door Management', active: false },
   { route: "data", name: 'Data Management', active: false },
   { route: "user", name: 'User Management', active: false },
-  { route: "vehicle", name: 'Vehicle Management', active: false }
+  { route: "vehicle", name: 'Vehicle Management', active: false },
 ]);
 
 const setActiveItem = (itemName, route) => {

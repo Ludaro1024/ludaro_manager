@@ -24,5 +24,6 @@ onMounted(() => {
 
 <template>
   <Index v-if="displayUI.index.value"></Index>  
-  <!-- add v-if here for ingame and if you wanna test it in browser remove it-->
+<!-- <Index></Index> -->
+<!-- add v-if here for ingame and if you wanna test it in browser remove it-->
 </template>
