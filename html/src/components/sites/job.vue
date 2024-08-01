@@ -500,12 +500,36 @@ export default {
     },
     saveJob(jobName) {
       const job = this.jobs[jobName];
+      const jobData = {
+        name: job.name,
+        label: job.label,
+        whitelisted: job.whitelisted,
+        grades: job.grades,
+        vehicles: job.vehicles,
+        bossmenu: {
+          bossMenuCoords: job.bossMenuCoords,
+          bossMenuGrade: job.bossMenuGrade,
+          bossMenuType: job.bossMenuType,
+          bossMenuNpcModel: job.bossMenuNpcModel,
+          bossMenuNpcHeading: job.bossMenuNpcHeading,
+          bossMenuNpcRange: job.bossMenuNpcRange,
+          bossMenuMarkerId: job.bossMenuMarkerId,
+          bossMenuMarkerColor: job.bossMenuMarkerColor,
+          bossMenuMarkerScale: job.bossMenuMarkerScale
+        },
+        interactions: job.interactions,
+        garage: job.garage,
+        onoffduty: job.onoffduty,
+        stashes: job.stashes,
+        shops: job.shops,
+        processing: job.processing
+      };
       fetch(`https://${GetParentResourceName()}/saveJob`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify(job)
+        body: JSON.stringify(jobData)
       })
         .then((response) => response.json())
         .then((result) => {

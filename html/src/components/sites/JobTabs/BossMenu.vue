@@ -25,6 +25,7 @@
         <input type="text" v-model="job.bossMenuNpcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
         <input type="number" v-model="job.bossMenuNpcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
         <input type="number" v-model="job.bossMenuNpcRange" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
+        <button @click="fetchCurrentHeading('bossMenuNpcHeading')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Heading</button>
       </div>
       <div v-else-if="job.bossMenuType === 'marker'">
         <input type="number" v-model="job.bossMenuMarkerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
@@ -36,6 +37,9 @@
         </div>
         <input type="number" v-model="job.bossMenuMarkerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
       </div>
+    </div>
+    <div>
+      <button @click="saveBossMenu" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Save Boss Menu</button>
     </div>
   </div>
 </template>
@@ -65,10 +69,32 @@ export default {
           console.error('Failed to fetch current coords:', error);
         });
     },
+    fetchCurrentHeading(headingType) {
+      fetch(`https://${GetParentResourceName()}/getCurrentHeading`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({})
+      })
+        .then((response) => response.json())
+        .then((heading) => {
+          if (heading) {
+            this.job[headingType] = heading;
+            this.$emit('update-job', this.job);
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to fetch current heading:', error);
+        });
+    },
     initializeMarkerColor() {
       if (!this.job.bossMenuMarkerColor) {
         this.job.bossMenuMarkerColor = { r: 0, g: 0, b: 0 };
       }
+    },
+    saveBossMenu() {
+      this.$emit('update-job', this.job);
     }
   },
   watch: {

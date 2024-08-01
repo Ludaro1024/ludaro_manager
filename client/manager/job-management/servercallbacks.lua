@@ -91,13 +91,6 @@ function deleteVehicle(jobName, index)
     return lib.callback.await("ludaro_manager:deleteVehicle", false, jobName, index)
 end
 
---- Get the current coordinates of the player.
--- @return table The current coordinates.
-function getCurrentCoords()
-    Debug(3, "Fetching current player coordinates")
-    return lib.callback.await("ludaro_manager:getCurrentCoords", false)
-end
-
 --- Save the armory data for a job.
 -- @param string jobName The job name.
 -- @param table armory The armory data.
@@ -140,6 +133,10 @@ function getAllGrades()
     return lib.callback.await("ludaro_manager:getAllGrades", false)
 end
 
+-- Saves all grades for a job
+-- @param string jobName The job name.
+-- @param table grades The grades data.
+-- @return boolean Success status.
 function saveGrades(jobName, grades)
     local success = false
     for _, grade in ipairs(grades) do
@@ -151,5 +148,13 @@ function saveGrades(jobName, grades)
             break
         end
     end
+    return success
+end
+
+-- Save the boss menu data for a job.
+-- @param table data The boss menu data.
+-- @return boolean Success status.
+function saveBossMenu(data)
+    local success = lib.callback.await("ludaro_manager:saveBossMenu", false, data)
     return success
 end

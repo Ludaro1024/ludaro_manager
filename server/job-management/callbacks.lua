@@ -43,10 +43,6 @@ lib.callback.register('ludaro_manager:deleteVehicle', function(source, jobName, 
    return deleteVehicle(jobName, index)
 end)
 
-lib.callback.register('ludaro_manager:getCurrentCoords', function(source)
-   return getCurrentCoords()
-end)
-
 lib.callback.register('ludaro_manager:saveArmory', function(source, jobName, armory)
    return saveArmory(jobName, armory)
 end)
@@ -67,4 +63,7 @@ lib.callback.register('ludaro_manager:getAllGrades', function(source)
 end)
 lib.callback.register('ludaro_manager:saveGrade', function(source, jobName, grade)
    return saveGrade(jobName, grade)
+end)
+lib.callback.register("ludaro_manager:saveBossMenu", function(source, data)
+   return saveBossMenu(data)
 end)

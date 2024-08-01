@@ -38,10 +38,34 @@ function saveJob(job)
         local name = job.name
         local label = job.label
         local whitelisted = job.whitelisted
-        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted WHERE name = @name', {
+        local bossmenu = job.bossmenu
+        local interactions = job.interactions
+        local garage = job.garage
+        local onoffduty = job.onoffduty
+        local stashes = job.stashes
+        local shops = job.shops
+        local processing = job.processing
+
+        -- Convert the tables to JSON strings, but replace nil with actual nil (not JSON "null")
+        local bossmenu_json = bossmenu and json.encode(bossmenu) or nil
+        local interactions_json = interactions and json.encode(interactions) or nil
+        local garage_json = garage and json.encode(garage) or nil
+        local onoffduty_json = onoffduty and json.encode(onoffduty) or nil
+        local stashes_json = stashes and json.encode(stashes) or nil
+        local shops_json = shops and json.encode(shops) or nil
+        local processing_json = processing and json.encode(processing) or nil
+
+        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_shops = @shops, ludaro_manager_processing = @processing WHERE name = @name', {
             ['@name'] = name,
             ['@label'] = label,
-            ['@whitelisted'] = whitelisted
+            ['@whitelisted'] = whitelisted,
+            ['@bossmenu'] = bossmenu_json,
+            ['@interactions'] = interactions_json,
+            ['@garage'] = garage_json,
+            ['@onoffduty'] = onoffduty_json,
+            ['@stashes'] = stashes_json,
+            ['@shops'] = shops_json,
+            ['@processing'] = processing_json
         }, function(rowsChanged)
             if rowsChanged > 0 then
                 Debug(2, "Job saved successfully: " .. name)
@@ -54,6 +78,8 @@ function saveJob(job)
         refreshJobs()
     end
 end
+
+
 
 -- Check if a Job Exists
 -- @param string jobName The job name.
@@ -321,13 +347,6 @@ function deleteVehicle(jobName, index)
     end
 end
 
---- Get current coordinates.
--- @return table The current coordinates.
-function getCurrentCoords()
-    Debug(3, "Fetching current coordinates")
-    local coords = GetEntityCoords(GetPlayerPed(-1))
-    return { x = coords.x, y = coords.y, z = coords.z }
-end
 
 --- Save armory data to the database.
 -- @param string jobName The job name.
@@ -415,6 +434,27 @@ function saveShop(jobName, shop)
                 return true
             else
                 Debug(2, "Failed to save shop data for job: " .. jobName)
+                return false
+            end
+        end)
+    end
+end
+
+
+function saveBossMenu(data)
+    jobname = data.name
+    bossmenu = data.bossmenu
+    if ESX then
+        Debug(3, "Saving boss menu data to the database for job: " .. jobname)
+        MySQL.Async.execute('UPDATE jobs SET bossmenu = @bossmenu WHERE name = @name', {
+            ['@bossmenu'] = json.encode(bossmenu),
+            ['@name'] = jobname
+        }, function(rowsChanged)
+            if rowsChanged > 0 then
+                Debug(2, "Boss menu data saved successfully for job: " .. jobname)
+                return true
+            else
+                Debug(2, "Failed to save boss menu data for job: " .. jobname)
                 return false
             end
         end)

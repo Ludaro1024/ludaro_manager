@@ -79,7 +79,7 @@ end)
 
 RegisterNUICallback('getCurrentCoords', function(data, cb)
     Debug(4, "Fetching current coords")
-    local coords = getCurrentCoords()
+    local coords = {x = math.round(GetEntityCoords(PlayerPedId()).x), y = math.round(GetEntityCoords(PlayerPedId()).y), z = math.round(GetEntityCoords(PlayerPedId()).z)}
     Debug(3, "Current coords: " .. ESX.DumpTable(coords))
     cb(coords)
 end)
@@ -120,6 +120,17 @@ end)
 
 RegisterNUICallback('saveGrades', function(data, cb)
     local success = saveGrades(data.jobName, data.grades)
+    cb({ success = success })
+end)
+
+RegisterNUICallback('getCurrentHeading', function(data, cb)
+    local ped = PlayerPedId()
+    local heading = GetEntityHeading(ped)
+    cb({ heading = heading })
+end)
+
+RegisterNUICallback('saveBossMenu', function(data, cb)
+    local success = saveBossMenu(data)
     cb({ success = success })
 end)
 
