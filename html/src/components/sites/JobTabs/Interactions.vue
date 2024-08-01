@@ -36,6 +36,7 @@
     },
     methods: {
       addInteraction() {
+        console.log(JSON.stringify(this.job.interactions));
         if (!Array.isArray(this.job.interactions)) {
           this.job.interactions = [];
         }

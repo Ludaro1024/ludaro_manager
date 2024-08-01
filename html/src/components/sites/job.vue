@@ -358,7 +358,17 @@ export default {
         whitelisted: false,
         grades: [],
         vehicles: [],
-        bossMenuCoords: { x: null, y: null, z: null },
+        bossmenu: {
+          coords: { x: null, y: null, z: null },
+          grade: '',
+          type: 'npc',
+          npcModel: '',
+          npcHeading: 0,
+          npcRange: 0,
+          markerId: 0,
+          markerColor: { r: 0, g: 0, b: 0 },
+          markerScale: 1
+        },
         onOffDutyCoords: { x: null, y: null, z: null },
         garageCoords: { x: null, y: null, z: null },
         stashes: [],
@@ -469,8 +479,18 @@ export default {
           if (!jobsData[jobName].vehicles) {
             jobsData[jobName].vehicles = [];
           }
-          if (!jobsData[jobName].bossMenuCoords) {
-            jobsData[jobName].bossMenuCoords = { x: null, y: null, z: null };
+          if (!jobsData[jobName].bossmenu) {
+            jobsData[jobName].bossmenu = {
+              coords: { x: null, y: null, z: null },
+              grade: '',
+              type: 'npc',
+              npcModel: '',
+              npcHeading: 0,
+              npcRange: 0,
+              markerId: 0,
+              markerColor: { r: 0, g: 0, b: 0 },
+              markerScale: 1
+            };
           }
           if (!jobsData[jobName].onOffDutyCoords) {
             jobsData[jobName].onOffDutyCoords = { x: null, y: null, z: null };
@@ -507,15 +527,15 @@ export default {
         grades: job.grades,
         vehicles: job.vehicles,
         bossmenu: {
-          bossMenuCoords: job.bossMenuCoords,
-          bossMenuGrade: job.bossMenuGrade,
-          bossMenuType: job.bossMenuType,
-          bossMenuNpcModel: job.bossMenuNpcModel,
-          bossMenuNpcHeading: job.bossMenuNpcHeading,
-          bossMenuNpcRange: job.bossMenuNpcRange,
-          bossMenuMarkerId: job.bossMenuMarkerId,
-          bossMenuMarkerColor: job.bossMenuMarkerColor,
-          bossMenuMarkerScale: job.bossMenuMarkerScale
+          coords: job.bossmenu.coords,
+          grade: job.bossmenu.grade,
+          type: job.bossmenu.type,
+          npcModel: job.bossmenu.npcModel,
+          npcHeading: job.bossmenu.npcHeading,
+          npcRange: job.bossmenu.npcRange,
+          markerId: job.bossmenu.markerId,
+          markerColor: job.bossmenu.markerColor,
+          markerScale: job.bossmenu.markerScale
         },
         interactions: job.interactions,
         garage: job.garage,
@@ -617,7 +637,17 @@ export default {
               whitelisted: false,
               grades: [],
               vehicles: [],
-              bossMenuCoords: { x: null, y: null, z: null },
+              bossmenu: {
+                coords: { x: null, y: null, z: null },
+                grade: '',
+                type: 'npc',
+                npcModel: '',
+                npcHeading: 0,
+                npcRange: 0,
+                markerId: 0,
+                markerColor: { r: 0, g: 0, b: 0 },
+                markerScale: 1
+              },
               onOffDutyCoords: { x: null, y: null, z: null },
               garageCoords: { x: null, y: null, z: null }
             };
@@ -638,7 +668,7 @@ export default {
       });
     },
     updateJob(updatedJob) {
-      this.jobs[this.editingJobName] = updatedJob;
+      this.$set(this.jobs, this.editingJobName, updatedJob);
     }
   }
 };
