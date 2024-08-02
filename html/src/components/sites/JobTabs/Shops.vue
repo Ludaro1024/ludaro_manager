@@ -41,9 +41,9 @@
                   </select>
                 </div>
               </div>
-              <button @click="removeItem(index, itemIndex)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove Item</button>
+              <button @click="removeItem(index, itemIndex)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mt-2">Remove Item</button>
             </div>
-            <button @click="addItem(index)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Add Item</button>
+            <button @click="addItem(index)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 mt-2">Add Item</button>
           </td>
           <td class="px-4 py-2">
             <button @click="removeShop(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Remove Shop</button>
@@ -90,9 +90,9 @@
                 </select>
               </div>
             </div>
-            <button @click="removeNewItem(index)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove Item</button>
+            <button @click="removeNewItem(index)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mt-2">Remove Item</button>
           </div>
-          <button @click="addNewItem" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Add Item</button>
+          <button @click="addNewItem" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 mt-2">Add Item</button>
         </div>
         <div class="mt-4">
           <button @click="addNewShop" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Shop</button>
@@ -102,6 +102,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
