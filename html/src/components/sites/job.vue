@@ -3,7 +3,7 @@
     <div v-if="loading" class="flex justify-center items-center h-screen">
       <span class="text-2xl text-white">Loading...</span>
     </div>
-    <div v-else class="container mx-auto p-4">
+    <div v-else class="container mx-auto p-4 overflow-auto max-h-[90vh]">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
           <thead>
@@ -101,226 +101,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Add Grade Popup -->
-    <div v-if="showAddGradePopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Add New Grade</h3>
-        <div class="mb-4">
-          <label class="block mb-2">Grade ID</label>
-          <input type="text" v-model="newGrade.grade"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Grade Spawn Name</label>
-          <input type="text" v-model="newGrade.name"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Grade Name</label>
-          <input type="text" v-model="newGrade.label"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Salary</label>
-          <input type="number" v-model="newGrade.salary"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mt-4">
-          <button @click="addNewGrade" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Grade</button>
-          <button @click="showAddGradePopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add Stash Popup -->
-    <div v-if="showAddStashPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Add New Stash</h3>
-        <div class="mb-4">
-          <label class="block mb-2">Coords</label>
-          <input type="number" v-model="newStash.coords.x"
-            class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
-          <input type="number" v-model="newStash.coords.y"
-            class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
-          <input type="number" v-model="newStash.coords.z"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Private</label>
-          <input type="checkbox" v-model="newStash.private">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Weight</label>
-          <input type="number" v-model="newStash.weight"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Min Grade</label>
-          <select v-model="newStash.minimumGrade"
-            class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
-            <option v-for="grade in jobs[editingJobName].grades" :key="grade.grade" :value="grade.grade">
-              {{ grade.label }} (ID: {{ grade.grade }})
-            </option>
-          </select>
-        </div>
-        <div class="mt-4">
-          <button @click="addNewStash" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Stash</button>
-          <button @click="showAddStashPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add Shop Popup -->
-    <div v-if="showAddShopPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Add New Shop</h3>
-        <div class="mb-4">
-          <label class="block mb-2">Item</label>
-          <input type="text" v-model="newShop.item"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Price</label>
-          <input type="number" v-model="newShop.price"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Job Only</label>
-          <input type="checkbox" v-model="newShop.jobOnly">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Min Grade</label>
-          <select v-model="newShop.minimumGrade"
-            class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
-            <option v-for="grade in jobs[editingJobName].grades" :key="grade.grade" :value="grade.grade">
-              {{ grade.label }} (ID: {{ grade.grade }})
-            </option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">NPC/Marker</label>
-          <select v-model="newShop.type" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
-            <option value="npc">NPC</option>
-            <option value="marker">Marker</option>
-          </select>
-          <div v-if="newShop.type === 'npc'">
-            <input type="text" v-model="newShop.npcModel"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
-            <input type="number" v-model="newShop.npcHeading"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
-            <input type="number" v-model="newShop.npcRange"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
-          </div>
-          <div v-else-if="newShop.type === 'marker'">
-            <input type="number" v-model="newShop.markerId"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
-            <div>
-              <label class="block mb-2">Marker Color (RGB)</label>
-              <input type="number" v-model="newShop.markerColor.r"
-                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
-              <input type="number" v-model="newShop.markerColor.g"
-                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
-              <input type="number" v-model="newShop.markerColor.b"
-                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
-            </div>
-            <input type="number" v-model="newShop.markerScale"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
-          </div>
-        </div>
-        <div class="mt-4">
-          <button @click="addNewShop" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Shop</button>
-          <button @click="showAddShopPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add Processing Popup -->
-    <div v-if="showAddProcessingPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Add New Processing</h3>
-        <div class="mb-4">
-          <label class="block mb-2">Input Items</label>
-          <input type="text" v-model="newProcessing.inputItems"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Output Item</label>
-          <input type="text" v-model="newProcessing.outputItem"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Seconds</label>
-          <input type="number" v-model="newProcessing.seconds"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Animation Dir</label>
-          <input type="text" v-model="newProcessing.animationDir"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Animation</label>
-          <input type="text" v-model="newProcessing.animation"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">Min Grade</label>
-          <select v-model="newProcessing.minimumGrade"
-            class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
-            <option v-for="grade in jobs[editingJobName].grades" :key="grade.grade" :value="grade.grade">
-              {{ grade.label }} (ID: {{ grade.grade }})
-            </option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">NPC/Marker</label>
-          <select v-model="newProcessing.type"
-            class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
-            <option value="npc">NPC</option>
-            <option value="marker">Marker</option>
-          </select>
-          <div v-if="newProcessing.type === 'npc'">
-            <input type="text" v-model="newProcessing.npcModel"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
-            <input type="number" v-model="newProcessing.npcHeading"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
-            <input type="number" v-model="newProcessing.npcRange"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
-          </div>
-          <div v-else-if="newProcessing.type === 'marker'">
-            <input type="number" v-model="newProcessing.markerId"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
-            <div>
-              <label class="block mb-2">Marker Color (RGB)</label>
-              <input type="number" v-model="newProcessing.markerColor.r"
-                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
-              <input type="number" v-model="newProcessing.markerColor.g"
-                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
-              <input type="number" v-model="newProcessing.markerColor.b"
-                class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
-            </div>
-            <input type="number" v-model="newProcessing.markerScale"
-              class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
-          </div>
-        </div>
-        <div class="mt-4">
-          <button @click="addNewProcessing" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Processing</button>
-          <button @click="showAddProcessingPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Loading Overlay -->
-    <div v-if="loadingData" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
-      <div class="text-center">
-        <svg class="animate-spin h-8 w-8 text-white mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-        </svg>
-        <span class="text-2xl text-white">Loading...</span>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -346,12 +126,6 @@ export default {
       editingJobName: null,
       activeTab: 'JobInfo',
       showAddJobPopup: false,
-      showAddGradePopup: false,
-      showAddInteractionPopup: false,
-      showAddVehiclePopup: false,
-      showAddStashPopup: false,
-      showAddShopPopup: false,
-      showAddProcessingPopup: false,
       newJob: {
         name: '',
         label: '',
@@ -373,41 +147,17 @@ export default {
         garageCoords: { x: null, y: null, z: null },
         stashes: [],
         shops: [],
-        processing: []
-      },
-      newStash: {
-        coords: { x: null, y: null, z: null },
-        private: false,
-        weight: 0,
-        minimumGrade: ''
-      },
-      newShop: {
-        item: '',
-        price: 0,
-        jobOnly: false,
-        minimumGrade: '',
-        type: 'npc',
-        npcModel: '',
-        npcHeading: '',
-        npcRange: '',
-        markerId: '',
-        markerColor: { r: 0, g: 0, b: 0 },
-        markerScale: ''
-      },
-      newProcessing: {
-        inputItems: '',
-        outputItem: '',
-        seconds: 0,
-        animationDir: '',
-        animation: '',
-        minimumGrade: '',
-        type: 'npc',
-        npcModel: '',
-        npcHeading: '',
-        npcRange: '',
-        markerId: '',
-        markerColor: { r: 0, g: 0, b: 0 },
-        markerScale: ''
+        processing: [],
+        vehicleShop: {
+          coords: { x: null, y: null, z: null },
+          type: 'npc',
+          npcModel: '',
+          npcHeading: 0,
+          markerId: 0,
+          markerColor: { r: 0, g: 0, b: 0 },
+          markerScale: 1,
+          vehicles: []
+        }
       },
       newGrade: {
         grade: '',
@@ -504,6 +254,18 @@ export default {
           if (!jobsData[jobName].marker) {
             jobsData[jobName].marker = { r: 0, g: 0, b: 0 };
           }
+          if (!jobsData[jobName].vehicleShop) {
+            jobsData[jobName].vehicleShop = {
+              coords: { x: null, y: null, z: null },
+              type: 'npc',
+              npcModel: '',
+              npcHeading: 0,
+              markerId: 0,
+              markerColor: { r: 0, g: 0, b: 0 },
+              markerScale: 1,
+              vehicles: []
+            };
+          }
         });
 
         this.jobs = jobsData;
@@ -542,7 +304,17 @@ export default {
         onoffduty: job.onoffduty,
         stashes: job.stashes,
         shops: job.shops,
-        processing: job.processing
+        processing: job.processing,
+        vehicleShop: {
+          coords: job.vehicleShop.coords,
+          type: job.vehicleShop.type,
+          npcModel: job.vehicleShop.npcModel,
+          npcHeading: job.vehicleShop.npcHeading,
+          markerId: job.vehicleShop.markerId,
+          markerColor: job.vehicleShop.markerColor,
+          markerScale: job.vehicleShop.markerScale,
+          vehicles: job.vehicleShop.vehicles
+        }
       };
       fetch(`https://${GetParentResourceName()}/saveJob`, {
         method: 'POST',
@@ -584,7 +356,6 @@ export default {
             const newJobs = { ...this.jobs };
             delete newJobs[jobName];
             this.jobs = newJobs;
-            this.$forceUpdate();
             this.jobToDelete = null;
           }
         })
@@ -613,23 +384,7 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           if (result.success) {
-            const newJobs = {};
-            const keys = Object.keys(this.jobs).sort();
-
-            let inserted = false;
-            for (let key of keys) {
-              if (!inserted && key > result.jobName) {
-                newJobs[result.jobName] = this.newJob;
-                inserted = true;
-              }
-              newJobs[key] = this.jobs[key];
-            }
-            if (!inserted) {
-              newJobs[result.jobName] = this.newJob;
-            }
-
-            this.jobs = newJobs;
-
+            this.jobs = { ...this.jobs, [result.jobName]: this.newJob };
             this.showAddJobPopup = false;
             this.newJob = {
               name: '',
@@ -649,7 +404,20 @@ export default {
                 markerScale: 1
               },
               onOffDutyCoords: { x: null, y: null, z: null },
-              garageCoords: { x: null, y: null, z: null }
+              garageCoords: { x: null, y: null, z: null },
+              stashes: [],
+              shops: [],
+              processing: [],
+              vehicleShop: {
+                coords: { x: null, y: null, z: null },
+                type: 'npc',
+                npcModel: '',
+                npcHeading: 0,
+                markerId: 0,
+                markerColor: { r: 0, g: 0, b: 0 },
+                markerScale: 1,
+                vehicles: []
+              }
             };
             this.refreshData();
           } else {
@@ -668,11 +436,12 @@ export default {
       });
     },
     updateJob(updatedJob) {
-      this.$set(this.jobs, this.editingJobName, updatedJob);
+      this.jobs[this.editingJobName] = updatedJob;
     }
   }
 };
 </script>
+
 
 <style scoped>
 body {

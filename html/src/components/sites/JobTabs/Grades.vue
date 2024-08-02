@@ -35,10 +35,6 @@
       <div class="bg-gray-800 text-white p-4 rounded w-1/2">
         <h3 class="text-lg font-bold mb-4">Add New Grade</h3>
         <div class="mb-4">
-          <label class="block mb-2">Grade ID</label>
-          <input type="text" v-model="newGrade.grade" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" readonly>
-        </div>
-        <div class="mb-4">
           <label class="block mb-2">Grade Spawn Name</label>
           <input type="text" v-model="newGrade.name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
@@ -51,6 +47,7 @@
           <input type="number" v-model="newGrade.salary" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mt-4">
+          <span v-if="error" class="text-red-500">{{ error }}</span>
           <button @click="addNewGrade" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Grade</button>
           <button @click="showAddGradePopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
         </div>
@@ -72,11 +69,19 @@ export default {
         name: '',
         label: '',
         salary: 0
-      }
+      },
+      error: ''
     };
   },
   methods: {
     addNewGrade() {
+      // Check if the grade already exists
+      const gradeExists = this.job.grades.some(grade => grade.name === this.newGrade.name || grade.label === this.newGrade.label);
+      if (gradeExists) {
+        this.error = 'A grade with the same name or label already exists.';
+        return;
+      }
+
       if (!Array.isArray(this.job.grades)) {
         this.job.grades = [];
       }
@@ -91,6 +96,7 @@ export default {
         label: '',
         salary: 0
       };
+      this.error = '';
       this.$emit('update-job', this.job);
     },
     removeGrade(index) {

@@ -138,17 +138,8 @@ end
 -- @param table grades The grades data.
 -- @return boolean Success status.
 function saveGrades(jobName, grades)
-    local success = false
-    for _, grade in ipairs(grades) do
-        local result = lib.callback.await("ludaro_manager:saveGrade", false, jobName, grade)
-        if result then
-            success = true
-        else
-            success = false
-            break
-        end
-    end
-    return success
+    local result = lib.callback.await("ludaro_manager:saveGrade", false, jobName, grades)
+    return result
 end
 
 -- Save the boss menu data for a job.
@@ -156,5 +147,10 @@ end
 -- @return boolean Success status.
 function saveBossMenu(data)
     local success = lib.callback.await("ludaro_manager:saveBossMenu", false, data)
+    return success
+end
+
+function saveEmployee(data)
+    local success = lib.callback.await("ludaro_manager:saveEmployee", false, data)
     return success
 end

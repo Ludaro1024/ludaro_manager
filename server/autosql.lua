@@ -9,8 +9,10 @@ ADD COLUMN ludaro_manager_onoffduty JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_stashes JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_shops JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_processing JSON DEFAULT NULL;
+ADD COLUMN ludaro_manager_vehicleShop JSON DEFAULT NULL;
 
  ]]
+-- TODO: ADD DEFAULT []
  
  query2 = [[
  CREATE TABLE IF NOT EXISTS ludaro_manager_interactions (

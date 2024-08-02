@@ -50,8 +50,16 @@ export default {
       }
     },
     fireEmployee(identifier) {
+      const employee = this.job.employees.find(emp => emp.identifier === identifier)
       this.job.employees = this.job.employees.filter(emp => emp.identifier !== identifier);
       this.$emit('update-job', this.job);
+      fetch(`https://${GetParentResourceName()}/saveEmployee`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({ jobName: this.job.name, employee, fire: true })
+      })
     },
     saveEmployeeData(employee) {
       fetch(`https://${GetParentResourceName()}/saveEmployee`, {

@@ -14,7 +14,7 @@ function GetJobs()
                 end
             end
             job.interactions = json.decode(job.interactions)
-            job.employees = MySQL.query.await("SELECT * FROM users WHERE job = ?", {job.name})
+            job.employees = getEmployees(job.name)
             job.activeplayers = GetJobPlayers(job.name)
             Debug(4, "Job data: " .. json.encode(job))
         end
@@ -45,6 +45,7 @@ function saveJob(job)
         local stashes = job.stashes
         local shops = job.shops
         local processing = job.processing
+        local vehicleshop = job.vehicleShop
 
         -- Convert the tables to JSON strings, but replace nil with actual nil (not JSON "null")
         local bossmenu_json = bossmenu and json.encode(bossmenu) or nil
@@ -54,8 +55,9 @@ function saveJob(job)
         local stashes_json = stashes and json.encode(stashes) or nil
         local shops_json = shops and json.encode(shops) or nil
         local processing_json = processing and json.encode(processing) or nil
+        local vehicleshop_json = vehicleshop and json.encode(vehicleshop) or nil
 
-        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_shops = @shops, ludaro_manager_processing = @processing WHERE name = @name', {
+        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_shops = @shops, ludaro_manager_processing = @processing, ludaro_manager_vehicleShop = @vehicleShop WHERE name = @name', {
             ['@name'] = name,
             ['@label'] = label,
             ['@whitelisted'] = whitelisted,
@@ -65,7 +67,8 @@ function saveJob(job)
             ['@onoffduty'] = onoffduty_json,
             ['@stashes'] = stashes_json,
             ['@shops'] = shops_json,
-            ['@processing'] = processing_json
+            ['@processing'] = processing_json,
+            ['@vehicleShop'] = vehicleshop_json,
         }, function(rowsChanged)
             if rowsChanged > 0 then
                 Debug(2, "Job saved successfully: " .. name)
@@ -197,14 +200,32 @@ function addGrade(jobName, gradeName, gradeLabel, salary)
 end
 
 function saveGrade(jobName, grade)
-    local rowsChanged = MySQL.Sync.execute('UPDATE job_grades SET name = @name, label = @label, salary = @salary WHERE job_name = @job_name AND grade = @grade', {
-        ['@job_name'] = jobName,
-        ['@grade'] = grade.grade,
-        ['@name'] = grade.name,
-        ['@label'] = grade.label,
-        ['@salary'] = grade.salary
-    })
-    return rowsChanged > 0
+    print(ESX.DumpTable(grade))
+    for k,v in pairs(grade) do
+        gradeexists = MySQL.query.await("SELECT * FROM job_grades WHERE job_name = ? AND grade = ?", {jobName, v.grade})
+        if not next(gradeexists) then
+            print(grade.grade)
+            Debug(3, "Adding grade to job in the database: " .. jobName .. " - " .. v.grade)
+            MySQL.Async.execute('INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (@job_name, @grade, @name, @label, @salary, @skin_male, @skin_female)', {
+                ['@job_name'] = jobName,
+                ['@grade'] = v.grade,
+                ['@name'] = v.name,
+                ['@label'] = v.label,
+                ['@salary'] = v.salary,
+                ['@skin_male'] = "{}",
+                ['@skin_female'] = "{}"
+            }, function(rowsChanged)
+                if rowsChanged > 0 then
+                    Debug(2, "Grade added successfully to job: " .. jobName)
+                    returnn = true
+                else
+                    Debug(2, "Failed to add grade to job: " .. jobName)
+                    returnn = false
+                end
+            end)
+        end
+        return returnn
+    end
 end
 
 
@@ -232,6 +253,23 @@ function deleteGrade(jobName, index)
     end
 end
 
+-- checks if an interaction exists
+-- @param string interaction The interaction name.
+-- @return boolean Interaction exists status.
+function doesInteractionExist(interaction)
+    if ESX then
+        Debug(3, "Checking if interaction exists: " .. interaction)
+        local interaction = MySQL.query.await("SELECT * FROM ludaro_manager_interactions WHERE interaction_name = ?", {interaction})
+        if next(interaction) then
+            Debug(2, "Interaction exists: ")
+            return true
+        else
+            Debug(2, "Interaction does not exist: ")
+            return false
+        end
+    end
+end
+
 --- Add an interaction to a job in the database.
 -- @param string jobName The job name.
 -- @param string interaction The interaction name.
@@ -240,29 +278,27 @@ function addInteractiontoJob(jobName, interaction)
     if ESX then 
         Debug(3, "Adding interaction to job in the database: " .. jobName .. " - " .. interaction)
         if doesInteractionExist(interaction) then
-            local job = MySQL.query.await("SELECT interactions FROM jobs WHERE name = ?", {jobName})
+            local job = MySQL.query.await("SELECT ludaro_manager_interactions FROM jobs WHERE name = ?", {jobName})
             local interactions = json.decode(job.interactions)
             if interactions == nil then
                 interactions = {}
             end
             table.insert(interactions, interaction)
             Debug(4, "Updated interactions: " .. json.encode(interactions))
-            MySQL.Async.execute('UPDATE jobs SET interactions = @interactions WHERE name = @name', {
+            MySQL.Async.execute('UPDATE jobs SET ludaro_manager_interactions = @interactions WHERE name = @name', {
                 ['@interactions'] = json.encode(interactions),
                 ['@name'] = jobName
             }, function(rowsChanged)
                 if rowsChanged > 0 then
                     Debug(2, "Interaction added successfully to job: " .. jobName)
-                    return true
+                    returnn = true
                 else
                     Debug(2, "Failed to add interaction to job: " .. jobName)
-                    return false
+                    returnn = false
                 end
             end)
-        else
-            Debug(2, "Interaction does not exist: " .. interaction)
-            return false
         end
+        return returnn
     end
 end
 -- gets All Available Interactions
@@ -282,21 +318,22 @@ end
 function removeInteractionfromjob(jobName, index)
     if ESX then
         Debug(3, "Deleting interaction from job in the database: " .. jobName .. " - Index: " .. index)
-        local job = MySQL.query.await("SELECT interactions FROM jobs WHERE name = ?", {jobName})
-        local interactions = json.decode(job.interactions)
-        table.remove(interactions, index)
-        MySQL.Async.execute('UPDATE jobs SET interactions = @interactions WHERE name = @name', {
-            ['@interactions'] = json.encode(interactions),
+        local interactions = MySQL.scalar.await("SELECT ludaro_manager_interactions FROM jobs WHERE name = ? LIMIT 1", {jobName})
+        interactions = json.decode(interactions)
+        newinteractions = removeIndexIfPresent(interactions, index)
+        MySQL.Async.execute('UPDATE jobs SET ludaro_manager_interactions = @interactions WHERE name = @name', {
+            ['@interactions'] = json.encode(newinteractions),
             ['@name'] = jobName
         }, function(rowsChanged)
             if rowsChanged > 0 then
+                returnn = true
                 Debug(2, "Interaction deleted successfully from job: " .. jobName)
-                return true
             else
+                returnn = false
                 Debug(2, "Failed to delete interaction from job: " .. jobName)
-                return false
             end
         end)
+        return returnn
     end
 end
 
@@ -458,5 +495,35 @@ function saveBossMenu(data)
                 return false
             end
         end)
+    end
+end
+
+function saveEmployee(data)
+    print(ESX.DumpTable(data))
+    if ESX then
+        xPlayer = ESX.GetPlayerFromIdentifier(data.employee.identifier)
+        if xPlayer then
+            if data.fire then
+                Debug(2, "Firing player. and setting job to unemployed 0")
+                xPlayer.setJob("unemployed", 0)
+                return true
+            end
+            xPlayer.setJob(data.jobName, data.employee.job_grade)
+            return true
+        else
+            MySQL.Async.execute('UPDATE users SET job = @job, job_grade = @job_grade WHERE identifier = @identifier', {
+                ['@job'] = data.jobName,
+                ['@job_grade'] = data.employee.job_grade,
+                ['@identifier'] = data.employee.identifier
+            }, function(rowsChanged)
+                if rowsChanged > 0 then
+                    Debug(2, "Employee data saved successfully for identifier: " .. data.employee.identifier)
+                    return true
+                else
+                    Debug(2, "Failed to save employee data for identifier: " .. data.employee.identifier)
+                    return false
+                end
+            end)
+        end
     end
 end
