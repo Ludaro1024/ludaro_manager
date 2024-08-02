@@ -154,3 +154,4 @@ function saveEmployee(data)
     local success = lib.callback.await("ludaro_manager:saveEmployee", false, data)
     return success
 end
+

@@ -9,6 +9,7 @@ function removeIndexIfPresent(tbl, index)
 end
 -- TODO: DOBULE CHECK
 function getEmployees(jobName)
+    
     local employees = {}
     for k, v in pairs(ESX.GetPlayers()) do
         local xPlayer = ESX.GetPlayerFromId(v)
@@ -27,13 +28,12 @@ function getEmployees(jobName)
             })
         end
     end
-    -- save all idenetifiers from all online players in a table and for everyone who isnt online, get it from the database
+  
     local identifiers = {}
     for k, v in pairs(ESX.GetExtendedPlayers()) do
         table.insert(identifiers, v.getIdentifier())
     end
-    -- get all users from the databse that dontn match the identifiers
-    print(ESX.DumpTable())
+
     restfromdatabase = MySQL.Sync.fetchAll('SELECT firstname, lastname, job_grade, job, identifier FROM users WHERE job = @job AND identifier NOT IN (@identifiers)', {
         ['@job'] = jobName,
         ['@identifiers'] = table.concat(identifiers, ',')

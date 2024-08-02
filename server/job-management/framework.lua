@@ -18,3 +18,10 @@ function GetJobPlayers(jobname)
     end
 end
 
+
+function getPlayerName(id)
+    if ESX then
+        local xPlayer = ESX.GetPlayerFromId(id)
+        return xPlayer.getName()
+    end
+end

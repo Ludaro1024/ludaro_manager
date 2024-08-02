@@ -70,3 +70,11 @@ end)
 lib.callback.register("ludaro_manager:saveEmployee", function(source, data)
    return saveEmployee(data)
 end)
+
+lib.callback.register("ludaro_manager:getNPCData", function(source, data)
+   return getNPCData()
+end)
+
+lib.callback.register('ludaro_manager:getName', function(source, id)
+   return getPlayerName(identifier)
+end)

@@ -527,3 +527,73 @@ function saveEmployee(data)
         end
     end
 end
+
+-- Get NPC Data for spawning NPCS
+-- @return table The NPC data.
+function getNPCData()
+    if ESX then
+        Debug(3, "Fetching NPC data from the database")
+        local query = [[
+            SELECT name, label, ludaro_manager_bossmenu, ludaro_manager_interactions,
+                   ludaro_manager_garage, ludaro_manager_onoffduty, ludaro_manager_stashes,
+                   ludaro_manager_shops, ludaro_manager_processing, ludaro_manager_vehicleShop 
+            FROM jobs
+        ]]
+   
+        local npcs = MySQL.query.await(query)
+        local npcdata = {}
+
+        for _, npc in ipairs(npcs) do
+            local ludaro_manager_bossmenu = json.decode(npc.ludaro_manager_bossmenu) or {}
+            local ludaro_manager_interactions = json.decode(npc.ludaro_manager_interactions) or {}
+            local ludaro_manager_garage = json.decode(npc.ludaro_manager_garage) or {}
+            local ludaro_manager_onoffduty = json.decode(npc.ludaro_manager_onoffduty) or {}
+            local ludaro_manager_stashes = json.decode(npc.ludaro_manager_stashes) or {}
+            local ludaro_manager_shops = json.decode(npc.ludaro_manager_shops) or {}
+            local ludaro_manager_processing = json.decode(npc.ludaro_manager_processing) or {}
+            local ludaro_manager_vehicleShop = json.decode(npc.ludaro_manager_vehicleShop) or {}
+            if next(ludaro_manager_bossmenu) then
+            ludaro_manager_bossmenu.openType = "bossmenu"
+            end
+            if next(ludaro_manager_interactions) then
+            ludaro_manager_interactions.openType = "interactions"
+            end
+            if next(ludaro_manager_garage) then 
+            ludaro_manager_garage.openType = "garage"
+            end
+            if next(ludaro_manager_onoffduty) then
+            ludaro_manager_onoffduty.openType = "onoffduty"
+            end
+            if next(ludaro_manager_stashes) then
+            ludaro_manager_stashes.openType = "stashes"
+            end
+            if next(ludaro_manager_shops) then
+            ludaro_manager_shops.openType = "shops"
+            end
+            if next(ludaro_manager_processing) then
+            ludaro_manager_processing.openType = "processing"
+            end
+            if next(ludaro_manager_vehicleShop) then
+            ludaro_manager_vehicleShop.openType = "vehicleShop"
+            end
+
+            table.insert(npcdata, {
+                name = npc.name,
+                label = npc.label,
+                data = {
+                    bossmenu = ludaro_manager_bossmenu,
+                    interactions = ludaro_manager_interactions,
+                    garage = ludaro_manager_garage,
+                    onoffduty = ludaro_manager_onoffduty,
+                    stashes = ludaro_manager_stashes,
+                    shops = ludaro_manager_shops,
+                    processing = ludaro_manager_processing,
+                    vehicleShop = ludaro_manager_vehicleShop
+                }
+            })
+        end
+
+        return npcdata
+    end
+end
+
