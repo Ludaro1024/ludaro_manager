@@ -1,6 +1,6 @@
 if Config.Menu == "esx_menu_default" then
     function openBossMenu(data, jobName)
-        local bossmenuData = getBossMenuData(jobName)
+        local bossmenuData = jobmenu_bossmenu_getBossMenuData(jobName)
         local players = ESX.Game.GetPlayersInArea(GetEntityCoords(PlayerPedId()), 10.0)
         local xPlayer = ESX.GetPlayerData()
         local playerGrade = xPlayer.job.grade
@@ -46,7 +46,7 @@ if Config.Menu == "esx_menu_default" then
             if value == 'deposit_money' then
                 local amount = lib.inputDialog(Locale("deposit_money"), {Locale("amount")})
                 if amount and amount[1] and tonumber(amount[1]) > 0 then
-                    local success = depositSocietyMoney(jobName, tonumber(amount[1]))
+                    local success = society_management_callback_depositSocietyMoney(jobName, tonumber(amount[1]))
                     if success then
                         societyData.money = societyData.money + tonumber(amount[1])
                         openSocietyMenu(societyData, jobName)
@@ -55,7 +55,7 @@ if Config.Menu == "esx_menu_default" then
             elseif value == 'withdraw_money' then
                 local amount = lib.inputDialog(Locale("withdraw_money"), {Locale("amount")})
                 if amount and amount[1] and tonumber(amount[1]) > 0 then
-                    local success = withdrawSocietyMoney(jobName, tonumber(amount[1]))
+                    local success = society_management_callback_withdrawSocietyMoney(jobName, tonumber(amount[1]))
                     if success then
                         societyData.money = societyData.money - tonumber(amount[1])
                         openSocietyMenu(societyData, jobName)
@@ -88,7 +88,7 @@ if Config.Menu == "esx_menu_default" then
             for _, player in ipairs(players) do
                 local playerName = GetPlayerName(player)
                 local playerServerId = GetPlayerServerId(player)
-                local job, grade = getJobandGrade(playerServerId)
+                local job, grade = jobmanagement_zones_npcs_getJobandGrade(playerServerId)
 
                 if job ~= jobName then
                     table.insert(elements, {
@@ -111,7 +111,7 @@ if Config.Menu == "esx_menu_default" then
                 manageEmployeeMenu(jobName, employeeId, employeeData, gradeData, playerGrade, menu)
             elseif string.match(value, '^hire_') then
                 local playerServerId = tonumber(string.sub(value, 6))
-                local newPlayerData = hirePlayer(jobName, playerServerId)
+                local newPlayerData = jobmenu_bossmenu_hirePlayer(jobName, playerServerId)
                 if newPlayerData then
                     table.insert(employeeData, newPlayerData.employee)
                     menu.close()
@@ -145,7 +145,7 @@ if Config.Menu == "esx_menu_default" then
                 if gradeIndex < playerGrade then
                     local salary = lib.inputDialog(Locale("set_salary"), {Locale("amount")})
                     if salary and salary[1] and tonumber(salary[1]) > 0 then
-                        setGradeSalary(jobName, gradeIndex, tonumber(salary[1]))
+                        jobmenu_bossmenu_setGradeSalary(jobName, gradeIndex, tonumber(salary[1]))
                         gradeData[gradeIndex + 1].salary = tonumber(salary[1])
                         menu.close()
                         openGradeMenu(gradeData, jobName, playerGrade)
@@ -184,7 +184,7 @@ if Config.Menu == "esx_menu_default" then
 
             if value == 'fire' then
                 local edata = { jobName = employee.job, employee = {job_grade = employee.job_grade, identifier = employee.identifier}, fire = true }
-                saveEmployee(edata)
+                job_management_callback_saveEmployee(edata)
                 ESX.UI.Menu.CloseAll()
                 openEmployeeMenu(employeeData, jobName, players, gradeData, playerGrade)
             elseif value == 'promote' or value == 'demote' then
@@ -194,7 +194,7 @@ if Config.Menu == "esx_menu_default" then
                     employee.job_grade = employee.job_grade - 1
                 end
                 local edata = { jobName = employee.job, employee = {job_grade = employee.job_grade, identifier = employee.identifier} }
-                saveEmployee(edata)
+                job_management_callback_saveEmployee(edata)
                 menu.close()
                 parentMenu.close()
                 openEmployeeMenu(employeeData, jobName, players, gradeData, playerGrade)

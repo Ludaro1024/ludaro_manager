@@ -1,6 +1,5 @@
 function removeIndexIfPresent(tbl, index)
     for i, v in ipairs(tbl) do
-        (v, index)
         if v == index then
             table.remove(tbl, i)
             return tbl

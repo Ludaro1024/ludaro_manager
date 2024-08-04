@@ -1,6 +1,6 @@
 npcs = {}
 
-function createNPC(coords, model, heading, name)
+function jobmanagement_zones_npcs_createNPC(coords, model, heading, name)
     ("Creating NPC " .. name, model, heading, name)
     RequestModel(model)
     while not HasModelLoaded(model) do
@@ -17,7 +17,7 @@ function createNPC(coords, model, heading, name)
     return npc
 end
 
-function deleteNPCByName(name)
+function jobmanagement_zones_npcs_deleteNPCByName(name)
     for i, v in ipairs(npcs) do
         if v.name == name then
             table.remove(npcs, i)
@@ -27,14 +27,14 @@ function deleteNPCByName(name)
     end
 end
 
-function deleteAllNPCs()
+function jobmanagement_zones_npcs_deleteAllNPCs()
     for i, v in ipairs(npcs) do
         DeleteEntity(v.npc)
     end
     npcs = {}
 end
 
-function getNPCByName(name)
+function jobmanagement_zones_npcs_getNPCByName(name)
     for i, v in ipairs(npcs) do
         if v.name == name then
             return v.npc
@@ -42,12 +42,12 @@ function getNPCByName(name)
     end
 end
 
-function getNPCs()
+function jobmanagement_zones_npcs_getNPCs()
     return npcs
 end
 
 AddEventHandler('onResourceStop', function(resourceName)
     if (GetCurrentResourceName() == resourceName) then
-        deleteAllNPCs()
+        jobmanagement_zones_npcs_deleteAllNPCs()
     end
   end)

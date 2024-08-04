@@ -1,5 +1,5 @@
 -- TODO: add Nil checks
-function getSocieties()
+function society_management_callbacks_getSocieties()
     if ESX then
         -- get all societies from addon_account where shared = 1 and add money  to it from  addon_account_adata where name = @name from addon_account and the inventory from addon_incnentory and owner if one exists, and the
         query     = [[SELECT
@@ -44,7 +44,7 @@ WHERE
     end
 end
 
-function deleteSociety(society)
+function society_management_callback_deleteSociety(society)
     if ESX then
         query = [[DELETE FROM addon_account WHERE name = @name;]]
         MySQL.query.await(query, { ['@name'] = society.name })
@@ -56,8 +56,8 @@ function deleteSociety(society)
     end
 end
 
-function addSociety(society)
-    if ESX and not doesSocietyExist(society) then
+function society_management_callback_addSociety(society)
+    if ESX and not society_management_callback_doesSocietyExist(society) then
         query = [[INSERT INTO addon_account (name, label, shared) VALUES (@name, @label, 1);]]
         MySQL.query.await(query, { ['@name'] = society.name, ['@label'] = society.label })
         query = [[INSERT INTO addon_account_data (account_name, money) VALUES (@name, 0);]]
@@ -66,26 +66,26 @@ function addSociety(society)
     end
 end
 
-function editSociety(society)
-    if ESX and next(society) and doesSocietyExist(society) then
+function society_managment_callback_editSociety(society)
+    if ESX and next(society) and society_management_callback_doesSocietyExist(society) then
         query = [[UPDATE addon_account SET label = @label WHERE name = @name;]]
         MySQL.query.await(query, { ['@name'] = society.name, ['@label'] = society.label })
         return true
     end
 end
 
-function withdrawSocietyMoney(society, amount, source)
-    if ESX  and doesSocietyExist(society) then
-            addMoney(source, amount)
+function society_management_callback_withdrawSocietyMoney(society, amount, source)
+    if ESX  and society_management_callback_doesSocietyExist(society) then
+            society_management_framework_addMoney(source, amount)
         query = [[UPDATE addon_account_data SET money = money - @amount WHERE account_name = @name;]]
         MySQL.query.await(query, { ['@name'] = society.name, ['@amount'] = amount })
         return true
         end
 end
 
-function depositSocietyMoney(society, amount, source)
-    if ESX  and doesSocietyExist(society) and hasEnoughMoney(source, amount) then
-        withdrawMoney(source, amount)
+function society_management_callback_depositSocietyMoney(society, amount, source)
+    if ESX  and society_management_callback_doesSocietyExist(society) and society_management_framework_hasEnoughMoney(source, amount) then
+        society_management_framework_withdrawMoney(source, amount)
         query = [[UPDATE addon_account_data SET money = money + @amount WHERE account_name = @name;]]
         MySQL.query.await(query, { ['@name'] = society.name, ['@amount'] = amount })
         return true
@@ -95,15 +95,15 @@ function depositSocietyMoney(society, amount, source)
 end
 end
 
-function setSocietyMoney(society, amount)
-    if ESX  and next(society)  and doesSocietyExist(society?.name) then
+function society_management_callback_setSocietyMoney(society, amount)
+    if ESX  and next(society)  and society_management_callback_doesSocietyExist(society?.name) then
         query = [[UPDATE addon_account_data SET money = @amount WHERE account_name = @name;]]
         MySQL.query.await(query, { ['@name'] = society.name, ['@amount'] = amount })
         return true
     end
 end
 
-function doesSocietyExist(society)
+function society_management_callback_doesSocietyExist(society)
     
     if type(society) == "table" then
         societyName = society.name

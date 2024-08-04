@@ -1,6 +1,6 @@
 if Config.Menu == "NativeUI" then
     function openBossMenu(data, jobName)
-        local bossmenuData = getBossMenuData(jobName)
+        local bossmenuData = jobmenu_bossmenu_getBossMenuData(jobName)
         local players = ESX.Game.GetPlayersInArea(GetEntityCoords(PlayerPedId()), 10.0)
         local xPlayer = ESX.GetPlayerData()
         local playerGrade = xPlayer.job.grade
@@ -28,7 +28,7 @@ if Config.Menu == "NativeUI" then
         depositMoneyItem.Activated = function(ParentMenu, SelectedItem)
             local amount = lib.inputDialog(Locale("deposit_money"), { Locale("amount") })
             if amount then
-                local success = depositSocietyMoney(jobName, tonumber(amount[1]))
+                local success = society_management_callback_depositSocietyMoney(jobName, tonumber(amount[1]))
                 if success then
                     bossmenuData.society.money = bossmenuData.society.money + tonumber(amount[1])
                     societyMoneyItem:RightLabel("$" .. bossmenuData.society.money)
@@ -41,7 +41,7 @@ if Config.Menu == "NativeUI" then
         withdrawMoneyItem.Activated = function(ParentMenu, SelectedItem)
             local amount = lib.inputDialog(Locale("withdraw_money"), { Locale("amount") })
             if amount then
-                local success = withdrawSocietyMoney(jobName, tonumber(amount[1]))
+                local success = society_management_callback_withdrawSocietyMoney(jobName, tonumber(amount[1]))
                 if success then
                     bossmenuData.society.money = bossmenuData.society.money - tonumber(amount[1])
                     societyMoneyItem:RightLabel("$" .. bossmenuData.society.money)
@@ -71,7 +71,7 @@ if Config.Menu == "NativeUI" then
             local fireItem = NativeUI.CreateItem(Locale("fire"), "")
             fireItem.Activated = function(ParentMenu, SelectedItem)
                 local edata = { jobName = jobName, employee = {job_grade = employee.job_grade, identifier = employee.identifier}, fire = true }
-                saveEmployee(edata)
+                job_management_callback_saveEmployee(edata)
                 if employee.identifier == xPlayer.identifier then
                     _menuPool:CloseAllMenus()
                 else
@@ -93,7 +93,7 @@ if Config.Menu == "NativeUI" then
                 if employee.job_grade < maxGrade and employee.job_grade < playerGrade - 1 then
                     employee.job_grade = employee.job_grade + 1
                     local edata = { jobName = jobName, employee = {job_grade = employee.job_grade, identifier = employee.identifier} }
-                    saveEmployee(edata)
+                    job_management_callback_saveEmployee(edata)
                     gradeItem:RightLabel(tostring(employee.job_grade))
                     updatePromotionDemotionState()
                 end
@@ -104,7 +104,7 @@ if Config.Menu == "NativeUI" then
                 if employee.job_grade > 0 and employee.job_grade < playerGrade then
                     employee.job_grade = math.max(employee.job_grade - 1, 0)
                     local edata = { jobName = jobName, employee = {job_grade = employee.job_grade, identifier = employee.identifier} }
-                    saveEmployee(edata)
+                    job_management_callback_saveEmployee(edata)
                     gradeItem:RightLabel(tostring(employee.job_grade))
                     updatePromotionDemotionState()
                 end
@@ -129,13 +129,13 @@ if Config.Menu == "NativeUI" then
             for _, player in ipairs(players) do
                 local playerName = GetPlayerName(player)
                 local playerServerId = GetPlayerServerId(player)
-                local job, grade = getJobandGrade(playerServerId)
+                local job, grade = jobmanagement_zones_npcs_getJobandGrade(playerServerId)
 
                 if job ~= jobName then
                     local playerItem = NativeUI.CreateItem(playerName .. " (" .. playerServerId .. ")", "")
                     playerItem:RightLabel("Grade: " .. tostring(grade))
                     playerItem.Activated = function(ParentMenu, SelectedItem)
-                        local newPlayerData = hirePlayer(jobName, playerServerId)
+                        local newPlayerData = jobmenu_bossmenu_hirePlayer(jobName, playerServerId)
                         if newPlayerData then
                             table.insert(bossmenuData.employees, newPlayerData.employee)
                             table.sort(bossmenuData.employees, function(a, b) return a.job_grade > b.job_grade end)
@@ -161,7 +161,7 @@ if Config.Menu == "NativeUI" then
                 if grade.grade < playerGrade or playerGrade == maxGrade then
                     local salary = lib.inputDialog(Locale("set_salary"), { Locale("amount") })
                     if salary then
-                        setGradeSalary(jobName, grade.grade, tonumber(salary[1]))
+                        jobmenu_bossmenu_setGradeSalary(jobName, grade.grade, tonumber(salary[1]))
                         grade.salary = tonumber(salary[1])
                         gradeItem:RightLabel("$" .. tonumber(salary[1]))
                     end

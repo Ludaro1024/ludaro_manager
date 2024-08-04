@@ -1,9 +1,8 @@
-function getBossMenuData(jobName)
+function jobmenu_bossmenu_getBossMenuData(jobName)
     -- get society money
-    (doesSocietyExist(jobName))
-    if doesSocietyExist(jobName) then
+    if society_management_callback_doesSocietyExist(jobName) then
         society = { name = "society_" .. jobName, label = jobName }
-            cb = addSociety(society)
+            cb = society_management_callback_addSociety(society)
             society = getSociety(jobName)
     else
         society = getSociety(jobName)
@@ -18,27 +17,23 @@ function getBossMenuData(jobName)
         employees = employees
     }   
 
-    (ESX.DumpTable(data))
-
    
     return data
 end
 
-function setGradeSalary(jobName, grade, salary)
-    (jobName, grade, salary)
+function jobmenu_bossmenu_setGradeSalary(jobName, grade, salary)
     MySQL.Async.execute("UPDATE job_grades SET salary = @salary WHERE job_name = @job_name AND grade = @grade", {['@job_name'] = jobName, ['@grade'] = grade, ['@salary'] = salary})
     return true
 end
 
-function hirePlayer(jobName, player)
+function jobmenu_bossmenu_hirePlayer(jobName, player)
     if ESX then
         local xPlayer = ESX.GetPlayerFromId(player)
-        (player)
+      
         if xPlayer then
-            ("what")
+      
 
         xPlayer.setJob(jobName, 0)
-        (jobName)
 
           fullname = xPlayer.getName()
             firstname = fullname:match("([^%s]+)")

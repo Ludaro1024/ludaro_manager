@@ -1,6 +1,6 @@
 --- Get all jobs from the database.
 -- @return table The jobs data.
-function GetJobs()
+function job_management_sql_GetJobs()
     if ESX then
         Debug(3, "Fetching jobs from the database")
         local jobs = MySQL.query.await("SELECT * FROM jobs")
@@ -24,7 +24,7 @@ end
 
 -- Get all grades
 -- @return table The grades data.
-function GetAllGrades()
+function job_management_sql_GetAllGrades()
     local grades = MySQL.query.await("SELECT * FROM job_grades")
     return grades
 end
@@ -32,7 +32,7 @@ end
 --- Save a job to the database.
 -- @param table job The job data.
 -- @return boolean Success status.
-function saveJob(job)
+function job_management_callback_saveJob(job)
     if ESX then
         Debug(3, "Saving job to the database: " .. json.encode(job))
         local name = job.name
@@ -104,7 +104,7 @@ end
 --- Delete a job from the database.
 -- @param string jobName The job name.
 -- @return boolean Success status.
-function deleteJob(jobName)
+function job_management_callback_deleteJob(jobName)
     if ESX then
         Debug(3, "Deleting job from the database: " .. jobName)
         MySQL.Async.execute('DELETE FROM jobs WHERE name = @name', {
@@ -126,7 +126,7 @@ end
 --- Add a new job to the database.
 -- @param table job The job data.
 -- @return boolean, string Success status and job name.
-function addJob(job)
+function job_management_callback_addJob(job)
     if ESX then
         Debug(3, "Adding new job to the database: " .. json.encode(job))
         if doesJobExist(job.name) then
@@ -152,7 +152,7 @@ function addJob(job)
             end
         end)
         -- adding a grade 0 so the job has a default grade
-        addGrade(name, name .. "_default", "Default", 0)
+        job_management_callback_addGrade(name, name .. "_default", "Default", 0)
         refreshJobs()
         return returnn, returnname
     end
@@ -164,8 +164,7 @@ end
 -- @param string gradeLabel The grade label.
 -- @param number salary The grade salary.
 -- @return boolean Success status.
-function addGrade(jobName, gradeName, gradeLabel, salary)
-    (jobName, gradeName, gradeLabel, salary)   
+function job_management_callback_addGrade(jobName, gradeName, gradeLabel, salary)
     if ESX then
         Debug(3, "Adding grade to job in the database: " .. jobName .. " - " .. gradeName)
         local latestgrade = MySQL.query.await("SELECT MAX(grade) as grade FROM job_grades WHERE job_name = ?", {jobName})
@@ -199,12 +198,11 @@ function addGrade(jobName, gradeName, gradeLabel, salary)
     end
 end
 
-function saveGrade(jobName, grade)
-    (ESX.DumpTable(grade))
+function job_management_sql_saveGrade(jobName, grade)
     for k,v in pairs(grade) do
         gradeexists = MySQL.query.await("SELECT * FROM job_grades WHERE job_name = ? AND grade = ?", {jobName, v.grade})
         if not next(gradeexists) then
-            (grade.grade)
+            
             Debug(3, "Adding grade to job in the database: " .. jobName .. " - " .. v.grade)
             MySQL.Async.execute('INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (@job_name, @grade, @name, @label, @salary, @skin_male, @skin_female)', {
                 ['@job_name'] = jobName,
@@ -234,7 +232,7 @@ end
 -- @param string jobName The job name.
 -- @param number index The grade index.
 -- @return boolean Success status.
-function deleteGrade(jobName, index)
+function job_management_callback_deleteGrade(jobName, index)
     if ESX then
         Debug(3, "Deleting grade from job in the database: " .. jobName .. " - Index: " .. index)
         MySQL.Async.execute('DELETE FROM job_grades WHERE job_name = @job_name AND grade = @grade', {
@@ -256,7 +254,7 @@ end
 -- checks if an interaction exists
 -- @param string interaction The interaction name.
 -- @return boolean Interaction exists status.
-function doesInteractionExist(interaction)
+function job_management_sql_doesInteractionExist(interaction)
     if ESX then
         Debug(3, "Checking if interaction exists: " .. interaction)
         local interaction = MySQL.query.await("SELECT * FROM ludaro_manager_interactions WHERE interaction_name = ?", {interaction})
@@ -277,7 +275,7 @@ end
 function addInteractiontoJob(jobName, interaction)
     if ESX then 
         Debug(3, "Adding interaction to job in the database: " .. jobName .. " - " .. interaction)
-        if doesInteractionExist(interaction) then
+        if job_management_sql_doesInteractionExist(interaction) then
             local job = MySQL.query.await("SELECT ludaro_manager_interactions FROM jobs WHERE name = ?", {jobName})
             local interactions = json.decode(job.interactions)
             if interactions == nil then
@@ -303,7 +301,7 @@ function addInteractiontoJob(jobName, interaction)
 end
 -- gets All Available Interactions
 -- @return table The interactions data.
-function getAllInteractions()
+function job_management_sql_getAllInteractions()
     if ESX then
         Debug(3, "Fetching interactions from the database")
         local interactions = MySQL.query.await("SELECT * FROM ludaro_manager_interactions")
@@ -315,7 +313,7 @@ end
 -- @param string jobName The job name.
 -- @param number index The interaction index.
 -- @return boolean Success status.
-function removeInteractionfromjob(jobName, index)
+function job_management_sql_removeInteractionfromjob(jobName, index)
     if ESX then
         Debug(3, "Deleting interaction from job in the database: " .. jobName .. " - Index: " .. index)
         local interactions = MySQL.scalar.await("SELECT ludaro_manager_interactions FROM jobs WHERE name = ? LIMIT 1", {jobName})
@@ -341,7 +339,7 @@ end
 -- @param string jobName The job name.
 -- @param table vehicle The vehicle data.
 -- @return boolean Success status.
-function addVehicle(jobName, vehicle)
+function job_management_callback_addVehicle(jobName, vehicle)
     if ESX then
         Debug(3, "Adding vehicle to job in the database: " .. jobName .. " - " .. json.encode(vehicle))
         MySQL.Async.execute('INSERT INTO job_vehicles (job_name, vehicle) VALUES (@job_name, @vehicle)', {
@@ -363,7 +361,7 @@ end
 -- @param string jobName The job name.
 -- @param number index The vehicle index.
 -- @return boolean Success status.
-function deleteVehicle(jobName, index)
+function job_management_callback_deleteVehicle(jobName, index)
     if ESX then
         Debug(3, "Deleting vehicle from job in the database: " .. jobName .. " - Index: " .. index)
         local job = MySQL.query.await("SELECT vehicles FROM jobs WHERE name = ?", {jobName})
@@ -389,7 +387,7 @@ end
 -- @param string jobName The job name.
 -- @param table armory The armory data.
 -- @return boolean Success status.
-function saveArmory(jobName, armory)
+function job_management_callback_saveArmory(jobName, armory)
     if ESX then
         Debug(3, "Saving armory data to the database for job: " .. jobName)
         MySQL.Async.execute('UPDATE ludaro_manager_armories SET weapons = @weapons, components = @components, ammo = @ammo, extras = @extras, blip_data = @blip_data WHERE job_name = @job_name', {
@@ -415,7 +413,7 @@ end
 -- @param string jobName The job name.
 -- @param table clothing The clothing data.
 -- @return boolean Success status.
-function saveClothing(jobName, clothing)
+function job_management_callback_saveClothing(jobName, clothing)
     if ESX then
         Debug(3, "Saving clothing data to the database for job: " .. jobName)
         MySQL.Async.execute('UPDATE jobs SET clothing = @clothing WHERE name = @name', {
@@ -437,7 +435,7 @@ end
 -- @param string jobName The job name.
 -- @param table stashes The stashes data.
 -- @return boolean Success status.
-function saveStashes(jobName, stashes)
+function job_management_callback_saveStashes(jobName, stashes)
     if ESX then
         Debug(3, "Saving stashes data to the database for job: " .. jobName)
         MySQL.Async.execute('UPDATE jobs SET stashes = @stashes WHERE name = @name', {
@@ -459,7 +457,7 @@ end
 -- @param string jobName The job name.
 -- @param table shop The shop data.
 -- @return boolean Success status.
-function saveShop(jobName, shop)
+function job_management_callback_saveShop(jobName, shop)
     if ESX then
         Debug(3, "Saving shop data to the database for job: " .. jobName)
         MySQL.Async.execute('UPDATE jobs SET shop = @shop WHERE name = @name', {
@@ -478,7 +476,7 @@ function saveShop(jobName, shop)
 end
 
 
-function saveBossMenu(data)
+function job_management_callback_saveBossMenu(data)
     jobname = data.name
     bossmenu = data.bossmenu
     if ESX then
@@ -498,7 +496,7 @@ function saveBossMenu(data)
     end
 end
 
-function saveEmployee(data)
+function job_management_callback_saveEmployee(data)
     ("savedata")
     (ESX.DumpTable(data))
     if ESX then
@@ -509,7 +507,6 @@ function saveEmployee(data)
                 xPlayer.setJob("unemployed", 0)
                 return true
             end
-            (ESX.DumpTable(data))
             xPlayer.setJob(data.jobName, data.employee.job_grade)
             return true
         else
@@ -532,7 +529,7 @@ end
 
 -- Get NPC Data for spawning NPCS
 -- @return table The NPC data.
-function getNPCData()
+function jobmanagement_zones_npcs_getNPCData()
     if ESX then
         Debug(3, "Fetching NPC data from the database")
         local query = [[

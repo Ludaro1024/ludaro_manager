@@ -1,3 +1,4 @@
+function framework_initFramework()
 if (GetResourceState("es_extended") == "started") then
     if (exports["es_extended"] and exports["es_extended"].getSharedObject) then
         ESX = exports["es_extended"]:getSharedObject()
@@ -5,4 +6,6 @@ if (GetResourceState("es_extended") == "started") then
         TriggerEvent("esx:getSharedObject", function(obj) ESX = obj end)
     end
 end
+end
+framework_initFramework()
 

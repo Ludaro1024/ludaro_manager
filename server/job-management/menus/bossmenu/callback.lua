@@ -1,5 +1,5 @@
 lib.callback.register("getBossMenuData", function(source, jobName)
-    return getBossMenuData(jobName)
+    return jobmenu_bossmenu_getBossMenuData(jobName)
 end)
 
 lib.callback.register("ludaro_manager:getJobandGrade", function(source, otherplayerid)
@@ -7,10 +7,10 @@ lib.callback.register("ludaro_manager:getJobandGrade", function(source, otherpla
 end)
 
 lib.callback.register("ludaro_manager:setGradeSalary", function(source, jobName, grade, salary)
-    return setGradeSalary(jobName, grade, salary)
+    return jobmenu_bossmenu_setGradeSalary(jobName, grade, salary)
 end)
 
 lib.callback.register("ludaro_manager:hirePlayer", function(source, jobName, player)
-    return hirePlayer(jobName, player)
+    return jobmenu_bossmenu_hirePlayer(jobName, player)
 end)
 

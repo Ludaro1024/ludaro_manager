@@ -1,4 +1,4 @@
-function hasEnoughMoney(source, amount)
+function society_management_framework_hasEnoughMoney(source, amount)
     if ESX then
         local xPlayer = ESX.GetPlayerFromId(source)
         if xPlayer.getMoney() >= amount then
@@ -8,7 +8,7 @@ function hasEnoughMoney(source, amount)
     return false
 end
 
-function withdrawMoney(player, amount)
+function society_management_framework_withdrawMoney(player, amount)
     if ESX then
         local xPlayer = ESX.GetPlayerFromId(player)
         xPlayer.removeMoney(amount)
@@ -17,7 +17,7 @@ function withdrawMoney(player, amount)
     return false
 end
 
-function addMoney(source, amount)
+function society_management_framework_addMoney(source, amount)
     if ESX then
         local xPlayer = ESX.GetPlayerFromId(source)
         xPlayer.addMoney(amount)

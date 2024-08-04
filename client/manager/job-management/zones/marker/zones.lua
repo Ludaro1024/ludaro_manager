@@ -1,6 +1,7 @@
 
 zones = {}
-function createMarkerZones(data)
+function jobmanagement_zones_marker_cr
+    eateMarkerZones(data)
     for _, marker in ipairs(data) do
         local data = json.decode(marker.data)
         if data and data.coords then
@@ -26,7 +27,7 @@ function createMarkerZones(data)
     end
 end
 
-function removeMarkerZoneByName(name)
+function jobmanagement_zones_marker_removeMarkerZoneByName(name)
     for i, v in ipairs(zones) do
         if v.name == name then
             table.remove(zones, i)
@@ -35,11 +36,11 @@ function removeMarkerZoneByName(name)
     end
 end
 
-function getMarkerZones()
+function jobmanagement_zones_marker_getMarkerZones()
     return zones
 end
 
-function getMarkerZoneByName(name)
+function jobmanagement_zones_marker_getMarkerZoneByName(name)
     for i, v in ipairs(zones) do
         if v.name == name then
             return v.zone
@@ -47,7 +48,7 @@ function getMarkerZoneByName(name)
     end
 end
 
-function removeAllMarkerZones()
+function jobmanagement_zones_marker_removeAllMarkerZones()
     for k,v in pairs(zones) do
         v:remove()
     end

@@ -10,7 +10,7 @@ end
 
 function createNPCZones(data)
     
-    local job, grade = getJobandGrade()
+    local job, grade = jobmanagement_zones_npcs_getJobandGrade()
     for _, npc in ipairs(data) do
         -- -- Check job and grade before proceeding with the rest of the loop
         -- if npc.grade and npc.grade > grade then
@@ -61,10 +61,10 @@ function createNPCZones(data)
                             end
                         end,
                         onEnter = function()
-                            createNPC(coords, managerData.npcModel, managerData.npcheading or 200.0, npc.name)
+                            jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcheading or 200.0, npc.name)
                         end,
                         onExit = function()
-                            deleteNPCByName(npc.name)
+                            jobmanagement_zones_npcs_deleteNPCByName(npc.name)
                         end
                     })
 
@@ -100,8 +100,8 @@ function getNPCZoneByName(name)
     end
 end
 
-function removeAllNPCZones()
-    deleteAllNPCs()
+function jobmanagement_zones_npc_removeAllNPCZones()
+    jobmanagement_zones_npcs_deleteAllNPCs()
     for _, v in pairs(zones) do
         v.zone:remove() -- Ensure the zone is properly removed
     end
