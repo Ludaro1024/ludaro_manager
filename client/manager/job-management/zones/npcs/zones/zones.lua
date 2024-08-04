@@ -1,22 +1,30 @@
 zones = {}
 
+function hasAccess(accessjob, accesgrade, job, grade)
+    if grade == nil then grade = 0 end
+    if accessgrade == nil then accesgrade = 0 end
+    if accessjob == job and accesgrade <= grade then
+        return true
+    end
+end
+
 function createNPCZones(data)
-    print(ESX.DumpTable(data))
+    
     local job, grade = getJobandGrade()
     for _, npc in ipairs(data) do
-        -- Check job and grade before proceeding with the rest of the loop
-        if npc.grade and npc.grade > grade then
+        -- -- Check job and grade before proceeding with the rest of the loop
+        -- if npc.grade and npc.grade > grade then
          
-            -- Skip to the next npc
-            goto continue
-        end
+        --     -- Skip to the next npc
+        --     goto continue
+        -- end
        
 
-        if job ~= npc.name then
+        -- if job ~= npc.name then
           
-            -- Skip to the next npc
-            goto continue
-        end
+        --     -- Skip to the next npc
+        --     goto continue
+        -- end
       
 
         -- Iterate over each manager field in npc.data
@@ -44,7 +52,7 @@ function createNPCZones(data)
                         inside = function(self)
                             if self.coords then
                                 local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
-                                if inrange then
+                                if inrange and hasAccess(npc.name, npc.grade, job, grade) then
                                     EditableFunctions.ShowHelpNotification(Locale("open_menu"))
                                     if IsControlJustReleased(0, 38) then
                                         openMenu(managerData, npc.name)
@@ -60,7 +68,7 @@ function createNPCZones(data)
                         end
                     })
 
-                    print("Created zone at " .. coords.x .. ", " .. coords.y .. ", " .. coords.z)
+                    ("Created zone at " .. coords.x .. ", " .. coords.y .. ", " .. coords.z)
                     
                     table.insert(zones, { name = npc.name, zone = box, type = zoneType })
                 end

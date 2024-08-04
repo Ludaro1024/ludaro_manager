@@ -15,11 +15,11 @@ lib.callback.register('ludaro_manager:editSociety', function(source, society)
  end)
 
 lib.callback.register('ludaro_manager:withdrawSocietyMoney', function(source, society, amount)
-    return withdrawSocietyMoney(society, amount)
+    return withdrawSocietyMoney(society, amount, source)
  end)
 
 lib.callback.register('ludaro_manager:depositSocietyMoney', function(source, society, amount)
-    return depositSocietyMoney(society, amount)
+    return depositSocietyMoney(society, amount, source)
  end)
 
 lib.callback.register('ludaro_manager:setSocietyMoney', function(source, society, amount)

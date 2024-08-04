@@ -18,7 +18,7 @@ end
 ---@return table
 ---@public
 function UIMenuGridPanel.New(TopText, LeftText, RightText, BottomText, CirclePositionX, CirclePositionY)
-    print(CirclePositionX)
+    (CirclePositionX)
     local _UIMenuGridPanel = {
         Data = {
             Enabled = true,

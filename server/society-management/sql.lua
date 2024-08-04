@@ -19,11 +19,13 @@ WHERE
 end
 
 function getSociety(jobName)
+
     if string.find(jobName, "society_") then
-        jobName = jobName
+        jobname = jobName
     else
         jobname = "society_" .. jobName
     end
+
     if ESX then
         -- LIKE NAME
         query = [[SELECT
@@ -35,63 +37,89 @@ FROM
 LEFT JOIN
     addon_account_data ad ON a.name = ad.account_name
 WHERE
-    a.name = @name AND a.shared = 1;
+    a.name = @name AND a.shared = 1 LIMIT 1;
 ]]
-        society = MySQL.query.await(query, { ['@name'] = jobName })
-        return society
+        society = MySQL.query.await(query, { ['@name'] = jobname })
+        return society[1]
     end
 end
 
 function deleteSociety(society)
     if ESX then
         query = [[DELETE FROM addon_account WHERE name = @name;]]
-        MySQL.execute.await(query, { ['@name'] = society.name })
+        MySQL.query.await(query, { ['@name'] = society.name })
         query = [[DELETE FROM addon_account_data WHERE account_name = @name;]]
-        MySQL.execute.await(query, { ['@name'] = society.name })
+        MySQL.query.await(query, { ['@name'] = society.name })
         query = [[DELETE FROM addon_inventory WHERE owner = @name;]]
-        MySQL.execute.await(query, { ['@name'] = society.name })
+        MySQL.query.await(query, { ['@name'] = society.name })
         return true
     end
 end
 
 function addSociety(society)
-    if ESX then
+    if ESX and not doesSocietyExist(society) then
         query = [[INSERT INTO addon_account (name, label, shared) VALUES (@name, @label, 1);]]
-        MySQL.execute.await(query, { ['@name'] = society.name, ['@label'] = society.label })
+        MySQL.query.await(query, { ['@name'] = society.name, ['@label'] = society.label })
         query = [[INSERT INTO addon_account_data (account_name, money) VALUES (@name, 0);]]
-        MySQL.execute.await(query, { ['@name'] = society.name })
+        MySQL.query.await(query, { ['@name'] = society.name })
         return getSociety(society.name)
     end
 end
 
 function editSociety(society)
-    if ESX and next(society) then
+    if ESX and next(society) and doesSocietyExist(society) then
         query = [[UPDATE addon_account SET label = @label WHERE name = @name;]]
-        MySQL.execute.await(query, { ['@name'] = society.name, ['@label'] = society.label })
+        MySQL.query.await(query, { ['@name'] = society.name, ['@label'] = society.label })
         return true
     end
 end
 
-function withdrawSocietyMoney(society, amount)
-    if ESX then
+function withdrawSocietyMoney(society, amount, source)
+    if ESX  and doesSocietyExist(society) then
+            addMoney(source, amount)
         query = [[UPDATE addon_account_data SET money = money - @amount WHERE account_name = @name;]]
-        MySQL.execute.await(query, { ['@name'] = society.name, ['@amount'] = amount })
+        MySQL.query.await(query, { ['@name'] = society.name, ['@amount'] = amount })
         return true
-    end
+        end
 end
 
-function depositSocietyMoney(society, amount)
-    if ESX then
+function depositSocietyMoney(society, amount, source)
+    if ESX  and doesSocietyExist(society) and hasEnoughMoney(source, amount) then
+        withdrawMoney(source, amount)
         query = [[UPDATE addon_account_data SET money = money + @amount WHERE account_name = @name;]]
-        MySQL.execute.await(query, { ['@name'] = society.name, ['@amount'] = amount })
+        MySQL.query.await(query, { ['@name'] = society.name, ['@amount'] = amount })
         return true
-    end
+    else
+        showNotification(source, Locale("not_enough_money"))
+        return false
+end
 end
 
 function setSocietyMoney(society, amount)
-    if ESX then
+    if ESX  and next(society)  and doesSocietyExist(society?.name) then
         query = [[UPDATE addon_account_data SET money = @amount WHERE account_name = @name;]]
-        MySQL.execute.await(query, { ['@name'] = society.name, ['@amount'] = amount })
+        MySQL.query.await(query, { ['@name'] = society.name, ['@amount'] = amount })
         return true
     end
+end
+
+function doesSocietyExist(society)
+    
+    if type(society) == "table" then
+        societyName = society.name
+    elseif type(society) == "string" then
+        if string.find(society, "society_") then
+            societyName = society
+        else
+            societyName = "society_" .. society
+        end
+    else
+        return false
+    end
+    if ESX then
+        query = [[SELECT name FROM addon_account WHERE name = @name;]]
+        result = MySQL.query.await(query, { ['@name'] = societyName })
+        return next(result) and true or false
+    end
+    return false
 end

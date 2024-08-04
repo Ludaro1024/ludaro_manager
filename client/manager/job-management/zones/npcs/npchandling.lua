@@ -1,7 +1,7 @@
 npcs = {}
 
 function createNPC(coords, model, heading, name)
-    print("Creating NPC " .. name, model, heading, name)
+    ("Creating NPC " .. name, model, heading, name)
     RequestModel(model)
     while not HasModelLoaded(model) do
         Wait(500)

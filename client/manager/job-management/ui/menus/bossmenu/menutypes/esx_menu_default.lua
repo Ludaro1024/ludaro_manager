@@ -2,72 +2,83 @@ if Config.Menu == "esx_menu_default" then
     function openBossMenu(data, jobName)
         local bossmenuData = getBossMenuData(jobName)
         local players = ESX.Game.GetPlayersInArea(GetEntityCoords(PlayerPedId()), 10.0)
+        local xPlayer = ESX.GetPlayerData()
+        local playerGrade = xPlayer.job.grade
+
+        local elements = {
+            {label = Locale("society_management"), icon = "fas fa-info-circle", value = 'society'},
+            {label = Locale("employee_management"), icon = "fas fa-user", value = 'employees'},
+            {label = Locale("grade_management"), icon = "fas fa-sitemap", value = 'grades'}
+        }
+
+        ESX.UI.Menu.CloseAll()
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'boss_menu', {
+            title = Locale("bossmenu"),
+            align = 'center',
+            elements = elements
+        }, function(data, menu)
+            local value = data.current.value
+            if value == 'society' then
+                openSocietyMenu(bossmenuData.society, jobName)
+            elseif value == 'employees' then
+                openEmployeeMenu(bossmenuData.employees, jobName, players, bossmenuData.grades, playerGrade)
+            elseif value == 'grades' then
+                openGradeMenu(bossmenuData.grades, jobName, playerGrade)
+            end
+        end, function(data, menu)
+            menu.close()
+        end)
+    end
+
+    function openSocietyMenu(societyData, jobName)
+        local elements = {
+            {label = Locale("current_money") .. ": $" .. societyData.money, icon = "fas fa-dollar-sign", disabled = true},
+            {label = Locale("deposit_money"), icon = "fas fa-arrow-down", value = 'deposit_money'},
+            {label = Locale("withdraw_money"), icon = "fas fa-arrow-up", value = 'withdraw_money'}
+        }
+
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'society_menu', {
+            title = Locale("society_management"),
+            align = 'center',
+            elements = elements
+        }, function(data, menu)
+            local value = data.current.value
+            if value == 'deposit_money' then
+                local amount = lib.inputDialog(Locale("deposit_money"), {Locale("amount")})
+                if amount and amount[1] and tonumber(amount[1]) > 0 then
+                    local success = depositSocietyMoney(jobName, tonumber(amount[1]))
+                    if success then
+                        societyData.money = societyData.money + tonumber(amount[1])
+                        openSocietyMenu(societyData, jobName)
+                    end
+                end
+            elseif value == 'withdraw_money' then
+                local amount = lib.inputDialog(Locale("withdraw_money"), {Locale("amount")})
+                if amount and amount[1] and tonumber(amount[1]) > 0 then
+                    local success = withdrawSocietyMoney(jobName, tonumber(amount[1]))
+                    if success then
+                        societyData.money = societyData.money - tonumber(amount[1])
+                        openSocietyMenu(societyData, jobName)
+                    end
+                end
+            end
+        end, function(data, menu)
+            menu.close()
+        end)
+    end
+
+    function openEmployeeMenu(employeeData, jobName, players, gradeData, playerGrade)
         local elements = {}
 
-        -- Society money menu
-        if next(bossmenuData.society) then
+        for _, employee in ipairs(employeeData) do
             table.insert(elements, {
-                label = Locale("society_money"),
-                unselectable = true,
-                icon = "fas fa-info-circle",
-            })
-
-            table.insert(elements, {
-                label = Locale("current_money") .. ": $" .. bossmenuData.society.money,
-                icon = "fas fa-dollar-sign",
-                disabled = true,
-            })
-
-            table.insert(elements, {
-                label = Locale("deposit_money"),
-                icon = "fas fa-arrow-down",
-                value = 'deposit_money'
-            })
-
-            table.insert(elements, {
-                label = Locale("withdraw_money"),
-                icon = "fas fa-arrow-up",
-                value = 'withdraw_money'
+                label = employee.firstname .. " " .. employee.lastname .. " - " .. Locale("grade") .. ": " .. employee.job_grade,
+                icon = "fas fa-user",
+                value = 'employee_' .. employee.identifier
             })
         end
 
-        -- Grades menu
-        if next(bossmenuData.grades) then
-            table.insert(elements, {
-                label = Locale("grades"),
-                unselectable = true,
-                icon = "fas fa-info-circle",
-            })
-
-            for _, grade in ipairs(bossmenuData.grades) do
-                table.insert(elements, {
-                    label = grade.label .. " (" .. Locale("salary") .. ": $" .. grade.salary .. ")",
-                    icon = "fas fa-chevron-right",
-                    value = 'grade_' .. grade.grade
-                })
-            end
-        end
-
-        -- Employees menu
-        if next(bossmenuData.employees) then
-            table.insert(elements, {
-                label = Locale("manage_employees"),
-                unselectable = true,
-                icon = "fas fa-info-circle",
-            })
-
-            for _, employee in ipairs(bossmenuData.employees) do
-                table.insert(elements, {
-                    label = employee.firstname ..
-                    " " .. employee.lastname .. " - " .. Locale("grade") .. ": " .. employee.job_grade,
-                    icon = "fas fa-user",
-                    value = 'employee_' .. employee.identifier
-                })
-            end
-        end
-
-        -- Nearby players menu
-        if next(players) and #players > 1 then
+        if type(players) == "table" and #players > 0 then    
             table.insert(elements, {
                 label = Locale("hire_nearby"),
                 unselectable = true,
@@ -77,60 +88,78 @@ if Config.Menu == "esx_menu_default" then
             for _, player in ipairs(players) do
                 local playerName = GetPlayerName(player)
                 local playerServerId = GetPlayerServerId(player)
+                local job, grade = getJobandGrade(playerServerId)
 
-                table.insert(elements, {
-                    label = playerName .. " (" .. playerServerId .. ")",
-                    icon = "fas fa-user-plus",
-                    value = 'hire_' .. playerServerId
-                })
+                if job ~= jobName then
+                    table.insert(elements, {
+                        label = playerName .. " (" .. playerServerId .. ")",
+                        icon = "fas fa-user-plus",
+                        value = 'hire_' .. playerServerId
+                    })
+                end
             end
         end
 
-        -- Open the ESX menu
-        ESX.UI.Menu.CloseAll()
-        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'boss_menu', {
-            title    = Locale("bossmenu"),
-            align    = 'center',
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'employee_menu', {
+            title = Locale("employee_management"),
+            align = 'center',
             elements = elements
         }, function(data, menu)
             local value = data.current.value
-
-            if value == 'deposit_money' then
-                local amount = lib.inputDialog(Locale("deposit_money"), { Locale("amount") })
-                if amount then
-                    depositSocietyMoney(jobName, tonumber(amount[1]))
-                    openBossMenu(jobName) -- Refresh the menu
-                end
-            elseif value == 'withdraw_money' then
-                local amount = lib.inputDialog(Locale("withdraw_money"), { Locale("amount") })
-                if amount then
-                    withdrawSocietyMoney(jobName, tonumber(amount[1]))
-                    openBossMenu(jobName) -- Refresh the menu
-                end
-            elseif string.match(value, '^grade_') then
-                local gradeIndex = tonumber(string.sub(value, 7))
-                local salary = lib.inputDialog(Locale("set_salary"), { Locale("amount") })
-                if salary then
-                    setGradeSalary(jobName, gradeIndex, tonumber(salary[1]))
-                    openBossMenu(jobName) -- Refresh the menu
-                end
-            elseif string.match(value, '^employee_') then
+            if string.match(value, '^employee_') then
                 local employeeId = string.sub(value, 10)
-                manageEmployeeMenu(jobName, employeeId, bossmenuData) -- Open employee management menu
+                manageEmployeeMenu(jobName, employeeId, employeeData, gradeData, playerGrade, menu)
             elseif string.match(value, '^hire_') then
                 local playerServerId = tonumber(string.sub(value, 6))
-                hirePlayer(jobName, playerServerId)
-                openBossMenu(jobName) -- Refresh the menu
+                local newPlayerData = hirePlayer(jobName, playerServerId)
+                if newPlayerData then
+                    table.insert(employeeData, newPlayerData.employee)
+                    menu.close()
+                    openEmployeeMenu(employeeData, jobName, players, gradeData, playerGrade)
+                end
             end
         end, function(data, menu)
             menu.close()
         end)
     end
 
-    -- Function to manage individual employee
-    function manageEmployeeMenu(jobName, employeeId, bossmenuData)
+    function openGradeMenu(gradeData, jobName, playerGrade)
+        local elements = {}
+
+        for _, grade in ipairs(gradeData) do
+            table.insert(elements, {
+                label = grade.label .. " (" .. Locale("salary") .. ": $" .. grade.salary .. ")",
+                icon = "fas fa-chevron-right",
+                value = 'grade_' .. grade.grade
+            })
+        end
+
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'grade_menu', {
+            title = Locale("grade_management"),
+            align = 'center',
+            elements = elements
+        }, function(data, menu)
+            local value = data.current.value
+            if string.match(value, '^grade_') then
+                local gradeIndex = tonumber(string.sub(value, 7))
+                if gradeIndex < playerGrade then
+                    local salary = lib.inputDialog(Locale("set_salary"), {Locale("amount")})
+                    if salary and salary[1] and tonumber(salary[1]) > 0 then
+                        setGradeSalary(jobName, gradeIndex, tonumber(salary[1]))
+                        gradeData[gradeIndex + 1].salary = tonumber(salary[1])
+                        menu.close()
+                        openGradeMenu(gradeData, jobName, playerGrade)
+                    end
+                end
+            end
+        end, function(data, menu)
+            menu.close()
+        end)
+    end
+
+    function manageEmployeeMenu(jobName, employeeId, employeeData, gradeData, playerGrade, parentMenu)
         local employee = nil
-        for _, emp in ipairs(bossmenuData.employees) do
+        for _, emp in ipairs(employeeData) do
             if emp.identifier == employeeId then
                 employee = emp
                 break
@@ -141,34 +170,34 @@ if Config.Menu == "esx_menu_default" then
 
         local employeeMenuElements = {
             { label = Locale("grade") .. ": " .. employee.job_grade, disabled = true },
-            { label = Locale("fire"),                                icon = "fas fa-times",      value = 'fire' },
-            { label = Locale("promote"),                             icon = "fas fa-arrow-up",   value = 'promote' },
-            { label = Locale("demote"),                              icon = "fas fa-arrow-down", value = 'demote' }
+            { label = Locale("fire"), icon = "fas fa-times", value = 'fire', enabled = employee.job_grade < playerGrade },
+            { label = Locale("promote"), icon = "fas fa-arrow-up", value = 'promote', enabled = employee.job_grade < playerGrade - 1 and employee.job_grade < #gradeData },
+            { label = Locale("demote"), icon = "fas fa-arrow-down", value = 'demote', enabled = employee.job_grade > 0 and employee.job_grade < playerGrade }
         }
 
-        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'employee_menu', {
-            title    = employee.firstname .. " " .. employee.lastname,
-            align    = 'center',
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'employee_manage_menu', {
+            title = employee.firstname .. " " .. employee.lastname,
+            align = 'center',
             elements = employeeMenuElements
         }, function(data, menu)
             local value = data.current.value
 
             if value == 'fire' then
-                fireEmployee(jobName, employee.id)
-                menu.close()
-                openBossMenu(jobName) -- Refresh the menu
+                local edata = { jobName = employee.job, employee = {job_grade = employee.job_grade, identifier = employee.identifier}, fire = true }
+                saveEmployee(edata)
+                ESX.UI.Menu.CloseAll()
+                openEmployeeMenu(employeeData, jobName, players, gradeData, playerGrade)
             elseif value == 'promote' or value == 'demote' then
-                local grades = {}
-                for _, grade in ipairs(bossmenuData.grades) do
-                    table.insert(grades, grade.label)
+                if value == 'promote' and employee.job_grade < playerGrade - 1 and employee.job_grade < #gradeData then
+                    employee.job_grade = employee.job_grade + 1
+                elseif value == 'demote' and employee.job_grade > 0 and employee.job_grade < playerGrade then
+                    employee.job_grade = employee.job_grade - 1
                 end
-                local selectedGrade = lib.selectDialog(Locale("select_grade"), grades)
-                if selectedGrade then
-                    employee.grade = selectedGrade
-                    saveEmployee(employee)
-                    menu.close()
-                    openBossMenu(jobName) -- Refresh the menu
-                end
+                local edata = { jobName = employee.job, employee = {job_grade = employee.job_grade, identifier = employee.identifier} }
+                saveEmployee(edata)
+                menu.close()
+                parentMenu.close()
+                openEmployeeMenu(employeeData, jobName, players, gradeData, playerGrade)
             end
         end, function(data, menu)
             menu.close()

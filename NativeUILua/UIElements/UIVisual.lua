@@ -8,7 +8,7 @@ UIVisual.__index = UIVisual
 ---@param array table
 ---@public
 function UIVisual:Popup(array)
-    ClearPrints()
+    Clears()
     if (array.colors == nil) then
         SetNotificationBackgroundColor(140)
     else
@@ -83,7 +83,7 @@ end
 ---@param array table
 ---@public
 function UIVisual:Text(array)
-    ClearPrints()
+    Clears()
     SetTextEntry_2("STRING")
     if (array.message ~= nil) then
         AddTextComponentString(tostring(array.message))

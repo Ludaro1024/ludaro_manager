@@ -165,7 +165,7 @@ end
 -- @param number salary The grade salary.
 -- @return boolean Success status.
 function addGrade(jobName, gradeName, gradeLabel, salary)
-    print(jobName, gradeName, gradeLabel, salary)   
+    (jobName, gradeName, gradeLabel, salary)   
     if ESX then
         Debug(3, "Adding grade to job in the database: " .. jobName .. " - " .. gradeName)
         local latestgrade = MySQL.query.await("SELECT MAX(grade) as grade FROM job_grades WHERE job_name = ?", {jobName})
@@ -200,11 +200,11 @@ function addGrade(jobName, gradeName, gradeLabel, salary)
 end
 
 function saveGrade(jobName, grade)
-    print(ESX.DumpTable(grade))
+    (ESX.DumpTable(grade))
     for k,v in pairs(grade) do
         gradeexists = MySQL.query.await("SELECT * FROM job_grades WHERE job_name = ? AND grade = ?", {jobName, v.grade})
         if not next(gradeexists) then
-            print(grade.grade)
+            (grade.grade)
             Debug(3, "Adding grade to job in the database: " .. jobName .. " - " .. v.grade)
             MySQL.Async.execute('INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (@job_name, @grade, @name, @label, @salary, @skin_male, @skin_female)', {
                 ['@job_name'] = jobName,
@@ -499,7 +499,8 @@ function saveBossMenu(data)
 end
 
 function saveEmployee(data)
-    print(ESX.DumpTable(data))
+    ("savedata")
+    (ESX.DumpTable(data))
     if ESX then
         xPlayer = ESX.GetPlayerFromIdentifier(data.employee.identifier)
         if xPlayer then
@@ -508,6 +509,7 @@ function saveEmployee(data)
                 xPlayer.setJob("unemployed", 0)
                 return true
             end
+            (ESX.DumpTable(data))
             xPlayer.setJob(data.jobName, data.employee.job_grade)
             return true
         else
@@ -517,10 +519,10 @@ function saveEmployee(data)
                 ['@identifier'] = data.employee.identifier
             }, function(rowsChanged)
                 if rowsChanged > 0 then
-                    Debug(2, "Employee data saved successfully for identifier: " .. data.employee.identifier)
+                    Debug(2, "Employee data saved successfully for identifier: ")
                     return true
                 else
-                    Debug(2, "Failed to save employee data for identifier: " .. data.employee.identifier)
+                    Debug(2, "Failed to save employee data for identifier: " )
                     return false
                 end
             end)

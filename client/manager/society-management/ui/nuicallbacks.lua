@@ -1,6 +1,6 @@
 RegisterNUICallback('getSocietys', function(data, cb)
     societies = getSocietys()
-    print(ESX.DumpTable(societies))
+    (ESX.DumpTable(societies))
     cb({societies})
 end)
 
