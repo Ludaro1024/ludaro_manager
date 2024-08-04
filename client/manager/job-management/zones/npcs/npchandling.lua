@@ -1,7 +1,6 @@
 npcs = {}
 
 function jobmanagement_zones_npcs_createNPC(coords, model, heading, name)
-    ("Creating NPC " .. name, model, heading, name)
     RequestModel(model)
     while not HasModelLoaded(model) do
         Wait(500)

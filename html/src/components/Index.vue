@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const router = useRouter();
 const routes = router.getRoutes().filter(route => route.name !== 'home');
@@ -26,6 +26,39 @@ const setActiveItem = (itemName, route) => {
   // Use item.route for navigation
   router.push({ name: route }); 
 };
+
+const closeUI = () => {
+  fetch(`https://${GetParentResourceName()}/ToggleUI`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify({})
+  });
+};
+
+const handleEscapeKey = (event) => {
+  if (event.key === 'Escape') {
+    closeUI();
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('keydown', handleEscapeKey);
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleEscapeKey);
+  document.removeEventListener('click', handleClickOutside);
+});
+
+const handleClickOutside = (event) => {
+  const table = document.querySelector('table');
+  if (!table.contains(event.target)) {
+    closeUI();
+  }
+};
 </script>
 
 <template>
@@ -33,7 +66,10 @@ const setActiveItem = (itemName, route) => {
     <table class="w-full max-w-[80%] h-[90vh] bg-gray-800 dark:bg-gray-800 border-gray-900 dark:border-gray-800 border-[10px] rounded-[2.5rem] overflow-hidden relative">
       <thead>
         <tr>
-          <th class="text-center p-4 text-2xl font-semibold text-white">Ludaro_Manager</th>
+          <th class="text-center p-4 text-2xl font-semibold text-white relative">
+            Ludaro_Manager
+            <button @click="closeUI" class="absolute top-2 right-4 text-white">X</button>
+          </th>
         </tr>
       </thead>
 

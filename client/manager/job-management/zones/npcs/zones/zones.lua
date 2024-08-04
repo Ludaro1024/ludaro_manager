@@ -1,17 +1,19 @@
 zones = {}
 
-function hasAccess(accessjob, accesgrade, job, grade)
+function job_management_zones_npcs_Allowed(accessjob, accessgrade, job, grade)
     if grade == nil then grade = 0 end
-    if accessgrade == nil then accesgrade = 0 end
-    if accessjob == job and accesgrade <= grade then
+  
+    if accessgrade == nil then accessgrade = 0 end
+    if accessjob == job and accessgrade <= grade then
         return true
     end
 end
 
-function createNPCZones(data)
-    
+function job_management_zones_npcs_NPCZones(data)
+        
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
     for _, npc in ipairs(data) do
+
         -- -- Check job and grade before proceeding with the rest of the loop
         -- if npc.grade and npc.grade > grade then
          
@@ -42,7 +44,7 @@ function createNPCZones(data)
 
                     local rotation = 200.0 -- Default rotation
                     local zoneType = key
-
+                
                     local box = lib.zones.box({
                         coords = coords,
                         size = size,
@@ -52,7 +54,7 @@ function createNPCZones(data)
                         inside = function(self)
                             if self.coords then
                                 local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
-                                if inrange and hasAccess(npc.name, npc.grade, job, grade) then
+                                if inrange and job_management_zones_npcs_Allowed(npc.name, managerData.grade, job, grade) then
                                     EditableFunctions.ShowHelpNotification(Locale("open_menu"))
                                     if IsControlJustReleased(0, 38) then
                                         openMenu(managerData, npc.name)
@@ -68,17 +70,17 @@ function createNPCZones(data)
                         end
                     })
 
-                    ("Created zone at " .. coords.x .. ", " .. coords.y .. ", " .. coords.z)
+                    
                     
                     table.insert(zones, { name = npc.name, zone = box, type = zoneType })
                 end
             end
         end
-        ::continue::
+        -- ::continue::
     end
 end
 
-function removeNPCZoneByName(name)
+function jobmanagement_zones_npc_removeAllNPCZonesremoveNPCZoneByName(name)
     for i, v in ipairs(zones) do
         if v.name == name then
             v.zone:remove() -- Ensure the zone is properly removed
@@ -88,11 +90,11 @@ function removeNPCZoneByName(name)
     end
 end
 
-function getNPCZones()
+function jobmanagement_zones_npc_removeAllNPCZonesgetNPCZones()
     return zones
 end
 
-function getNPCZoneByName(name)
+function jobmanagement_zones_npc_removeAllNPCZonesgetNPCZoneByName(name)
     for i, v in ipairs(zones) do
         if v.name == name then
             return v.zone

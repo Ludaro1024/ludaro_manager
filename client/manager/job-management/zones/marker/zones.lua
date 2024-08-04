@@ -1,7 +1,6 @@
 
 zones = {}
-function jobmanagement_zones_marker_cr
-    eateMarkerZones(data)
+function jobmanagement_zones_marker_createMarkerZones(data)
     for _, marker in ipairs(data) do
         local data = json.decode(marker.data)
         if data and data.coords then

@@ -1,45 +1,81 @@
 <template>
   <div>
-    <div>
-      <label class="block mb-2">Boss Menu Coords (x, y, z)</label>
-      <input type="number" v-model="job.bossmenu.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
-      <input type="number" v-model="job.bossmenu.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
-      <input type="number" v-model="job.bossmenu.coords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
+    <div class="mb-4">
+      <label class="block mb-2 font-bold">Boss Menu Coords (x, y, z)</label>
+      <div class="flex">
+        <div class="flex flex-col">
+          <label class="mb-1">X:</label>
+          <input type="number" v-model="job.bossmenu.coords.x" class="w-full p-2 mr-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
+        </div>
+        <div class="flex flex-col">
+          <label class="mb-1">Y:</label>
+          <input type="number" v-model="job.bossmenu.coords.y" class="w-full p-2 mr-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
+        </div>
+        <div class="flex flex-col">
+          <label class="mb-1">Z:</label>
+          <input type="number" v-model="job.bossmenu.coords.z" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
+        </div>
+      </div>
       <button @click="fetchCurrentCoords" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
     </div>
-    <div>
-      <label class="block mb-2">Boss Menu Grade Access</label>
-      <select v-model="job.bossmenu.grade" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+    <div class="mb-4">
+      <label class="block mb-2 font-bold">Boss Menu Grade Access</label>
+      <select v-model="job.bossmenu.grade" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
         <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
           {{ grade.label }} (ID: {{ grade.grade }})
         </option>
       </select>
     </div>
     <div class="mb-4">
-      <label class="block mb-2">Boss Menu NPC/Marker</label>
-      <select v-model="job.bossmenu.type" @change="initializeMarkerColor" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
+      <label class="block mb-2 font-bold">Boss Menu NPC/Marker</label>
+      <select v-model="job.bossmenu.type" @change="initializeMarkerColor" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
         <option value="npc">NPC</option>
         <option value="marker">Marker</option>
       </select>
       <div v-if="job.bossmenu.type === 'npc'">
-        <input type="text" v-model="job.bossmenu.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
-        <input type="number" v-model="job.bossmenu.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
-        <input type="number" v-model="job.bossmenu.npcRange" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
+        <div class="flex flex-col">
+          <label class="mb-1">NPC Model:</label>
+          <input type="text" v-model="job.bossmenu.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
+        </div>
+        <div class="flex flex-col">
+          <label class="mb-1">NPC Heading:</label>
+          <input type="number" v-model="job.bossmenu.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
+        </div>
+        <div class="flex flex-col">
+          <label class="mb-1">NPC Range:</label>
+          <input type="number" v-model="job.bossmenu.npcRange" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
+        </div>
         <button @click="fetchCurrentHeading" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Heading</button>
       </div>
       <div v-else-if="job.bossmenu.type === 'marker'">
-        <input type="number" v-model="job.bossmenu.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
-        <div>
-          <label class="block mb-2">Marker Color (RGB)</label>
-          <input type="number" v-model="job.bossmenu.markerColor.r" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
-          <input type="number" v-model="job.bossmenu.markerColor.g" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
-          <input type="number" v-model="job.bossmenu.markerColor.b" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
+        <div class="flex flex-col">
+          <label class="mb-1">Marker ID:</label>
+          <input type="number" v-model="job.bossmenu.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
         </div>
-        <input type="number" v-model="job.bossmenu.markerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
+        <div class="flex">
+          <label class="block mb-2 font-bold">Marker Color (RGB)</label>
+          <div class="flex flex-col">
+            <label class="mb-1">R:</label>
+            <input type="number" v-model="job.bossmenu.markerColor.r" class="w-full p-2 mr-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
+          </div>
+          <div class="flex flex-col">
+            <label class="mb-1">G:</label>
+            <input type="number" v-model="job.bossmenu.markerColor.g" class="w-full p-2 mr-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
+          </div>
+          <div class="flex flex-col">
+            <label class="mb-1">B:</label>
+            <input type="number" v-model="job.bossmenu.markerColor.b" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <label class="mb-1">Marker Scale:</label>
+          <input type="number" v-model="job.bossmenu.markerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
