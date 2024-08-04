@@ -1,6 +1,16 @@
-job = ESX.GetPlayerData().job.name
-grade = ESX.GetPlayerData().job.grade
+CreateThread(function()
+    -- TODO: REWRITE PERFORMANCE
+    repeat Wait(0) until ESX ~= nil
+    job = ESX.GetPlayerData().job.name
+    grade = ESX.GetPlayerData().job.grade
+    
+    RegisterNetEvent('esx:setJob', function(job, lastJob)
+        job = job.name
+        grade = job.grade
+        refresh_RefreshEverything()
+    end)
 
+end)
 RegisterNetEvent('esx:setJob', function(job, lastJob)
     job = job.name
     grade = job.grade

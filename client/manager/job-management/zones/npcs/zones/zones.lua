@@ -45,7 +45,7 @@ function job_management_zones_npcs_NPCZones(data)
                     local rotation = 200.0 -- Default rotation
                     local zoneType = key
                 
-                    local box = lib.zones.box({
+                    box = lib.zones.box({
                         coords = coords,
                         size = size,
                         rotation = rotation,
@@ -72,7 +72,7 @@ function job_management_zones_npcs_NPCZones(data)
 
                     
                     
-                    table.insert(zones, { name = npc.name, zone = box, type = zoneType })
+                    table.insert(zones, box)
                 end
             end
         end
@@ -80,32 +80,9 @@ function job_management_zones_npcs_NPCZones(data)
     end
 end
 
-function jobmanagement_zones_npc_removeAllNPCZonesremoveNPCZoneByName(name)
-    for i, v in ipairs(zones) do
-        if v.name == name then
-            v.zone:remove() -- Ensure the zone is properly removed
-            table.remove(zones, i)
-            return
-        end
-    end
-end
-
-function jobmanagement_zones_npc_removeAllNPCZonesgetNPCZones()
-    return zones
-end
-
-function jobmanagement_zones_npc_removeAllNPCZonesgetNPCZoneByName(name)
-    for i, v in ipairs(zones) do
-        if v.name == name then
-            return v.zone
-        end
-    end
-end
-
-function jobmanagement_zones_npc_removeAllNPCZones()
-    jobmanagement_zones_npcs_deleteAllNPCs()
-    for _, v in pairs(zones) do
-        v.zone:remove() -- Ensure the zone is properly removed
+function job_management_zones_npc_removeAllNPCZones()
+    for k,v in pairs(zones) do
+            v:remove()
     end
     zones = {}
 end

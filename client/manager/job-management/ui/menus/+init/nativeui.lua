@@ -8,7 +8,7 @@ if Config.Menu == "NativeUI" then
             if _menuPool:IsAnyMenuOpen() then
              _menuPool:ProcessMenus()
             else
-             Citizen.Wait(150) -- this small line
+             Citizen.Wait(150)
             end
          end
     end)

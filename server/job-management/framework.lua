@@ -1,10 +1,16 @@
-function refreshJobs()
+function framework_refreshJobs()
     if ESX then
         ESX.RefreshJobs()
+        for k,v in pairs(ESX.GetPlayers()) do
+            local xPlayer = ESX.GetPlayerFromId(v)
+            if xPlayer then
+               xPlayer.triggerEvent("ludaro_manager:refreshZones")
+            end
+        end
     end
 end
 
-function GetJobPlayers(jobname)
+function framework_GetJobPlayers(jobname)
     if ESX then
         local players = ESX.GetPlayers()
         local count = 0
@@ -19,7 +25,7 @@ function GetJobPlayers(jobname)
 end
 
 
-function getPlayerName(id)
+function framework_getPlayerName(id)
     if ESX then
         local xPlayer = ESX.GetPlayerFromId(id)
         return xPlayer.getName()

@@ -35,6 +35,7 @@ const closeUI = () => {
     },
     body: JSON.stringify({})
   });
+  console.log("closing UI..")
 };
 
 const handleEscapeKey = (event) => {
@@ -45,20 +46,20 @@ const handleEscapeKey = (event) => {
 
 onMounted(() => {
   document.addEventListener('keydown', handleEscapeKey);
-  document.addEventListener('click', handleClickOutside);
+  // document.addEventListener('click', handleClickOutside);
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleEscapeKey);
-  document.removeEventListener('click', handleClickOutside);
+  // document.removeEventListener('click', handleClickOutside);
 });
 
-const handleClickOutside = (event) => {
-  const table = document.querySelector('table');
-  if (!table.contains(event.target)) {
-    closeUI();
-  }
-};
+// const handleClickOutside = (event) => {
+//   const table = document.querySelector('table');
+//   if (!table.contains(event.target)) {
+//     closeUI();
+//   }
+// };
 </script>
 
 <template>

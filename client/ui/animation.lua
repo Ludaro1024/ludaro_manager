@@ -7,6 +7,8 @@ local tabletBone = 60309
 local tabletOffset = vector3(0.03, 0.002, -0.0)
 local tabletRot = vector3(10.0, 160.0, 0.0)
 
+local tabletObj = nil  -- Make tabletObj a global variable
+
 function ToggleTablet(toggle)
     if toggle and not tablet then
         tablet = true
@@ -25,7 +27,7 @@ function ToggleTablet(toggle)
             end
 
             local playerPed = PlayerPedId()
-            local tabletObj = CreateObject(tabletProp, 0.0, 0.0, 0.0, true, true, false)
+            tabletObj = CreateObject(tabletProp, 0.0, 0.0, 0.0, true, true, false)
             local tabletBoneIndex = GetPedBoneIndex(playerPed, tabletBone)
 
             SetCurrentPedWeapon(playerPed, `weapon_unarmed`, true)
@@ -47,15 +49,23 @@ function ToggleTablet(toggle)
 
             DetachEntity(tabletObj, true, false)
             DeleteEntity(tabletObj)
+            tabletObj = nil  -- Clear the global variable when done
         end)
     elseif not toggle and tablet then
         tablet = false
     end
 end
 
-
--- AddEventHandler('onResourceStop', function(resourceName)
---     if (GetCurrentResourceName() == resourceName) and Config.Tablet then
---       ToggleTablet(false)
---     end
---   end)
+AddEventHandler('onResourceStop', function(resourceName)
+    if GetCurrentResourceName() == resourceName then
+        if tablet then
+            ToggleTablet(false)
+            ClearPedTasksImmediately(PlayerPedId())
+            if tabletObj then
+                DetachEntity(tabletObj, true, false)
+                DeleteEntity(tabletObj)
+                tabletObj = nil  -- Clear the global variable
+            end
+        end
+    end
+end)

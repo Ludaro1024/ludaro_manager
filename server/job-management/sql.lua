@@ -15,7 +15,7 @@ function job_management_sql_GetJobs()
             end
             job.interactions = json.decode(job.interactions)
             job.employees = getEmployees(job.name)
-            job.activeplayers = GetJobPlayers(job.name)
+            job.activeplayers = framework_GetJobPlayers(job.name)
             Debug(4, "Job data: " .. json.encode(job))
         end
         return jobs
@@ -78,7 +78,7 @@ function job_management_callback_saveJob(job)
                 return false
             end
         end)
-        refreshJobs()
+        framework_refreshJobs()
     end
 end
 
@@ -118,7 +118,7 @@ function job_management_callback_deleteJob(jobName)
                 done = false
             end
         end)
-        refreshJobs()
+        framework_refreshJobs()
         return done
     end
 end
@@ -153,7 +153,7 @@ function job_management_callback_addJob(job)
         end)
         -- adding a grade 0 so the job has a default grade
         job_management_callback_addGrade(name, name .. "_default", "Default", 0)
-        refreshJobs()
+        framework_refreshJobs()
         return returnn, returnname
     end
 end

@@ -33,18 +33,16 @@
     </div>
 
     <!-- Job Edit Popup -->
-    <div v-if="editingJobName !== null" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+    <div v-if="isPopupVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75" @click.self="closePopup">
       <div class="bg-gray-800 text-white p-4 rounded w-3/4 overflow-auto max-h-[90vh]">
         <h3 class="text-lg font-bold mb-4">Edit Job</h3>
         <div class="mb-4">
           <label class="block mb-2">Job Name</label>
-          <input type="text" v-model="jobs[editingJobName].name"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="jobs[editingJobName].name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Job Label</label>
-          <input type="text" v-model="jobs[editingJobName].label"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="jobs[editingJobName].label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Whitelisted</label>
@@ -52,20 +50,19 @@
         </div>
         <div class="mb-4">
           <nav class="flex mb-4 border-b border-gray-600">
-            <a v-for="tab in tabs" :key="tab" @click="activeTab = tab"
-              class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : ''">{{ tab }}</a>
+            <a v-for="tab in tabs" :key="tab" @click="activeTab = tab" class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : ''">{{ tab }}</a>
           </nav>
           <component :is="activeTabComponent" :job="jobs[editingJobName]" @update-job="updateJob"></component>
         </div>
         <div class="mt-4">
           <button @click="saveJob(editingJobName)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
-          <button @click="cancelEdit" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
         </div>
       </div>
     </div>
 
     <!-- Add Job Popup -->
-    <div v-if="showAddJobPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+    <div v-if="showAddJobPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75" @click.self="closePopup">
       <div class="bg-gray-800 text-white p-4 rounded w-1/2">
         <h3 class="text-lg font-bold mb-4">Add New Job</h3>
         <div class="mb-4">
@@ -84,20 +81,20 @@
         </div>
         <div class="mt-4">
           <button @click="addNewJob" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Job</button>
-          <button @click="showAddJobPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
         </div>
         <div v-if="error" class="mt-4 text-red-500">{{ error }}</div>
       </div>
     </div>
 
     <!-- Confirm Delete Job Popup -->
-    <div v-if="jobToDelete !== null" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+    <div v-if="jobToDelete !== null" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75" @click.self="closePopup">
       <div class="bg-gray-800 text-white p-4 rounded w-1/2">
         <h3 class="text-lg font-bold mb-4">Confirm Delete Job</h3>
         <p>Are you sure you want to delete this job?</p>
         <div class="mt-4">
           <button @click="deleteJob(jobToDelete)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Yes</button>
-          <button @click="jobToDelete = null" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">No</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">No</button>
         </div>
       </div>
     </div>
@@ -124,8 +121,10 @@ export default {
       jobs: {},
       interactions: [],
       editingJobName: null,
+      isPopupVisible: false, // Add this line
       activeTab: 'JobInfo',
       showAddJobPopup: false,
+      lastSaveTime: 0, // Add this line
       newJob: {
         name: '',
         label: '',
@@ -179,6 +178,10 @@ export default {
   },
   mounted() {
     this.fetchJobsAndInteractions();
+    document.addEventListener('keydown', this.handleKeydown);
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown);
   },
   computed: {
     activeTabComponent() {
@@ -219,6 +222,7 @@ export default {
         });
         const interactionsData = await interactionsResponse.json();
 
+
         Object.keys(jobsData).forEach(jobName => {
           if (!jobsData[jobName].grades) {
             jobsData[jobName].grades = [];
@@ -242,18 +246,11 @@ export default {
               markerScale: 1
             };
           }
-          if (!jobsData[jobName].onOffDutyCoords) {
-            jobsData[jobName].onOffDutyCoords = { x: null, y: null, z: null };
-          }
-          if (!jobsData[jobName].garageCoords) {
-            jobsData[jobName].garageCoords = { x: null, y: null, z: null };
-          }
+
           if (!jobsData[jobName].employees) {
             jobsData[jobName].employees = [];
           }
-          if (!jobsData[jobName].marker) {
-            jobsData[jobName].marker = { r: 0, g: 0, b: 0 };
-          }
+
           if (!jobsData[jobName].vehicleShop) {
             jobsData[jobName].vehicleShop = {
               coords: { x: null, y: null, z: null },
@@ -279,64 +276,39 @@ export default {
     editJob(jobName) {
       this.editingJobName = jobName;
       this.activeTab = 'JobInfo';
+      this.isPopupVisible = true; // Show the popup
     },
     saveJob(jobName) {
+      const now = Date.now();
+
       const job = this.jobs[jobName];
-      const jobData = {
-        name: job.name,
-        label: job.label,
-        whitelisted: job.whitelisted,
-        grades: job.grades,
-        vehicles: job.vehicles,
-        bossmenu: {
-          coords: job.bossmenu.coords,
-          grade: job.bossmenu.grade,
-          type: job.bossmenu.type,
-          npcModel: job.bossmenu.npcModel,
-          npcHeading: job.bossmenu.npcHeading,
-          npcRange: job.bossmenu.npcRange,
-          markerId: job.bossmenu.markerId,
-          markerColor: job.bossmenu.markerColor,
-          markerScale: job.bossmenu.markerScale
-        },
-        interactions: job.interactions,
-        garage: job.garage,
-        onoffduty: job.onoffduty,
-        stashes: job.stashes,
-        shops: job.shops,
-        processing: job.processing,
-        vehicleShop: {
-          coords: job.vehicleShop.coords,
-          type: job.vehicleShop.type,
-          npcModel: job.vehicleShop.npcModel,
-          npcHeading: job.vehicleShop.npcHeading,
-          markerId: job.vehicleShop.markerId,
-          markerColor: job.vehicleShop.markerColor,
-          markerScale: job.vehicleShop.markerScale,
-          vehicles: job.vehicleShop.vehicles
-        }
-      };
+
       fetch(`https://${GetParentResourceName()}/saveJob`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify(jobData)
+        body: JSON.stringify(this.jobs[jobName])
       })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.success) {
-            this.editingJobName = null;
-            this.refreshData();
-          }
-        })
-        .catch((error) => {
-          console.error('Failed to save job:', error);
-        });
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          this.isPopupVisible = false; // Hide the popup after saving
+          this.editingJobName = null;
+          this.refreshData();
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to save job:', error);
+      });
     },
-    cancelEdit() {
-      this.editingJobName = null;
-      this.fetchJobsAndInteractions();
+    closePopup() {
+      this.isPopupVisible = false;
+    },
+    handleKeydown(event) {
+      if (event.key === 'Escape') {
+        this.closePopup();
+      }
     },
     confirmDeleteJob(jobName) {
       this.jobToDelete = jobName;
@@ -350,18 +322,18 @@ export default {
         },
         body: JSON.stringify({ jobName: job.name })
       })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.success) {
-            const newJobs = { ...this.jobs };
-            delete newJobs[jobName];
-            this.jobs = newJobs;
-            this.jobToDelete = null;
-          }
-        })
-        .catch((error) => {
-          console.error('Failed to delete job:', error);
-        });
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          const newJobs = { ...this.jobs };
+          delete newJobs[jobName];
+          this.jobs = newJobs;
+          this.jobToDelete = null;
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to delete job:', error);
+      });
     },
     openAddJobPopup() {
       this.showAddJobPopup = true;
@@ -381,53 +353,53 @@ export default {
         },
         body: JSON.stringify(this.newJob)
       })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.success) {
-            this.jobs = { ...this.jobs, [result.jobName]: this.newJob };
-            this.showAddJobPopup = false;
-            this.newJob = {
-              name: '',
-              label: '',
-              whitelisted: false,
-              grades: [],
-              vehicles: [],
-              bossmenu: {
-                coords: { x: null, y: null, z: null },
-                grade: '',
-                type: 'npc',
-                npcModel: '',
-                npcHeading: 0,
-                npcRange: 0,
-                markerId: 0,
-                markerColor: { r: 0, g: 0, b: 0 },
-                markerScale: 1
-              },
-              onOffDutyCoords: { x: null, y: null, z: null },
-              garageCoords: { x: null, y: null, z: null },
-              stashes: [],
-              shops: [],
-              processing: [],
-              vehicleShop: {
-                coords: { x: null, y: null, z: null },
-                type: 'npc',
-                npcModel: '',
-                npcHeading: 0,
-                markerId: 0,
-                markerColor: { r: 0, g: 0, b: 0 },
-                markerScale: 1,
-                vehicles: []
-              }
-            };
-            this.refreshData();
-          } else {
-            this.error = 'Failed to add new job. Please try again.';
-          }
-        })
-        .catch((error) => {
-          console.error('Failed to add new job:', error);
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          this.jobs = { ...this.jobs, [result.jobName]: this.newJob };
+          this.showAddJobPopup = false;
+          this.newJob = {
+            name: '',
+            label: '',
+            whitelisted: false,
+            grades: [],
+            vehicles: [],
+            bossmenu: {
+              coords: { x: null, y: null, z: null },
+              grade: '',
+              type: 'npc',
+              npcModel: '',
+              npcHeading: 0,
+              npcRange: 0,
+              markerId: 0,
+              markerColor: { r: 0, g: 0, b: 0 },
+              markerScale: 1
+            },
+            onOffDutyCoords: { x: null, y: null, z: null },
+            garageCoords: { x: null, y: null, z: null },
+            stashes: [],
+            shops: [],
+            processing: [],
+            vehicleShop: {
+              coords: { x: null, y: null, z: null },
+              type: 'npc',
+              npcModel: '',
+              npcHeading: 0,
+              markerId: 0,
+              markerColor: { r: 0, g: 0, b: 0 },
+              markerScale: 1,
+              vehicles: []
+            }
+          };
+          this.refreshData();
+        } else {
           this.error = 'Failed to add new job. Please try again.';
-        });
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to add new job:', error);
+        this.error = 'Failed to add new job. Please try again.';
+      });
     },
     refreshData() {
       this.loadingData = true;
@@ -441,7 +413,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 body {
