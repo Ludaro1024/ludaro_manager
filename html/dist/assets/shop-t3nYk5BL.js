@@ -1,1 +1,0 @@
-import{_ as e,c as t,o,a as s}from"./index-Bg__Z-9V.js";const c={},n={class:"under-construction"},a=s("div",{class:"message"},[s("span",{class:"text"},"🚧 Under Construction 👷‍♀️🚧"),s("br"),s("span",{class:"text"},"This site is not available right now.")],-1),r=[a];function i(_,d){return o(),t("div",n,r)}const h=e(c,[["render",i]]);export{h as default};
