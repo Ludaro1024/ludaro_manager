@@ -73,6 +73,7 @@
     "doorManagement": "Door Management",
     "dataManagement": "Data Management",
     "userManagement": "user Management",
-    "vehicleManagement": "VehicleManagement"
+    "vehicleManagement": "VehicleManagement",
+    "home": "Home"  
   }
   

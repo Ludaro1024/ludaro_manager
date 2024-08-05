@@ -11,8 +11,3 @@ CreateThread(function()
     end)
 
 end)
-RegisterNetEvent('esx:setJob', function(job, lastJob)
-    job = job.name
-    grade = job.grade
-    refresh_RefreshEverything()
-end)

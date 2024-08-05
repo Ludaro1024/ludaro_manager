@@ -1,21 +1,30 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
-import {i18n} from '../main.js';
+import { i18n } from '../main.js';
+
 const locale = ref(localStorage.getItem('locale') || 'en');
+const { t } = i18n.global;
 const router = useRouter();
-const items = ref([
-  { route: "home", name: 'home', active: true },
-  { route: "job", name: $t('jobManagement'), active: false },
-  { route: "society", name: $t('societyManagement'), active: false },
-  { route: "interactions", name: $t('interactionsManagement'), active: false },
-  { route: "farming", name: $t('farmingManagement'), active: false },
-  { route: "shop", name: $t('shopManagement'), active: false },
-  { route: "door", name: $t('doorManagement'), active: false },
-  { route: "data", name: $t('dataManagement'), active: false },
-  { route: "user", name: $t('userManagement'), active: false },
-  { route: "vehicle", name: $t('vehicleManagement'), active: false },
-]);
+
+const items = ref([]);
+const updateItems = () => {
+  items.value = [
+    { route: "home", name: t('home'), active: true },
+    { route: "job", name: t('jobManagement'), active: false },
+    { route: "society", name: t('societyManagement'), active: false },
+    { route: "interactions", name: t('interactionsManagement'), active: false },
+    { route: "farming", name: t('farmingManagement'), active: false },
+    { route: "shop", name: t('shopManagement'), active: false },
+    { route: "door", name: t('doorManagement'), active: false },
+    { route: "data", name: t('dataManagement'), active: false },
+    { route: "user", name: t('userManagement'), active: false },
+    { route: "vehicle", name: t('vehicleManagement'), active: false },
+  ];
+};
+
+// Initialize items
+updateItems();
 
 const languages = {
   en: 'English',
@@ -46,17 +55,19 @@ const handleEscapeKey = (event) => {
   }
 };
 
-const changeLocale = (locale) => {
-  console.log("setting locale.. " + locale)
-  localStorage.setItem('locale', locale);
-  locale.value = locale;
-  i18n.locale = locale;
+const changeLocale = (newLocale) => {
+  console.log("setting locale.. " + newLocale);
+  localStorage.setItem('locale', newLocale);
+  locale.value = newLocale;
+  i18n.global.locale = newLocale;
 };
 
 watch(locale, (newLocale) => {
   console.log("Locale changed to:", newLocale);
   i18n.global.locale = newLocale;
+  updateItems(); // Update items based on new locale
 });
+
 onMounted(() => {
   document.addEventListener('keydown', handleEscapeKey);
   const savedLocale = localStorage.getItem('locale');
@@ -82,7 +93,7 @@ onBeforeUnmount(() => {
             <button @click="closeUI" class="absolute top-2 right-4 text-white">X</button>
             <div class="locale-changer absolute top-2 left-4">
               <select v-model="locale" @change="changeLocale(locale)" class="text-black">
-              <option v-for="(lang, code) in languages" :key="code" :value="code">{{ lang }}</option>
+                <option v-for="(lang, code) in languages" :key="code" :value="code">{{ lang }}</option>
               </select>
             </div>
           </th>
@@ -95,14 +106,14 @@ onBeforeUnmount(() => {
             <div class="flex h-full">
               <div class="w-1/5 mr-8 relative">
                 <ul class="space-y-4">
-                  <li v-for="item in items" :key="item.name"
+                  <li v-for="item in items" :key="item.route"
                       class="cursor-pointer rounded-md p-2 transition-colors duration-200 text-white"
                       :class="{ 
                         'bg-blue-500': item.active,
                         'hover:bg-blue-300': !item.active
                       }"
                       @click="setActiveItem(item.name, item.route)">
-                    {{ $t(item.name) }}
+                    {{ item.name }}
                   </li>
                 </ul>
                 <div class="absolute top-0 right-0 h-full w-px bg-gray-300 dark:bg-gray-700"></div> 
@@ -125,8 +136,6 @@ onBeforeUnmount(() => {
     </table>
   </div>
 </template>
-
-
 
 <style scoped>
 /* Ensure the table and its content maintain fixed sizes */

@@ -10,7 +10,7 @@ function job_management_zzload_Init()
     
     -- Create NPC zones based on the retrieved data
     job_management_zones_npcs_NPCZones(data)
-    print("refreshing..")
+
     
     -- Create marker zones based on the retrieved data
     job_management_zones_marker_createMarkerZones(data)
