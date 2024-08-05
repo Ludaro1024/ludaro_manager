@@ -64,3 +64,7 @@ files({
 	"html/dist/**",
 })
 
+dependencies({
+	"ox_lib",
+	"oxmysql",
+})

@@ -41,6 +41,7 @@ export default {
   mounted() {
     this.fetchAvailableInteractions();
     this.job.interactions = JSON.parse(this.job.ludaro_manager_interactions || '[]');
+
   },
   methods: {
     async fetchAvailableInteractions() {

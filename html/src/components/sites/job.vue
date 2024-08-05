@@ -12,6 +12,7 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Job Label</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Whitelisted</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Active Players</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Society Paid</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -22,6 +23,7 @@
               <td class="px-6 py-4 whitespace-nowrap">{{ job.label }}</td>
               <td class="px-6 py-4 whitespace-nowrap">{{ job.whitelisted ? '✔️' : '❌' }}</td>
               <td class="px-6 py-4 whitespace-nowrap">{{ job.activeplayers }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ job.societypaid ? '✔️' : '❌' }}</td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <button @click.stop="confirmDeleteJob(jobName)" class="text-red-500 hover:text-red-700">🗑️</button>
               </td>
@@ -49,6 +51,10 @@
           <input type="checkbox" v-model="jobs[editingJobName].whitelisted">
         </div>
         <div class="mb-4">
+          <label class="block mb-2">Society Paid</label>
+          <input type="checkbox" v-model="jobs[editingJobName].societypaid">
+        </div>
+        <div class="mb-4">
           <nav class="flex mb-4 border-b border-gray-600">
             <a v-for="tab in tabs" :key="tab" @click="activeTab = tab" class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : ''">{{ tab }}</a>
           </nav>
@@ -67,17 +73,19 @@
         <h3 class="text-lg font-bold mb-4">Add New Job</h3>
         <div class="mb-4">
           <label class="block mb-2">Job Name</label>
-          <input type="text" v-model="newJob.name"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="newJob.name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Job Label</label>
-          <input type="text" v-model="newJob.label"
-            class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <input type="text" v-model="newJob.label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
           <label class="block mb-2">Whitelisted</label>
           <input type="checkbox" v-model="newJob.whitelisted">
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Society Paid</label>
+          <input type="checkbox" v-model="newJob.societypaid">
         </div>
         <div class="mt-4">
           <button @click="addNewJob" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Job</button>
@@ -129,6 +137,7 @@ export default {
         name: '',
         label: '',
         whitelisted: false,
+        societypaid: false, // Add this line
         grades: [],
         vehicles: [],
         bossmenu: {
@@ -263,6 +272,10 @@ export default {
               vehicles: []
             };
           }
+
+          if (typeof jobsData[jobName].societypaid === 'undefined') {
+            jobsData[jobName].societypaid = false;
+          }
         });
 
         this.jobs = jobsData;
@@ -304,6 +317,8 @@ export default {
     },
     closePopup() {
       this.isPopupVisible = false;
+      this.showAddJobPopup = false;
+      this.jobToDelete = null;
     },
     handleKeydown(event) {
       if (event.key === 'Escape') {
@@ -362,6 +377,7 @@ export default {
             name: '',
             label: '',
             whitelisted: false,
+            societypaid: false, // Add this line
             grades: [],
             vehicles: [],
             bossmenu: {

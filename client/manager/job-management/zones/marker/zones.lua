@@ -17,6 +17,7 @@ function job_management_zones_marker_createMarkerZones(dataa)
         
         for _, marker in pairs(v.data) do
             if marker.type == "marker" then
+               
                -- print(ESX.DumpTable(marker))
                 if marker.coords then
                     coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
@@ -45,17 +46,22 @@ function job_management_zones_marker_createMarkerZones(dataa)
                 local zoneType = marker.type
                 box = lib.zones.box({
                     coords = coords,
+                    marker = marker,
                     size = size,
                     rotation = rotation,
-                    debug = true,
+                    debug = Debuglevel >= 4,
+                    job = job,
+                    grade = grade,
+                    parentName = jobname,
                     inside = function(self) 
-                        DrawMarker(marker.marker.markerId, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, marker.marker.markerScale, marker.marker.markerScale, marker.marker.markerScale, marker.marker.markerColor.r, marker.marker.markerColor.g, marker.marker.markerColor.b, 255, marker.marker.bobUpAndDown, marker.marker.faceCamera, 2, nil, nil)
+                     
+                        DrawMarker(self.marker.markerId, self.coords.x, self.coords.y, self.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, self.marker.markerScale, self.marker.markerScale, self.marker.markerScale, self.marker.markerColor.r, self.marker.markerColor.g,self.marker.markerColor.b, 255, self.marker.bobUpAndDown, self.marker.faceCamera, 2, nil, nil)
                         local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
 
-                        if inrange and job_management_zones_marker_Allowed(parentName, marker.grade, job, grade) then
+                        if inrange and job_management_zones_marker_Allowed(self.jobname, self.grade, self.job, self.grade) then
                             EditableFunctions.ShowHelpNotification(Locale("open_menu"))
                             if IsControlJustReleased(0, 38) then
-                                openMenu(marker, parentName) -- Pass the parent name here
+                                openMenu(self.marker, self.jobname) -- Pass the parent name here
                             end
                         end
                     end, 

@@ -42,15 +42,15 @@ function job_management_zones_npcs_NPCZones(data)
                         end
                     end
 
-                    local rotation = 200.0 -- Default rotation
-                    local zoneType = key
-                
+                    local rotation = 200.0 
+                    timer = 0
+                    timer = timer + 1
+                    print()
                     box = lib.zones.box({
                         coords = coords,
                         size = size,
                         rotation = rotation,
-                        inside = function() end,
-                        debug = Debuglevel >= 3,
+                        debug = Debuglevel >= 4,
                         inside = function(self)
                             if self.coords then
                                 local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
