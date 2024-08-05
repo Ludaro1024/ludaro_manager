@@ -60,7 +60,7 @@ function job_management_zones_marker_createMarkerZones(dataa)
                             self.coords.x, self.coords.y, self.coords.z, 
                             0.0, 0.0, 0.0, 
                             0.0, 0.0, 0.0, 
-                            self.marker.marker.markerScale, self.marker.marker.markerScale, self.marker.marker.markerScale, 
+                            self.marker.marker.markerScale + 0.0, self.marker.marker.markerScale + 0.0, self.marker.marker.markerScale + 0.0, 
                             self.marker.marker.markerColor.r, self.marker.marker.markerColor.g, self.marker.marker.markerColor.b, 255, 
                             self.marker.marker.bobUpAndDown, self.marker.marker.faceCamera, 2, nil, nil
                         )

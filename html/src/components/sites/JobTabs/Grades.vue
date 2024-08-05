@@ -118,7 +118,7 @@ export default {
       .then(response => response.json())
       .then(result => {
         if (result.success) {
-          console.log('Grades saved successfully');
+          // console.log('Grades saved successfully');
         } else {
           console.error('Failed to save grades');
         }

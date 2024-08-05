@@ -132,7 +132,7 @@ export default {
         minimumGrade: item.minimumGrade || ''
       })) : []
     }));
-    console.log('Loaded job data:', JSON.stringify(this.job.shops));
+    // console.log('Loaded job data:', JSON.stringify(this.job.shops));
   },
   methods: {
     fetchCurrentCoords(index = null, isNew = false) {
@@ -151,7 +151,7 @@ export default {
           } else {
             this.job.shops[index].coords = { x: coords.x, y: coords.y, z: coords.z };
           }
-          console.log('Updated coords:', coords);
+          // console.log('Updated coords:', coords);
           this.$emit('update-job', this.job);
         }
       })
@@ -169,12 +169,12 @@ export default {
         stock: 0,
         minimumGrade: ''
       });
-      console.log('Added new item to shop:', shopIndex, this.job.shops[shopIndex].items);
+      // console.log('Added new item to shop:', shopIndex, this.job.shops[shopIndex].items);
       this.$emit('update-job', this.job);
     },
     removeItem(shopIndex, itemIndex) {
       this.job.shops[shopIndex].items.splice(itemIndex, 1);
-      console.log('Removed item from shop:', shopIndex, this.job.shops[shopIndex].items);
+      // console.log('Removed item from shop:', shopIndex, this.job.shops[shopIndex].items);
       this.$emit('update-job', this.job);
     },
     addNewItem() {
@@ -184,18 +184,18 @@ export default {
         stock: 0,
         minimumGrade: ''
       });
-      console.log('Added new item to new shop:', this.newShop.items);
+      // console.log('Added new item to new shop:', this.newShop.items);
     },
     removeNewItem(index) {
       this.newShop.items.splice(index, 1);
-      console.log('Removed item from new shop:', index, this.newShop.items);
+      // console.log('Removed item from new shop:', index, this.newShop.items);
     },
     addNewShop() {
       if (!Array.isArray(this.job.shops)) {
         this.job.shops = [];
       }
       this.job.shops.push({ ...this.newShop });
-      console.log('Added new shop:', this.newShop);
+      // console.log('Added new shop:', this.newShop);
       this.showAddShopPopup = false;
       this.newShop = {
         coords: { x: 0, y: 0, z: 0 },
@@ -206,7 +206,7 @@ export default {
     },
     removeShop(index) {
       this.job.shops.splice(index, 1);
-      console.log('Removed shop:', index, this.job.shops);
+      // console.log('Removed shop:', index, this.job.shops);
       this.$emit('update-job', this.job);
     }
   }

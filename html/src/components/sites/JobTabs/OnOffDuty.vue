@@ -49,7 +49,7 @@ export default {
         markerColor: onoffduty.markerColor || { r: 0, g: 0, b: 0 },
         markerScale: onoffduty.markerScale || 1
       };
-      console.log('Initialized job.onoffduty:', JSON.stringify(this.job.onoffduty));
+      // console.log('Initialized job.onoffduty:', JSON.stringify(this.job.onoffduty));
     } catch (error) {
       console.error('Error parsing onoffduty data:', error);
       this.job.onoffduty = {
@@ -78,7 +78,7 @@ export default {
         if (coords) {
           this.job.onoffduty.coords = { x: coords.x, y: coords.y, z: coords.z };
           this.$emit('update-job', this.job);
-          console.log('Updated onoffduty coords:', this.job.onoffduty.coords);
+          // console.log('Updated onoffduty coords:', this.job.onoffduty.coords);
         }
       })
       .catch((error) => {
@@ -88,7 +88,7 @@ export default {
     initializeMarkerColor() {
       if (!this.job.onoffduty.markerColor) {
         this.job.onoffduty.markerColor = { r: 0, g: 0, b: 0 };
-        console.log('Initialized marker color to default:', this.job.onoffduty.markerColor);
+        // console.log('Initialized marker color to default:', this.job.onoffduty.markerColor);
       }
     }
   },

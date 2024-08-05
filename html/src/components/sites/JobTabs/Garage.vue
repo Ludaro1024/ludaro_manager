@@ -172,8 +172,8 @@ export default {
       vehicles: vehicleShopData.vehicles || [],
       buyWithSocietyMoney: vehicleShopData.buyWithSocietyMoney || false
     };
-    console.log('Loaded garage data:', JSON.stringify(this.job.garage));
-    console.log('Loaded vehicle shop data:', JSON.stringify(this.job.vehicleShop));
+    // console.log('Loaded garage data:', JSON.stringify(this.job.garage));
+    // console.log('Loaded vehicle shop data:', JSON.stringify(this.job.vehicleShop));
   },
   methods: {
     fetchCurrentCoords(section) {

@@ -55,7 +55,7 @@ export default {
           body: JSON.stringify({})
         });
         this.availableInteractions = await response.json();
-        console.log('Fetched interactions:', this.availableInteractions);
+        // console.log('Fetched interactions:', this.availableInteractions);
       } catch (error) {
         console.error('Failed to fetch available interactions:', error);
         this.error = 'Failed to load interactions. Please try again later.';
@@ -85,7 +85,7 @@ export default {
           })
         });
         const result = await response.json();
-        console.log('Interaction add status:', result.success);
+        // console.log('Interaction add status:', result.success);
 
         if (result.success === true || result.success === 'true' || result.success === undefined) {
           this.job.interactions.push(this.newInteraction);
@@ -114,7 +114,7 @@ export default {
           })
         });
         const result = await response.json();
-        console.log('Interaction remove status:', result.success);
+        // console.log('Interaction remove status:', result.success);
 
         if (result.success === true || result.success === 'true' || result.success === undefined) {
           this.job.interactions.splice(index, 1);

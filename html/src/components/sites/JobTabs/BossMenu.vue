@@ -20,7 +20,7 @@
     </div>
     <div class="mb-4">
       <label class="block mb-2 font-bold">{{ $t('bossMenuGradeAccess') }}</label>
-      <select v-model="localBossMenu.grade" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
+      <select v-model="localBossMenu.grade" @change ="initializegrade(localBossMenu.grade)" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
         <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
           {{ grade.label }} (ID: {{ grade.grade }})
         </option>
@@ -91,7 +91,7 @@ export default {
     return {
       localBossMenu: {
         coords: { x: 0, y: 0, z: 0 },
-        grade: '',
+        grade: 0,
         type: 'npc',
         npcModel: '',
         npcHeading: 0,
@@ -108,11 +108,10 @@ export default {
   },
   beforeMount() {
     try {
-      console.log(JSON.stringify(this.job));
       const bossmenu = JSON.parse(this.job.ludaro_manager_bossmenu || '{}');
       this.localBossMenu = {
         coords: bossmenu.coords || { x: 0, y: 0, z: 0 },
-        grade: bossmenu.grade || '',
+        grade: bossmenu.grade || 0,
         type: bossmenu.type || 'npc',
         npcModel: bossmenu.npcModel || '',
         npcHeading: bossmenu.npcHeading || 0,
@@ -125,7 +124,6 @@ export default {
           faceCamera: bossmenu.marker ? bossmenu.marker.faceCamera : false
         }
       };
-      console.log('Initialized localBossMenu:', JSON.stringify(this.localBossMenu));
     } catch (error) {
       console.error('Error parsing bossmenu data:', error);
     }
@@ -144,7 +142,7 @@ export default {
         if (coords) {
           this.localBossMenu.coords = { x: coords.x, y: coords.y, z: coords.z };
           this.updateJobBossMenu();
-          console.log('Updated localBossMenu coords:', this.localBossMenu.coords);
+          // console.log('Updated localBossMenu coords:', this.localBossMenu.coords);
         }
       })
       .catch((error) => {
@@ -164,7 +162,7 @@ export default {
         if (heading.heading) {
           this.localBossMenu.npcHeading = heading.heading;
           this.updateJobBossMenu();
-          console.log('Updated localBossMenu heading:', this.localBossMenu.npcHeading);
+          // console.log('Updated localBossMenu heading:', this.localBossMenu.npcHeading);
         }
       })
       .catch((error) => {
@@ -175,8 +173,13 @@ export default {
       if (!this.localBossMenu.marker.markerColor) {
         this.localBossMenu.marker.markerColor = { r: 0, g: 0, b: 0 };
         this.updateJobBossMenu();
-        console.log('Initialized marker color to default:', this.localBossMenu.marker.markerColor);
+        // console.log('Initialized marker color to default:', this.localBossMenu.marker.markerColor);
       }
+    },
+    initializeGrade(grade) {
+      this.localBossMenu.grade = grade;
+      this.updateJobBossMenu();
+      // console.log('Initialized grade:', this.localBossMenu.grade);  
     },
     updateJobBossMenu() {
       this.job.bossmenu = { ...this.localBossMenu };

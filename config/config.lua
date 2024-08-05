@@ -13,5 +13,5 @@ Config.AdminGroups = {"admin", "superadmin"} -- groups that are allowed to use t
 -- LEAVE THE KEYMAPPINGS PLEASE IN THE SAME ORDER, OTHERWISE THE KEYMAPPINGS WILL NOT WORK OR BREAK THE SCRIPT
 Config.KeyMapping = { -- keymapping for the commands
     openTablet = {"F1", "+tablet", "Open the Tablet"},
-    openInteractions = {"E", "+openInteractions", "Open Job Interactionsn"},
+    openInteractions = {"F4", "+openInteractions", "Open Job Interactionsn"},
 }
