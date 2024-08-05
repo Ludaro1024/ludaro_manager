@@ -3,14 +3,14 @@
     <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
       <thead>
         <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Input Items</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Output Item</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Seconds</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Animation Dir</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Animation</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Min Grade</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Coords</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('inputItems') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('outputItem') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('seconds') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('animationDir') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('animation') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('minGrade') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('coords') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('actions') }}</th>
         </tr>
       </thead>
       <tbody class="bg-gray-700 divide-y divide-gray-600">
@@ -41,42 +41,42 @@
             <input type="number" v-model="processing.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
             <input type="number" v-model="processing.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
             <input type="number" v-model="processing.coords.z" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-            <button @click="fetchCurrentCoords(index)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+            <button @click="fetchCurrentCoords(index)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
           </td>
           <td class="px-4 py-2">
-            <button @click="removeProcessing(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Remove</button>
+            <button @click="removeProcessing(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">{{ $t('remove') }}</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <button @click="showAddProcessingPopup = true" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Processing</button>
+    <button @click="showAddProcessingPopup = true" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{{ $t('addProcessing') }}</button>
 
     <!-- Add Processing Popup -->
     <div v-if="showAddProcessingPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
       <div class="bg-gray-800 text-white p-4 rounded w-1/2 overflow-auto max-h-[90vh]">
-        <h3 class="text-lg font-bold mb-4">Add New Processing</h3>
+        <h3 class="text-lg font-bold mb-4">{{ $t('addNewProcessing') }}</h3>
         <div class="mb-4">
-          <label class="block mb-2">Input Items</label>
+          <label class="block mb-2">{{ $t('inputItems') }}</label>
           <input type="text" v-model="newProcessing.inputItems" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Output Item</label>
+          <label class="block mb-2">{{ $t('outputItem') }}</label>
           <input type="text" v-model="newProcessing.outputItem" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Seconds</label>
+          <label class="block mb-2">{{ $t('seconds') }}</label>
           <input type="number" v-model="newProcessing.seconds" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Animation Dir</label>
+          <label class="block mb-2">{{ $t('animationDir') }}</label>
           <input type="text" v-model="newProcessing.animationDir" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Animation</label>
+          <label class="block mb-2">{{ $t('animation') }}</label>
           <input type="text" v-model="newProcessing.animation" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Min Grade</label>
+          <label class="block mb-2">{{ $t('minGrade') }}</label>
           <select v-model="newProcessing.minimumGrade" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
             <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
               {{ grade.label }} (ID: {{ grade.grade }})
@@ -84,20 +84,21 @@
           </select>
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Coords</label>
+          <label class="block mb-2">{{ $t('coords') }}</label>
           <input type="number" v-model="newProcessing.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
           <input type="number" v-model="newProcessing.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
           <input type="number" v-model="newProcessing.coords.z" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-          <button @click="fetchCurrentCoords(null, true)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+          <button @click="fetchCurrentCoords(null, true)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
         </div>
         <div class="mt-4">
-          <button @click="addNewProcessing" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Processing</button>
-          <button @click="showAddProcessingPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+          <button @click="addNewProcessing" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('addProcessing') }}</button>
+          <button @click="showAddProcessingPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {

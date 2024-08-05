@@ -1,0 +1,19 @@
+{
+    "loading": "Wird geladen...",
+    "jobName": "Berufsname",
+    "jobLabel": "Berufsbezeichnung",
+    "whitelisted": "Auf der Whitelist",
+    "activePlayers": "Aktive Spieler",
+    "societyPaid": "Gesellschaft bezahlt",
+    "actions": "Aktionen",
+    "addNewJob": "Neuen Job hinzufügen",
+    "editJob": "Job bearbeiten",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "confirmDeleteJob": "Job löschen bestätigen",
+    "confirmDeleteMessage": "Möchten Sie diesen Job wirklich löschen?",
+    "yes": "Ja",
+    "no": "Nein",
+    "addJob": "Job hinzufügen"
+  }
+  

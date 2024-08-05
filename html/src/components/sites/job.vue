@@ -1,19 +1,19 @@
 <template>
   <div>
     <div v-if="loading" class="flex justify-center items-center h-screen">
-      <span class="text-2xl text-white">Loading...</span>
+      <span class="text-2xl text-white">{{ $t('loading') }}</span>
     </div>
     <div v-else class="container mx-auto p-4 overflow-auto max-h-[90vh]">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
           <thead>
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Job Name</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Job Label</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Whitelisted</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Active Players</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Society Paid</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('jobName') }}</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('jobLabel') }}</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('whitelisted') }}</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('activePlayers') }}</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('societyPaid') }}</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('actions') }}</th>
             </tr>
           </thead>
           <tbody class="bg-gray-700 divide-y divide-gray-600">
@@ -31,38 +31,38 @@
           </tbody>
         </table>
       </div>
-      <button class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="openAddJobPopup">Add New Job</button>
+      <button class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="openAddJobPopup">{{ $t('addNewJob') }}</button>
     </div>
 
     <!-- Job Edit Popup -->
     <div v-if="isPopupVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75" @click.self="closePopup">
       <div class="bg-gray-800 text-white p-4 rounded w-3/4 overflow-auto max-h-[90vh]">
-        <h3 class="text-lg font-bold mb-4">Edit Job</h3>
+        <h3 class="text-lg font-bold mb-4">{{ $t('editJob') }}</h3>
         <div class="mb-4">
-          <label class="block mb-2">Job Name</label>
+          <label class="block mb-2">{{ $t('jobName') }}</label>
           <input type="text" v-model="jobs[editingJobName].name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Job Label</label>
+          <label class="block mb-2">{{ $t('jobLabel') }}</label>
           <input type="text" v-model="jobs[editingJobName].label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Whitelisted</label>
+          <label class="block mb-2">{{ $t('whitelisted') }}</label>
           <input type="checkbox" v-model="jobs[editingJobName].whitelisted">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Society Paid</label>
+          <label class="block mb-2">{{ $t('societyPaid') }}</label>
           <input type="checkbox" v-model="jobs[editingJobName].societypaid">
         </div>
         <div class="mb-4">
           <nav class="flex mb-4 border-b border-gray-600">
-            <a v-for="tab in tabs" :key="tab" @click="activeTab = tab" class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : ''">{{ tab }}</a>
+            <a v-for="tab in tabs" :key="tab" @click="activeTab = tab" class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : ''">{{ $t(tab) }}</a>
           </nav>
           <component :is="activeTabComponent" :job="jobs[editingJobName]" @update-job="updateJob"></component>
         </div>
         <div class="mt-4">
-          <button @click="saveJob(editingJobName)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
-          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+          <button @click="saveJob(editingJobName)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('save') }}</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
         </div>
       </div>
     </div>
@@ -70,26 +70,26 @@
     <!-- Add Job Popup -->
     <div v-if="showAddJobPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75" @click.self="closePopup">
       <div class="bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Add New Job</h3>
+        <h3 class="text-lg font-bold mb-4">{{ $t('addNewJob') }}</h3>
         <div class="mb-4">
-          <label class="block mb-2">Job Name</label>
+          <label class="block mb-2">{{ $t('jobName') }}</label>
           <input type="text" v-model="newJob.name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Job Label</label>
+          <label class="block mb-2">{{ $t('jobLabel') }}</label>
           <input type="text" v-model="newJob.label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Whitelisted</label>
+          <label class="block mb-2">{{ $t('whitelisted') }}</label>
           <input type="checkbox" v-model="newJob.whitelisted">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Society Paid</label>
+          <label class="block mb-2">{{ $t('societyPaid') }}</label>
           <input type="checkbox" v-model="newJob.societypaid">
         </div>
         <div class="mt-4">
-          <button @click="addNewJob" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Job</button>
-          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+          <button @click="addNewJob" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('addJob') }}</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
         </div>
         <div v-if="error" class="mt-4 text-red-500">{{ error }}</div>
       </div>
@@ -98,11 +98,11 @@
     <!-- Confirm Delete Job Popup -->
     <div v-if="jobToDelete !== null" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75" @click.self="closePopup">
       <div class="bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Confirm Delete Job</h3>
-        <p>Are you sure you want to delete this job?</p>
+        <h3 class="text-lg font-bold mb-4">{{ $t('confirmDeleteJob') }}</h3>
+        <p>{{ $t('confirmDeleteMessage') }}</p>
         <div class="mt-4">
-          <button @click="deleteJob(jobToDelete)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Yes</button>
-          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">No</button>
+          <button @click="deleteJob(jobToDelete)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">{{ $t('yes') }}</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('no') }}</button>
         </div>
       </div>
     </div>
@@ -130,7 +130,7 @@ export default {
       interactions: [],
       editingJobName: null,
       isPopupVisible: false, // Add this line
-      activeTab: 'JobInfo',
+      activeTab: 'jobInfo',
       showAddJobPopup: false,
       lastSaveTime: 0, // Add this line
       newJob: {
@@ -181,7 +181,7 @@ export default {
         grade: ''
       },
       jobToDelete: null,
-      tabs: ['JobInfo', 'Grades', 'BossMenu', 'Interactions', 'Garage', 'OnOffDuty', 'Employees', 'Stashes', 'Shops', 'Processing'],
+      tabs: ['jobInfo', 'Grades', 'BossMenu', 'Interactions', 'Garage', 'onOffDuty', 'employees', 'stashes', 'shops', 'processing'],
       error: ''
     };
   },
@@ -195,16 +195,16 @@ export default {
   computed: {
     activeTabComponent() {
       const tabComponents = {
-        JobInfo,
+        jobInfo: JobInfo,
         Grades,
         BossMenu,
         Interactions,
         Garage,
-        OnOffDuty,
-        Employees,
-        Stashes,
-        Shops,
-        Processing
+        onOffDuty: OnOffDuty,
+        employees: Employees,
+        stashes: Stashes,
+        shops: Shops,
+        processing: Processing
       };
       return tabComponents[this.activeTab] || 'div';
     }
@@ -288,7 +288,7 @@ export default {
     },
     editJob(jobName) {
       this.editingJobName = jobName;
-      this.activeTab = 'JobInfo';
+      this.activeTab = 'jobInfo';
       this.isPopupVisible = true; // Show the popup
     },
     saveJob(jobName) {

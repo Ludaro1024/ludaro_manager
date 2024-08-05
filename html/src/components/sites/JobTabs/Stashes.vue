@@ -1,12 +1,13 @@
 <template>
   <div class="under-construction">
     <div class="message">
-      <span class="text">🚧 Under Construction 👷‍♀️🚧</span>
+      <span class="text">🚧 {{ $t('underConstruction') }} 👷‍♀️🚧</span>
       <br>
-      <span class="text">This site is not available right now.</span>
+      <span class="text">{{ $t('siteNotAvailable') }}</span>
     </div>
   </div>
 </template>
+
 
 <style>
   .under-construction {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mb-4">
-      <label class="block mb-2 font-bold">Boss Menu Coords (x, y, z)</label>
+      <label class="block mb-2 font-bold">{{ $t('bossMenuCoords') }} (x, y, z)</label>
       <div class="flex">
         <div class="flex flex-col">
           <label class="mb-1">X:</label>
@@ -16,10 +16,10 @@
           <input type="number" v-model="localBossMenu.coords.z" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
         </div>
       </div>
-      <button @click="fetchCurrentCoords" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+      <button @click="fetchCurrentCoords" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
     </div>
     <div class="mb-4">
-      <label class="block mb-2 font-bold">Boss Menu Grade Access</label>
+      <label class="block mb-2 font-bold">{{ $t('bossMenuGradeAccess') }}</label>
       <select v-model="localBossMenu.grade" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
         <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
           {{ grade.label }} (ID: {{ grade.grade }})
@@ -27,29 +27,29 @@
       </select>
     </div>
     <div class="mb-4">
-      <label class="block mb-2 font-bold">Boss Menu NPC/Marker</label>
+      <label class="block mb-2 font-bold">{{ $t('bossMenuNpcMarker') }}</label>
       <select v-model="localBossMenu.type" @change="initializeMarkerColor" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
-        <option value="npc">NPC</option>
-        <option value="marker">Marker</option>
+        <option value="npc">{{ $t('npc') }}</option>
+        <option value="marker">{{ $t('marker') }}</option>
       </select>
       <div v-if="localBossMenu.type === 'npc'">
         <div class="flex flex-col">
-          <label class="mb-1">NPC Model:</label>
+          <label class="mb-1">{{ $t('npcModel') }}:</label>
           <input type="text" v-model="localBossMenu.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
         </div>
         <div class="flex flex-col">
-          <label class="mb-1">NPC Heading:</label>
+          <label class="mb-1">{{ $t('npcHeading') }}:</label>
           <input type="number" v-model="localBossMenu.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
         </div>
         <div class="flex flex-col">
-          <label class="mb-1">NPC Range:</label>
+          <label class="mb-1">{{ $t('npcRange') }}:</label>
           <input type="number" v-model="localBossMenu.npcRange" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
         </div>
-        <button @click="fetchCurrentHeading" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Heading</button>
+        <button @click="fetchCurrentHeading" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
       </div>
       <div v-else-if="localBossMenu.type === 'marker'">
         <div class="flex flex-col">
-          <label class="mb-1">Marker ID:</label>
+          <label class="mb-1">{{ $t('markerId') }}:</label>
           <input type="number" v-model="localBossMenu.marker.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
         </div>
         <div class="flex">
@@ -67,21 +67,22 @@
           </div>
         </div>
         <div class="flex flex-col">
-          <label class="mb-1">Marker Scale:</label>
+          <label class="mb-1">{{ $t('markerScale') }}:</label>
           <input type="number" v-model="localBossMenu.marker.markerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
         </div>
         <div class="flex flex-col">
-          <label class="mb-1">Bob Up and Down:</label>
+          <label class="mb-1">{{ $t('bobUpAndDown') }}:</label>
           <input type="checkbox" v-model="localBossMenu.marker.bobUpAndDown" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="flex flex-col">
-          <label class="mb-1">Face Camera:</label>
+          <label class="mb-1">{{ $t('faceCamera') }}:</label>
           <input type="checkbox" v-model="localBossMenu.marker.faceCamera" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {

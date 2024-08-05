@@ -3,10 +3,10 @@
     <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
       <thead>
         <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">First Name</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Last Name</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Grade</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('firstName') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('lastName') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('grade') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('actions') }}</th>
         </tr>
       </thead>
       <tbody class="bg-gray-700 divide-y divide-gray-600">
@@ -15,15 +15,16 @@
           <td class="px-4 py-2">{{ employee.lastname }}</td>
           <td class="px-4 py-2">{{ getGradeLabel(employee.job_grade) }}</td>
           <td class="px-4 py-2">
-            <button v-if="canPromote(employee)" @click="promoteEmployee(employee.identifier)" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Promote</button>
-            <button v-if="canDemote(employee)" @click="demoteEmployee(employee.identifier)" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Demote</button>
-            <button v-if="job.name !== 'unemployed'" @click="fireEmployee(employee.identifier)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Fire</button>
+            <button v-if="canPromote(employee)" @click="promoteEmployee(employee.identifier)" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">{{ $t('promote') }}</button>
+            <button v-if="canDemote(employee)" @click="demoteEmployee(employee.identifier)" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">{{ $t('demote') }}</button>
+            <button v-if="job.name !== 'unemployed'" @click="fireEmployee(employee.identifier)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">{{ $t('fire') }}</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
 
 <script>
 export default {

@@ -1,50 +1,51 @@
 markerzones = {}
-
+-- job_management_zones_marker_Allowed
+-- Checks if the job and grade provided are allowed access
+-- @param accessjob: The required job for access
+-- @param accessgrade: The required grade for access
+-- @param job: The current job of the player
+-- @param grade: The current grade of the player
+-- @return boolean: Returns true if access is allowed, false otherwise
 function job_management_zones_marker_Allowed(accessjob, accessgrade, job, grade)
-    if grade == nil then grade = 0 end
-    if accessgrade == nil then accessgrade = 0 end
+    grade = grade or 0
+    accessgrade = accessgrade or 0
     if type(accessgrade) == "string" then accessgrade = 0 end
-    if accessjob == job and accessgrade <= grade then
-        return true
-    end
+    return accessjob == job and accessgrade <= grade
 end
 
+-- job_management_zones_marker_createMarkerZones
+-- Creates marker zones based on the provided data
+-- @param dataa: The data containing marker zone information
 function job_management_zones_marker_createMarkerZones(dataa)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
 
-    for k,v in pairs(dataa) do
-        local parentName = v.name -- Extract the name from the parent element
-        
+    for k, v in pairs(dataa) do
         for _, marker in pairs(v.data) do
             if marker.type == "marker" then
-               
-               -- print(ESX.DumpTable(marker))
-                if marker.coords then
-                    coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
-                    size = vec3(15, 15, 15)
-                    rotation = 200.0
-                end 
-             
+                local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
+                local size = vec3(15, 15, 15)
+                local rotation = 200.0
 
-                defaultmarkerdata = {
+                local defaultmarkerdata = {
                     markerId = 1,
                     markerScale = 1.0,
                     markerColor = {r = 255, g = 0, b = 0, a = 255},
                     bobUpAndDown = false,
                     faceCamera = false
                 }
-                -- check if data exists if not use default
+
+                -- Apply default data if not provided
+                marker.marker = marker.marker or {}
                 marker.marker.markerId = marker.marker.markerId or defaultmarkerdata.markerId
-                marker.marker.markerScale = marker.marker.markerScale + 0.0 or defaultmarkerdata.markerScale
+                marker.marker.markerScale = marker.marker.markerScale or defaultmarkerdata.markerScale
                 marker.marker.markerColor = marker.marker.markerColor or defaultmarkerdata.markerColor
                 marker.marker.bobUpAndDown = marker.marker.bobUpAndDown or defaultmarkerdata.bobUpAndDown
                 marker.marker.faceCamera = marker.marker.faceCamera or defaultmarkerdata.faceCamera
-                --print(ESX.DumpTable(marker))
 
-
-               
+                local jobname = v.name
                 local zoneType = marker.type
-                box = lib.zones.box({
+
+                local box = lib.zones.box({
                     coords = coords,
                     marker = marker,
                     size = size,
@@ -53,31 +54,41 @@ function job_management_zones_marker_createMarkerZones(dataa)
                     job = job,
                     grade = grade,
                     parentName = jobname,
-                    inside = function(self) 
-                     
-                        DrawMarker(self.marker.markerId, self.coords.x, self.coords.y, self.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, self.marker.markerScale, self.marker.markerScale, self.marker.markerScale, self.marker.markerColor.r, self.marker.markerColor.g,self.marker.markerColor.b, 255, self.marker.bobUpAndDown, self.marker.faceCamera, 2, nil, nil)
+                    inside = function(self)
+                        DrawMarker(
+                            self.marker.marker.markerId, 
+                            self.coords.x, self.coords.y, self.coords.z, 
+                            0.0, 0.0, 0.0, 
+                            0.0, 0.0, 0.0, 
+                            self.marker.marker.markerScale, self.marker.marker.markerScale, self.marker.marker.markerScale, 
+                            self.marker.marker.markerColor.r, self.marker.marker.markerColor.g, self.marker.marker.markerColor.b, 255, 
+                            self.marker.marker.bobUpAndDown, self.marker.marker.faceCamera, 2, nil, nil
+                        )
+
                         local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
 
-                        if inrange and job_management_zones_marker_Allowed(self.jobname, self.grade, self.job, self.grade) then
+                        if inrange and job_management_zones_marker_Allowed(self.parentName, self.grade, self.job, self.grade) then
                             EditableFunctions.ShowHelpNotification(Locale("open_menu"))
                             if IsControlJustReleased(0, 38) then
-                                openMenu(self.marker, self.jobname) -- Pass the parent name here
+                                openMenu(self.marker, self.parentName)
                             end
                         end
-                    end, 
-                    onEnter = function() end, 
-                    onExit = function()  end 
+                    end,
+                    onEnter = function() end,
+                    onExit = function() end
                 })
-        
+
                 table.insert(markerzones, box)
             end
         end
     end
 end
 
+-- job_management_zones_marker_removeAllMarkerZones
+-- Removes all marker zones from the markerzones table
 function job_management_zones_marker_removeAllMarkerZones()
-    for k,v in pairs(markerzones) do
-            v:remove()
+    for _, v in pairs(markerzones) do
+        v:remove()
     end
-    zones = {}
+    markerzones = {}
 end

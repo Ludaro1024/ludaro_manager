@@ -46,6 +46,7 @@ function job_management_callback_saveJob(job)
         local shops = job.shops
         local processing = job.processing
         local vehicleshop = job.vehicleShop
+        local societyPaid = job.societypaid
 
         -- Convert the tables to JSON strings, but replace nil with actual nil (not JSON "null")
         local bossmenu_json = bossmenu and json.encode(bossmenu) or nil
@@ -57,7 +58,7 @@ function job_management_callback_saveJob(job)
         local processing_json = processing and json.encode(processing) or nil
         local vehicleshop_json = vehicleshop and json.encode(vehicleshop) or nil
 
-        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_shops = @shops, ludaro_manager_processing = @processing, ludaro_manager_vehicleShop = @vehicleShop WHERE name = @name', {
+        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_shops = @shops, ludaro_manager_processing = @processing, ludaro_manager_vehicleShop = @vehicleShop, ludaro_manager_societyPaid = @societyPaid WHERE name = @name', {
             ['@name'] = name,
             ['@label'] = label,
             ['@whitelisted'] = whitelisted,
@@ -69,6 +70,7 @@ function job_management_callback_saveJob(job)
             ['@shops'] = shops_json,
             ['@processing'] = processing_json,
             ['@vehicleShop'] = vehicleshop_json,
+            ['@societyPaid'] = societyPaid
         }, function(rowsChanged)
             if rowsChanged > 0 then
                 Debug(2, "Job saved successfully: " .. name)

@@ -3,11 +3,11 @@
     <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
       <thead>
         <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Grade ID</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Grade Spawn Name</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Grade Name</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Salary</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('gradeId') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('gradeSpawnName') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('gradeName') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('salary') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('actions') }}</th>
         </tr>
       </thead>
       <tbody class="bg-gray-700 divide-y divide-gray-600">
@@ -23,40 +23,41 @@
             <input type="number" v-model="grade.salary" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
           </td>
           <td class="px-4 py-2">
-            <button @click="removeGrade(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Remove</button>
+            <button @click="removeGrade(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">{{ $t('remove') }}</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <button @click="showAddGradePopup = true" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Grade</button>
+    <button @click="showAddGradePopup = true" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{{ $t('addGrade') }}</button>
 
     <!-- Add Grade Popup -->
     <div v-if="showAddGradePopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
       <div class="bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Add New Grade</h3>
+        <h3 class="text-lg font-bold mb-4">{{ $t('addNewGrade') }}</h3>
         <div class="mb-4">
-          <label class="block mb-2">Grade Spawn Name</label>
+          <label class="block mb-2">{{ $t('gradeSpawnName') }}</label>
           <input type="text" v-model="newGrade.name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Grade Name</label>
+          <label class="block mb-2">{{ $t('gradeName') }}</label>
           <input type="text" v-model="newGrade.label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Salary</label>
+          <label class="block mb-2">{{ $t('salary') }}</label>
           <input type="number" v-model="newGrade.salary" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mt-4">
           <span v-if="error" class="text-red-500">{{ error }}</span>
-          <button @click="addNewGrade" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Grade</button>
-          <button @click="showAddGradePopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+          <button @click="addNewGrade" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('addGrade') }}</button>
+          <button @click="showAddGradePopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
         </div>
       </div>
     </div>
 
-    <button @click="saveGrades" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save Grades</button>
+    <button @click="saveGrades" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('saveGrades') }}</button>
   </div>
 </template>
+
 
 <script>
 export default {

@@ -3,10 +3,10 @@
     <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
       <thead>
         <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Coords</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Items</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('coords') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('name') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('items') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('actions') }}</th>
         </tr>
       </thead>
       <tbody class="bg-gray-700 divide-y divide-gray-600">
@@ -15,25 +15,25 @@
             <input type="number" v-model="shop.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
             <input type="number" v-model="shop.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
             <input type="number" v-model="shop.coords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-            <button @click="fetchCurrentCoords(index)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+            <button @click="fetchCurrentCoords(index)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
           </td>
           <td class="px-4 py-2">
-            <input type="text" v-model="shop.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Shop Name">
+            <input type="text" v-model="shop.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('shopName') }}">
           </td>
           <td class="px-4 py-2">
             <div v-for="(item, itemIndex) in shop.items" :key="itemIndex" class="mb-4">
-              <input type="text" v-model="item.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Item Name">
+              <input type="text" v-model="item.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('itemName') }}">
               <div class="flex space-x-2">
                 <div class="w-1/3">
-                  <label class="block mb-2">Price</label>
-                  <input type="number" v-model="item.price" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Price">
+                  <label class="block mb-2">{{ $t('price') }}</label>
+                  <input type="number" v-model="item.price" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('price') }}">
                 </div>
                 <div class="w-1/3">
-                  <label class="block mb-2">Stock</label>
-                  <input type="number" v-model="item.stock" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Stock">
+                  <label class="block mb-2">{{ $t('stock') }}</label>
+                  <input type="number" v-model="item.stock" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('stock') }}">
                 </div>
                 <div class="w-1/3">
-                  <label class="block mb-2">Grade</label>
+                  <label class="block mb-2">{{ $t('grade') }}</label>
                   <select v-model="item.minimumGrade" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
                     <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
                       {{ grade.label }} (ID: {{ grade.grade }})
@@ -41,48 +41,48 @@
                   </select>
                 </div>
               </div>
-              <button @click="removeItem(index, itemIndex)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove Item</button>
+              <button @click="removeItem(index, itemIndex)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">{{ $t('removeItem') }}</button>
             </div>
-            <button @click="addItem(index)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Add Item</button>
+            <button @click="addItem(index)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">{{ $t('addItem') }}</button>
           </td>
           <td class="px-4 py-2">
-            <button @click="removeShop(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Remove Shop</button>
+            <button @click="removeShop(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">{{ $t('removeShop') }}</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <button @click="showAddShopPopup = true" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Shop</button>
+    <button @click="showAddShopPopup = true" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{{ $t('addShop') }}</button>
 
     <!-- Add Shop Popup -->
     <div v-if="showAddShopPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
       <div class="bg-gray-800 text-white p-4 rounded w-1/2 overflow-auto max-h-[90vh]">
-        <h3 class="text-lg font-bold mb-4">Add New Shop</h3>
+        <h3 class="text-lg font-bold mb-4">{{ $t('addNewShop') }}</h3>
         <div class="mb-4">
-          <label class="block mb-2">Coords</label>
+          <label class="block mb-2">{{ $t('coords') }}</label>
           <input type="number" v-model="newShop.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
           <input type="number" v-model="newShop.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
           <input type="number" v-model="newShop.coords.z" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-          <button @click="fetchCurrentCoords(null, true)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+          <button @click="fetchCurrentCoords(null, true)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Name</label>
-          <input type="text" v-model="newShop.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Shop Name">
+          <label class="block mb-2">{{ $t('name') }}</label>
+          <input type="text" v-model="newShop.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('shopName') }}">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Items</label>
+          <label class="block mb-2">{{ $t('items') }}</label>
           <div v-for="(item, index) in newShop.items" :key="index" class="mb-4">
-            <input type="text" v-model="item.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Item Name">
+            <input type="text" v-model="item.name" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('itemName') }}">
             <div class="flex space-x-2">
               <div class="w-1/3">
-                <label class="block mb-2">Price</label>
-                <input type="number" v-model="item.price" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Price">
+                <label class="block mb-2">{{ $t('price') }}</label>
+                <input type="number" v-model="item.price" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('price') }}">
               </div>
               <div class="w-1/3">
-                <label class="block mb-2">Stock</label>
-                <input type="number" v-model="item.stock" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Stock">
+                <label class="block mb-2">{{ $t('stock') }}</label>
+                <input type="number" v-model="item.stock" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('stock') }}">
               </div>
               <div class="w-1/3">
-                <label class="block mb-2">Grade</label>
+                <label class="block mb-2">{{ $t('grade') }}</label>
                 <select v-model="item.minimumGrade" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
                   <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
                     {{ grade.label }} (ID: {{ grade.grade }})
@@ -90,18 +90,19 @@
                 </select>
               </div>
             </div>
-            <button @click="removeNewItem(index)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove Item</button>
+            <button @click="removeNewItem(index)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">{{ $t('removeItem') }}</button>
           </div>
-          <button @click="addNewItem" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Add Item</button>
+          <button @click="addNewItem" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">{{ $t('addItem') }}</button>
         </div>
         <div class="mt-4">
-          <button @click="addNewShop" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Shop</button>
-          <button @click="showAddShopPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
+          <button @click="addNewShop" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('addShop') }}</button>
+          <button @click="showAddShopPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {

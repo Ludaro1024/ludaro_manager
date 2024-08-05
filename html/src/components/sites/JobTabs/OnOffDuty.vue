@@ -1,17 +1,17 @@
 <template>
   <div>
     <div>
-      <label class="block mb-2">On/Off Duty Coords (x, y, z)</label>
+      <label class="block mb-2">{{ $t('onOffDutyCoords') }} (x, y, z)</label>
       <input type="number" v-model="job.onoffduty.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
       <input type="number" v-model="job.onoffduty.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
       <input type="number" v-model="job.onoffduty.coords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-      <button @click="fetchCurrentCoords" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+      <button @click="fetchCurrentCoords" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
     </div>
     <div class="mb-4">
-      <label class="block mb-2">On/Off Duty NPC/Marker</label>
+      <label class="block mb-2">{{ $t('onOffDutyNpcMarker') }}</label>
       <select v-model="job.onoffduty.type" @change="initializeMarkerColor" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
-        <option value="npc">NPC</option>
-        <option value="marker">Marker</option>
+        <option value="npc">{{ $t('npc') }}</option>
+        <option value="marker">{{ $t('marker') }}</option>
       </select>
       <div v-if="job.onoffduty.type === 'npc'">
         <input type="text" v-model="job.onoffduty.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
@@ -21,7 +21,7 @@
       <div v-else-if="job.onoffduty.type === 'marker'">
         <input type="number" v-model="job.onoffduty.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
         <div>
-          <label class="block mb-2">Marker Color (RGB)</label>
+          <label class="block mb-2">{{ $t('markerColor') }} (RGB)</label>
           <input type="number" v-model="job.onoffduty.markerColor.r" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
           <input type="number" v-model="job.onoffduty.markerColor.g" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
           <input type="number" v-model="job.onoffduty.markerColor.b" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
@@ -31,6 +31,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 export default {

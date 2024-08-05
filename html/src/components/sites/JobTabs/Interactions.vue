@@ -3,30 +3,31 @@
     <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
       <thead>
         <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Interaction</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('interaction') }}</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('actions') }}</th>
         </tr>
       </thead>
       <tbody class="bg-gray-700 divide-y divide-gray-600">
         <tr v-for="(interaction, index) in job.interactions || []" :key="index">
           <td class="px-4 py-2">{{ interaction }}</td>
           <td class="px-4 py-2">
-            <button @click="removeInteraction(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Remove</button>
+            <button @click="removeInteraction(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">{{ $t('remove') }}</button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="mt-4">
-      <label class="block mb-2">Select Interaction</label>
+      <label class="block mb-2">{{ $t('selectInteraction') }}</label>
       <select v-model="newInteraction" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
-        <option disabled value="">-- Select an Interaction --</option>
+        <option disabled value="">{{ $t('selectInteractionPlaceholder') }}</option>
         <option v-for="interaction in availableInteractions" :key="interaction.interaction_name" :value="interaction.interaction_name">{{ interaction.interaction_name }}</option>
       </select>
       <span v-if="error" class="text-red-500">{{ error }}</span>
-      <button @click="addInteraction" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Add Interaction</button>
+      <button @click="addInteraction" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('addInteraction') }}</button>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {

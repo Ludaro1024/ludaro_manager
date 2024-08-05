@@ -9,6 +9,7 @@ ADD COLUMN ludaro_manager_stashes JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_shops JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_processing JSON DEFAULT NULL;
 ADD COLUMN ludaro_manager_vehicleShop JSON DEFAULT NULL;
+ADD COLUMN ludaro_manager_societyPaid INT DEFAULT 0;
  ]]
     -- TODO: ADD DEFAULT []
 

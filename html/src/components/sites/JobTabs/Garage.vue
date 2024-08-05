@@ -6,49 +6,49 @@
         @click="activeTab = 'garage'"
         class="tab-button"
       >
-        Garage
+        {{ $t('garage') }}
       </button>
       <button
         :class="{'active-tab': activeTab === 'vehicleShop'}"
         @click="activeTab = 'vehicleShop'"
         class="tab-button"
       >
-        Vehicle Shop
+        {{ $t('vehicleShop') }}
       </button>
     </div>
 
     <div v-if="activeTab === 'garage'">
       <div>
-        <label class="block mb-2">Garage Coords (x, y, z)</label>
+        <label class="block mb-2">{{ $t('garageCoords') }} (x, y, z)</label>
         <input type="number" v-model="job.garage.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
         <input type="number" v-model="job.garage.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
         <input type="number" v-model="job.garage.coords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-        <button @click="fetchCurrentCoords('garage')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+        <button @click="fetchCurrentCoords('garage')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">Garage Marker/NPC</label>
+        <label class="block mb-2">{{ $t('garageMarkerNpc') }}</label>
         <select v-model="job.garage.shop.type" @change="initializeMarkerColor('garage')" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
-          <option value="npc">NPC</option>
-          <option value="marker">Marker</option>
+          <option value="npc">{{ $t('npc') }}</option>
+          <option value="marker">{{ $t('marker') }}</option>
         </select>
         <div v-if="job.garage.shop.type === 'npc'">
-          <label class="block mb-2">NPC Model</label>
+          <label class="block mb-2">{{ $t('npcModel') }}</label>
           <input type="text" v-model="job.garage.shop.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
-          <label class="block mb-2">NPC Heading</label>
+          <label class="block mb-2">{{ $t('npcHeading') }}</label>
           <input type="number" v-model="job.garage.shop.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
-          <button @click="fetchCurrentHeading('garage')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Heading</button>
+          <button @click="fetchCurrentHeading('garage')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
         </div>
         <div v-else-if="job.garage.shop.type === 'marker'">
-          <label class="block mb-2">Marker ID</label>
+          <label class="block mb-2">{{ $t('markerId') }}</label>
           <input type="number" v-model="job.garage.shop.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
           <div>
-            <label class="block mb-2">Marker Color (RGB)</label>
+            <label class="block mb-2">{{ $t('markerColor') }} (RGB)</label>
             <input type="number" v-model="job.garage.shop.markerColor.r" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
             <input type="number" v-model="job.garage.shop.markerColor.g" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
             <input type="number" v-model="job.garage.shop.markerColor.b" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
           </div>
-          <label class="block mb-2">Marker Scale</label>
+          <label class="block mb-2">{{ $t('markerScale') }}</label>
           <input type="number" v-model="job.garage.shop.markerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
         </div>
       </div>
@@ -56,57 +56,57 @@
 
     <div v-else-if="activeTab === 'vehicleShop'">
       <div>
-        <label class="block mb-2">Vehicle Shop Coords (x, y, z)</label>
+        <label class="block mb-2">{{ $t('vehicleShopCoords') }} (x, y, z)</label>
         <input type="number" v-model="job.vehicleShop.coords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
         <input type="number" v-model="job.vehicleShop.coords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
         <input type="number" v-model="job.vehicleShop.coords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-        <button @click="fetchCurrentCoords('vehicleShop')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Coords</button>
+        <button @click="fetchCurrentCoords('vehicleShop')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">Vehicle Shop Marker/NPC</label>
+        <label class="block mb-2">{{ $t('vehicleShopMarkerNpc') }}</label>
         <select v-model="job.vehicleShop.type" @change="initializeMarkerColor('vehicleShop')" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
-          <option value="npc">NPC</option>
-          <option value="marker">Marker</option>
+          <option value="npc">{{ $t('npc') }}</option>
+          <option value="marker">{{ $t('marker') }}</option>
         </select>
         <div v-if="job.vehicleShop.type === 'npc'">
-          <label class="block mb-2">NPC Model</label>
+          <label class="block mb-2">{{ $t('npcModel') }}</label>
           <input type="text" v-model="job.vehicleShop.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
-          <label class="block mb-2">NPC Heading</label>
+          <label class="block mb-2">{{ $t('npcHeading') }}</label>
           <input type="number" v-model="job.vehicleShop.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
-          <button @click="fetchCurrentHeading('vehicleShop')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Use Current Heading</button>
+          <button @click="fetchCurrentHeading('vehicleShop')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
         </div>
         <div v-else-if="job.vehicleShop.type === 'marker'">
-          <label class="block mb-2">Marker ID</label>
+          <label class="block mb-2">{{ $t('markerId') }}</label>
           <input type="number" v-model="job.vehicleShop.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
           <div>
-            <label class="block mb-2">Marker Color (RGB)</label>
+            <label class="block mb-2">{{ $t('markerColor') }} (RGB)</label>
             <input type="number" v-model="job.vehicleShop.markerColor.r" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
             <input type="number" v-model="job.vehicleShop.markerColor.g" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
             <input type="number" v-model="job.vehicleShop.markerColor.b" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
           </div>
-          <label class="block mb-2">Marker Scale</label>
+          <label class="block mb-2">{{ $t('markerScale') }}</label>
           <input type="number" v-model="job.vehicleShop.markerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
         </div>
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">Buy with Society Money</label>
+        <label class="block mb-2">{{ $t('buyWithSocietyMoney') }}</label>
         <input type="checkbox" v-model="job.vehicleShop.buyWithSocietyMoney">
       </div>
 
       <div class="mt-4">
-        <h3 class="text-lg font-bold mb-2">Available Vehicles</h3>
+        <h3 class="text-lg font-bold mb-2">{{ $t('availableVehicles') }}</h3>
         <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
           <thead>
             <tr>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Model</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Label</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Price</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Grade</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Plate Prefix</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Society Owned</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('model') }}</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('label') }}</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('price') }}</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('grade') }}</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('platePrefix') }}</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('societyOwned') }}</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ $t('actions') }}</th>
             </tr>
           </thead>
           <tbody class="bg-gray-700 divide-y divide-gray-600">
@@ -134,16 +134,17 @@
                 <input type="checkbox" v-model="vehicle.societyOwned">
               </td>
               <td class="px-4 py-2">
-                <button @click="removeVehicle(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Remove</button>
+                <button @click="removeVehicle(index)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">{{ $t('remove') }}</button>
               </td>
             </tr>
           </tbody>
         </table>
-        <button @click="addVehicle" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Vehicle</button>
+        <button @click="addVehicle" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{{ $t('addVehicle') }}</button>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {

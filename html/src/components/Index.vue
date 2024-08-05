@@ -1,29 +1,31 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import {i18n} from '../main.js';
+const locale = ref(localStorage.getItem('locale') || 'en');
 const router = useRouter();
-const routes = router.getRoutes().filter(route => route.name !== 'home');
-
 const items = ref([
-  { route: "home", name: 'Home', active: true },
-  { route: "job", name: 'Job Management', active: false },
-  { route: "society", name: "Society Management", active: false},
-  { route: "interactions", name: "Interactions Management", active: false},
-  { route: "farming", name: 'Farming Management', active: false },
-  { route: "shop", name: 'Shop Management', active: false },
-  { route: "door", name: 'Door Management', active: false },
-  { route: "data", name: 'Data Management', active: false },
-  { route: "user", name: 'User Management', active: false },
-  { route: "vehicle", name: 'Vehicle Management', active: false },
+  { route: "home", name: 'home', active: true },
+  { route: "job", name: $t('jobManagement'), active: false },
+  { route: "society", name: $t('societyManagement'), active: false },
+  { route: "interactions", name: $t('interactionsManagement'), active: false },
+  { route: "farming", name: $t('farmingManagement'), active: false },
+  { route: "shop", name: $t('shopManagement'), active: false },
+  { route: "door", name: $t('doorManagement'), active: false },
+  { route: "data", name: $t('dataManagement'), active: false },
+  { route: "user", name: $t('userManagement'), active: false },
+  { route: "vehicle", name: $t('vehicleManagement'), active: false },
 ]);
+
+const languages = {
+  en: 'English',
+  de: 'Deutsch'
+};
 
 const setActiveItem = (itemName, route) => {
   items.value.forEach(item => {
     item.active = item.name === itemName; 
   });
-
-  // Use item.route for navigation
   router.push({ name: route }); 
 };
 
@@ -44,22 +46,30 @@ const handleEscapeKey = (event) => {
   }
 };
 
+const changeLocale = (locale) => {
+  console.log("setting locale.. " + locale)
+  localStorage.setItem('locale', locale);
+  locale.value = locale;
+  i18n.locale = locale;
+};
+
+watch(locale, (newLocale) => {
+  console.log("Locale changed to:", newLocale);
+  i18n.global.locale = newLocale;
+});
 onMounted(() => {
   document.addEventListener('keydown', handleEscapeKey);
-  // document.addEventListener('click', handleClickOutside);
+  const savedLocale = localStorage.getItem('locale');
+  if (savedLocale) {
+    locale.value = savedLocale; // Initialize locale
+    i18n.global.locale = savedLocale;
+  }
+  console.log("Mounted with locale:", locale.value);
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleEscapeKey);
-  // document.removeEventListener('click', handleClickOutside);
 });
-
-// const handleClickOutside = (event) => {
-//   const table = document.querySelector('table');
-//   if (!table.contains(event.target)) {
-//     closeUI();
-//   }
-// };
 </script>
 
 <template>
@@ -68,8 +78,13 @@ onBeforeUnmount(() => {
       <thead>
         <tr>
           <th class="text-center p-4 text-2xl font-semibold text-white relative">
-            Ludaro_Manager
+            Ludaro-Manager
             <button @click="closeUI" class="absolute top-2 right-4 text-white">X</button>
+            <div class="locale-changer absolute top-2 left-4">
+              <select v-model="locale" @change="changeLocale(locale)" class="text-black">
+              <option v-for="(lang, code) in languages" :key="code" :value="code">{{ lang }}</option>
+              </select>
+            </div>
           </th>
         </tr>
       </thead>
@@ -87,10 +102,9 @@ onBeforeUnmount(() => {
                         'hover:bg-blue-300': !item.active
                       }"
                       @click="setActiveItem(item.name, item.route)">
-                    {{ item.name }}
+                    {{ $t(item.name) }}
                   </li>
                 </ul>
-
                 <div class="absolute top-0 right-0 h-full w-px bg-gray-300 dark:bg-gray-700"></div> 
               </div>
 
@@ -111,6 +125,8 @@ onBeforeUnmount(() => {
     </table>
   </div>
 </template>
+
+
 
 <style scoped>
 /* Ensure the table and its content maintain fixed sizes */
