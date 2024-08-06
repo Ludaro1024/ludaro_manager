@@ -18,7 +18,7 @@ function jobmanagement_zones_npcs_createNPC(coords, model, heading, name)
     FreezeEntityPosition(npc, true)
     SetEntityInvincible(npc, true)
     SetEntityVisible(npc, true)
-    -- TODO: Unload the model after creation if necessary
+    SetModelAsNoLongerNeeded(model)
     table.insert(npcs, {npc = npc, name = name})
     return npc
 end

@@ -27,29 +27,37 @@
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">{{ $t('garageMarkerNpc') }}</label>
-        <select v-model="job.garage.shop.type" @change="initializeMarkerColor('garage')" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
+        <label class="block mb-2">{{ $t('garageParkoutCoords') }} (x, y, z)</label>
+        <input type="number" v-model="job.garage.parkoutCoords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
+        <input type="number" v-model="job.garage.parkoutCoords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
+        <input type="number" v-model="job.garage.parkoutCoords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
+        <button @click="fetchCurrentCoords('garageParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
+      </div>
+
+      <div class="mt-4">
+        <label class="block mb-2">{{ $t('garageMarkerType') }}</label>
+        <select v-model="job.garage.type" @change="initializeMarkerColor('garage')" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
           <option value="npc">{{ $t('npc') }}</option>
           <option value="marker">{{ $t('marker') }}</option>
         </select>
-        <div v-if="job.garage.shop.type === 'npc'">
+        <div v-if="job.garage.type === 'npc'">
           <label class="block mb-2">{{ $t('npcModel') }}</label>
-          <input type="text" v-model="job.garage.shop.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
+          <input type="text" v-model="job.garage.npcModel" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Model">
           <label class="block mb-2">{{ $t('npcHeading') }}</label>
-          <input type="number" v-model="job.garage.shop.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
+          <input type="number" v-model="job.garage.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
           <button @click="fetchCurrentHeading('garage')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
         </div>
-        <div v-else-if="job.garage.shop.type === 'marker'">
+        <div v-else-if="job.garage.type === 'marker'">
           <label class="block mb-2">{{ $t('markerId') }}</label>
-          <input type="number" v-model="job.garage.shop.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
+          <input type="number" v-model="job.garage.markerId" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker ID">
           <div>
             <label class="block mb-2">{{ $t('markerColor') }} (RGB)</label>
-            <input type="number" v-model="job.garage.shop.markerColor.r" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
-            <input type="number" v-model="job.garage.shop.markerColor.g" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
-            <input type="number" v-model="job.garage.shop.markerColor.b" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
+            <input type="number" v-model="job.garage.markerColor.r" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="R" min="0" max="255">
+            <input type="number" v-model="job.garage.markerColor.g" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="G" min="0" max="255">
+            <input type="number" v-model="job.garage.markerColor.b" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
           </div>
           <label class="block mb-2">{{ $t('markerScale') }}</label>
-          <input type="number" v-model="job.garage.shop.markerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
+          <input type="number" v-model="job.garage.markerScale" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="Marker Scale">
         </div>
       </div>
     </div>
@@ -64,7 +72,15 @@
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">{{ $t('vehicleShopMarkerNpc') }}</label>
+        <label class="block mb-2">{{ $t('vehicleShopParkoutCoords') }} (x, y, z)</label>
+        <input type="number" v-model="job.vehicleShop.parkoutCoords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
+        <input type="number" v-model="job.vehicleShop.parkoutCoords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
+        <input type="number" v-model="job.vehicleShop.parkoutCoords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
+        <button @click="fetchCurrentCoords('vehicleShopParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
+      </div>
+
+      <div class="mt-4">
+        <label class="block mb-2">{{ $t('vehicleShopMarkerType') }}</label>
         <select v-model="job.vehicleShop.type" @change="initializeMarkerColor('vehicleShop')" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
           <option value="npc">{{ $t('npc') }}</option>
           <option value="marker">{{ $t('marker') }}</option>
@@ -145,7 +161,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   props: ['job'],
@@ -158,11 +173,18 @@ export default {
     const garageData = JSON.parse(this.job.ludaro_manager_garage || '{}');
     this.job.garage = {
       coords: garageData.coords || { x: 0, y: 0, z: 0 },
-      shop: garageData.shop || { type: 'npc', npcModel: '', npcHeading: 0, markerId: 0, markerColor: { r: 0, g: 0, b: 0 }, markerScale: 1 }
+      parkoutCoords: garageData.parkoutCoords || { x: 0, y: 0, z: 0 },
+      type: garageData.type || 'npc',
+      npcModel: garageData.npcModel || '',
+      npcHeading: garageData.npcHeading || 0,
+      markerId: garageData.markerId || 0,
+      markerColor: garageData.markerColor || { r: 0, g: 0, b: 0 },
+      markerScale: garageData.markerScale || 1
     };
     const vehicleShopData = JSON.parse(this.job.ludaro_manager_vehicleShop || '{}');
     this.job.vehicleShop = {
       coords: vehicleShopData.coords || { x: 0, y: 0, z: 0 },
+      parkoutCoords: vehicleShopData.parkoutCoords || { x: 0, y: 0, z: 0 },
       type: vehicleShopData.type || 'npc',
       npcModel: vehicleShopData.npcModel || '',
       npcHeading: vehicleShopData.npcHeading || 0,
@@ -172,8 +194,6 @@ export default {
       vehicles: vehicleShopData.vehicles || [],
       buyWithSocietyMoney: vehicleShopData.buyWithSocietyMoney || false
     };
-    // console.log('Loaded garage data:', JSON.stringify(this.job.garage));
-    // console.log('Loaded vehicle shop data:', JSON.stringify(this.job.vehicleShop));
   },
   methods: {
     fetchCurrentCoords(section) {
@@ -189,8 +209,12 @@ export default {
         if (coords) {
           if (section === 'garage') {
             this.job.garage.coords = { x: coords.x, y: coords.y, z: coords.z };
-          } else {
+          } else if (section === 'garageParkout') {
+            this.job.garage.parkoutCoords = { x: coords.x, y: coords.y, z: coords.z };
+          } else if (section === 'vehicleShop') {
             this.job.vehicleShop.coords = { x: coords.x, y: coords.y, z: coords.z };
+          } else if (section === 'vehicleShopParkout') {
+            this.job.vehicleShop.parkoutCoords = { x: coords.x, y: coords.y, z: coords.z };
           }
           this.$emit('update-job', this.job);
         }
@@ -213,7 +237,7 @@ export default {
           if (section === 'vehicleShop') {
             this.job.vehicleShop.npcHeading = heading;
           } else {
-            this.job.garage.shop.npcHeading = heading;
+            this.job.garage.npcHeading = heading;
           }
           this.$emit('update-job', this.job);
         }
@@ -228,8 +252,8 @@ export default {
           this.job.vehicleShop.markerColor = { r: 0, g: 0, b: 0 };
         }
       } else {
-        if (!this.job.garage.shop.markerColor) {
-          this.job.garage.shop.markerColor = { r: 0, g: 0, b: 0 };
+        if (!this.job.garage.markerColor) {
+          this.job.garage.markerColor = { r: 0, g: 0, b: 0 };
         }
       }
     },

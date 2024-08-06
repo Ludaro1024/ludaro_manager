@@ -15,3 +15,5 @@ Config.KeyMapping = { -- keymapping for the commands
     openTablet = {"F1", "+tablet", "Open the Tablet"},
     openInteractions = {"F4", "+openInteractions", "Open Job Interactionsn"},
 }
+
+Config.ExtraOffDutyJobs = true -- WILL CREATE JOBS WITH OFFDUTY_NAME OF THE JOB TO PREVENT CERTAIN THINGS FROM HAPPENING

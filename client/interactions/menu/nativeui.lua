@@ -1,18 +1,18 @@
 if Config.Menu == "NativeUI" then
-    InteractionFunctions = {}
     function openInteractionsMenu(data)
             local menu = NativeUI.CreateMenu(v.name, v.name)
             for _, item in pairs(v.data) do
-                local item = NativeUI.CreateItem(v, "")
+                local item = NativeUI.CreateItem(v[2], "")
                 menu:AddItem(item)
             end
             menu:Visible(true)
-            menu.OnItemSelect = function(sender, item, index)
-                for _, item in pairs(v.data) do
-                    if item.name == item.Text then
-                        InteractionsFunctions[v]()
-                    end
+            item.Activated = function(sender, index)
+
+                if InteractionsFunctions[v[1]] == nil then
+                    print("No function found for: " .. item.Text)
+                    return
                 end
+                InteractionsFunctions[v[1]]()
             end
     end
 end

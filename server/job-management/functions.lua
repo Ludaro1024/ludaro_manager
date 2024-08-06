@@ -6,7 +6,7 @@ function removeIndexIfPresent(tbl, index)
         end
     end
 end
--- TODO: DOUBLE CHECK
+
 function getEmployees(jobName)
     local employees = {}
     local onlineIdentifiers = {}

@@ -18,10 +18,16 @@ end
 -- @param dataa: The data containing marker zone information
 function job_management_zones_marker_createMarkerZones(dataa)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
-
+ 
     for k, v in pairs(dataa) do
+       
         for _, marker in pairs(v.data) do
+           
+            
+                print(ESX.DumpTable(marker))
             if marker.type == "marker" then
+
+        
                 local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
                 local size = vec3(15, 15, 15)
                 local rotation = 200.0

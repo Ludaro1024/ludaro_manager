@@ -20,14 +20,13 @@
       <label class="block mb-2">{{ $t('selectInteraction') }}</label>
       <select v-model="newInteraction" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         <option disabled value="">{{ $t('selectInteractionPlaceholder') }}</option>
-        <option v-for="interaction in availableInteractions" :key="interaction.interaction_name" :value="interaction.interaction_name">{{ interaction.interaction_name }}</option>
+        <option v-for="interaction in availableInteractions" :key="interaction.interaction_label" :value="interaction.interaction_name">{{ interaction.interaction_label }}</option>
       </select>
       <span v-if="error" class="text-red-500">{{ error }}</span>
       <button @click="addInteraction" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('addInteraction') }}</button>
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -71,6 +70,10 @@ export default {
 
       if (!Array.isArray(this.job.interactions)) {
         this.job.interactions = [];
+      }
+      if (this.job.interactions.includes(this.newInteraction)) {
+        this.error = 'This interaction is already added.';
+        return;
       }
 
       try {

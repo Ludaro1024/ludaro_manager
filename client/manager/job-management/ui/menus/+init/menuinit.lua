@@ -4,4 +4,8 @@ function openMenu(data, jobname)
   if opentype == "bossmenu" then
     openBossMenu(data, jobname)
   end
+
+  if opentype == "garagee" then
+    openGarageMenu(data, jobname)
+  end
 end

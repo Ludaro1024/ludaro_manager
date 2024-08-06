@@ -1,4 +1,4 @@
--- TODO: add Nil checks
+
 function society_management_callbacks_getSocieties()
     if ESX then
         -- get all societies from addon_account where shared = 1 and add money  to it from  addon_account_adata where name = @name from addon_account and the inventory from addon_incnentory and owner if one exists, and the

@@ -6,24 +6,22 @@ ADD COLUMN ludaro_manager_interactions JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_garage JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_onoffduty JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_stashes JSON DEFAULT NULL,
-ADD COLUMN ludaro_manager_shops JSON DEFAULT NULL,
-ADD COLUMN ludaro_manager_processing JSON DEFAULT NULL;
 ADD COLUMN ludaro_manager_vehicleShop JSON DEFAULT NULL;
 ADD COLUMN ludaro_manager_societyPaid INT DEFAULT 0;
  ]]
-    -- TODO: ADD DEFAULT []
 
     query2 = [[
  CREATE TABLE IF NOT EXISTS ludaro_manager_interactions (
      id INT AUTO_INCREMENT PRIMARY KEY,
-     interaction_name VARCHAR(255) NOT NULL
+     interaction_name VARCHAR(255) NOT NULL,
+     interaction_label VARCHAR(255) NOT NULL
  );]]
 
  query3 = [[
  
  ALTER TABLE owned_vehicles
  ADD COLUMN ludaro_manager_job VARCHAR(255) DEFAULT NULL;
- ADD COLUMN ludaro_manager_grad INT(11) DEFAULT NULL;
+ ADD COLUMN ludaro_manager_grade INT(11) DEFAULT NULL;
  ]]
 
     -- Check if table ludaro_manager_armories exists, if not create tables

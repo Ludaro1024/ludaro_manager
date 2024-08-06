@@ -20,6 +20,7 @@ function job_management_zones_npcs_NPCZones(data)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
     
     for _, npc in ipairs(data) do
+        
         for _, managerData in pairs(npc.data) do
             if managerData and managerData.type == "npc" and next(managerData.coords) then
                 local coords = vec3(managerData.coords.x, managerData.coords.y, managerData.coords.z)
