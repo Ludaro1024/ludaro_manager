@@ -45,8 +45,8 @@ function job_management_callback_saveJob(job)
         local stashes = job.stashes
         local shops = job.shops
         local processing = job.processing
-        local societyPaid = job.societypaid
         local vehicleshop = job.vehicleShop
+        local societyPaid = job.societypaid
 
         -- Convert the tables to JSON strings, but replace nil with actual nil (not JSON "null")
         local bossmenu_json = bossmenu and json.encode(bossmenu) or nil

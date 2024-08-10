@@ -10,6 +10,11 @@ if Config.Menu == "esx_menu_default" then
         if #personalvehicles > 0 then
             table.insert(elements, {label = Locale("personal_vehicles"), value = "personal_vehicles"})
         end
+        hascars = #personalvehicles > 0 or #sharedvehicles > 0 
+        if not hascars then
+           EditableFunctions.Notify(Locale("no_vehicles"))
+            return
+        end
 
         table.insert(elements, {label = Locale("park_in"), value = "park_in"})
 
@@ -71,7 +76,7 @@ if Config.Menu == "esx_menu_default" then
                     ESX.Game.SetVehicleProperties(vehicle, vehicleData)
                 end)
             else
-                ESX.ShowNotification(Locale("error"))
+                EditableFunctions.Notify(Locale("error"))
             end
             menu.close()
         end, function(data, menu)
@@ -99,7 +104,7 @@ if Config.Menu == "esx_menu_default" then
             if cb then
                 ESX.Game.DeleteVehicle(vehicleData)
             else
-                ESX.ShowNotification(Locale("error"))
+                EditableFunctions.Notify(Locale("error"))
             end
             menu.close()
         end, function(data, menu)

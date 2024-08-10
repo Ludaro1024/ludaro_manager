@@ -40,7 +40,6 @@ client_scripts({
 	"client/NativeUILua/UIProgressBar/UIProgressBarPool.lua",
 	"client/NativeUILua/UIProgressBar/items/UIProgressBarItem.lua",
 	"client/NativeUILua/NativeUI.lua",
-	"client/+init/*.lua",
 	"client/**/*",
 })
 

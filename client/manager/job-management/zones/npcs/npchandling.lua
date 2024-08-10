@@ -8,10 +8,19 @@ npcs = {}
 -- @param name: The name identifier for the NPC
 -- @return npc: The created NPC entity
 function jobmanagement_zones_npcs_createNPC(coords, model, heading, name)
+    if IsModelValid(model) then
+
     RequestModel(model)
     while not HasModelLoaded(model) do
         Wait(500)
     end
+else
+    model = GetHashKey("a_m_m_business_01")
+    RequestModel(model)
+    while not HasModelLoaded(model) do
+        Wait(500)
+    end
+end
     local npc = CreatePed(4, model, coords.x, coords.y, coords.z - 1.5, heading, false, false)
     SetEntityAsMissionEntity(npc, true, true)
     SetBlockingOfNonTemporaryEvents(npc, true)

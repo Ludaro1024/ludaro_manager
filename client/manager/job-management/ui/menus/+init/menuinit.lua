@@ -5,7 +5,7 @@ function openMenu(data, jobname)
     openBossMenu(data, jobname)
   end
 
-  if opentype == "garagee" then
+  if opentype == "garage" then
     openGarageMenu(data, jobname)
   end
 end

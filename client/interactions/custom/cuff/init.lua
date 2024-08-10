@@ -10,13 +10,15 @@ function loadanimdict(animDict)
 	end
 end
 
-
-local AnimDir = 'mp_arrest_paired'    -- SectionAnimation
-local AnimCop = 'cop_p2_back_left'    -- Animation / Cop
-local AnimUser = 'crook_p2_back_left' -- Animation / Criminal
+-- Cuff
 
 InteractionsFunctions["cuff"] = function()
 	closestplayer = framework_GetClosestPlayer()
+
+	if framework_GetClosestPlayer() == -1 or framework_GetClosestPlayer() == nil then
+		EditableFunctions.Notify(Locale("no_players_nearby"))
+		return
+	end
 	TriggerServerEvent("ludaro_manager:startArrest", GetPlayerServerId(closestplayer))
 end
 
@@ -29,7 +31,7 @@ RegisterNetEvent("ludaro_manager:police:cuffPerson", function(target)
 	ClearPedTasks(PlayerPedId())
 	TaskPlayAnim(ped, 'mp_arresting', 'idle', 8.0, -8, -1, 49, 0.0, false, false, false)
 	loadanimdict('mp_arrest_paired')
-	TaskPlayAnim(GetPlayerPed(-1), 'mp_arrest_paired', 'cop_p2_back_right', 8.0, -8, 3750, 2, 0, 0, 0, 0)
+	TaskPlayAnim(PlayerPedId(), 'mp_arrest_paired', 'cop_p2_back_right', 8.0, -8, 3750, 2, 0, 0, 0, 0)
 end)
 
 RegisterNetEvent("ludaro_manager:user:getCuffed", function(target)
@@ -44,6 +46,8 @@ RegisterNetEvent("ludaro_manager:user:getCuffed", function(target)
 	TaskPlayAnim(ped, 'mp_arrest_paired', 'cop_p2_back_right', 8.0, -8, 3750, 2, 0, 0, 0, 0)
 end)
 
+-- Uncuff
+
 RegisterNetEvent("ludaro_manager:police:uncuffPerson", function(id)
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(id))
 	local playerPed = PlayerPedId()
@@ -57,9 +61,6 @@ RegisterNetEvent("ludaro_manager:police:uncuffPerson", function(id)
 	TaskPlayAnim(targetPed, 'mp_arresting', 'b_uncuff', 8.0, -8, -1, 2, 0, 0, 0, 0)
 	TaskPlayAnim(playerPed, 'mp_arresting', 'a_uncuff', 8.0, -8, -1, 2, 0, 0, 0, 0)
 	Wait(5000)
-
-	-- Uncuff the person
-	-- Add your uncuff logic here
 	DetachEntity(targetPed, false, true)
 	ClearPedTasks(PlayerPedId())
 	ClearPedTasksImmediately(PlayerPedId())
@@ -77,10 +78,6 @@ RegisterNetEvent("ludaro_manager:user:getUncuffed", function(id)
 
 	TaskPlayAnim(playerPed, 'mp_arresting', 'b_uncuff', 8.0, -8, -1, 2, 0, 0, 0, 0)
 	TaskPlayAnim(targetPed, 'mp_arresting', 'a_uncuff', 8.0, -8, -1, 2, 0, 0, 0, 0)
-
-
-	-- Remove the handcuffs from the person
-	-- Add your remove handcuffs logic here
 	Wait(5000)
 	DetachEntity(PlayerPedId(), false, true)
 	ClearPedTasks(PlayerPedId())

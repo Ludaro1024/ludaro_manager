@@ -15,6 +15,7 @@ ADD COLUMN ludaro_manager_societyPaid INT DEFAULT 0;
      id INT AUTO_INCREMENT PRIMARY KEY,
      interaction_name VARCHAR(255) NOT NULL,
      interaction_label VARCHAR(255) NOT NULL
+     grade INT(11) DEFAULT 0
  );]]
 
  query3 = [[

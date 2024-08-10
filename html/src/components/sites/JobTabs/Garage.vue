@@ -35,7 +35,7 @@
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">{{ $t('garageMarkerType') }}</label>
+        <label class="block mb-2">{{ $t('garageMarkerNpc') }}</label>
         <select v-model="job.garage.type" @change="initializeMarkerColor('garage')" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
           <option value="npc">{{ $t('npc') }}</option>
           <option value="marker">{{ $t('marker') }}</option>
@@ -80,7 +80,7 @@
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">{{ $t('vehicleShopMarkerType') }}</label>
+        <label class="block mb-2">{{ $t('vehicleShopMarkerNpc') }}</label>
         <select v-model="job.vehicleShop.type" @change="initializeMarkerColor('vehicleShop')" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
           <option value="npc">{{ $t('npc') }}</option>
           <option value="marker">{{ $t('marker') }}</option>
@@ -174,12 +174,12 @@ export default {
     this.job.garage = {
       coords: garageData.coords || { x: 0, y: 0, z: 0 },
       parkoutCoords: garageData.parkoutCoords || { x: 0, y: 0, z: 0 },
-      type: garageData.type || 'npc',
-      npcModel: garageData.npcModel || '',
-      npcHeading: garageData.npcHeading || 0,
-      markerId: garageData.markerId || 0,
-      markerColor: garageData.markerColor || { r: 0, g: 0, b: 0 },
-      markerScale: garageData.markerScale || 1
+      type: 'npc',
+      npcModel: '',
+      npcHeading: 0,
+      markerId: 0,
+      markerColor: { r: 0, g: 0, b: 0 },
+      markerScale: 1
     };
     const vehicleShopData = JSON.parse(this.job.ludaro_manager_vehicleShop || '{}');
     this.job.vehicleShop = {
@@ -194,6 +194,8 @@ export default {
       vehicles: vehicleShopData.vehicles || [],
       buyWithSocietyMoney: vehicleShopData.buyWithSocietyMoney || false
     };
+    // console.log('Loaded garage data:', JSON.stringify(this.job.garage));
+    // console.log('Loaded vehicle shop data:', JSON.stringify(this.job.vehicleShop));
   },
   methods: {
     fetchCurrentCoords(section) {

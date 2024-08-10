@@ -14,7 +14,7 @@
                 if IsPedDeadOrDying(closestPlayerPed, 1) then
                     local playerPed = PlayerPedId()
                     local lib, anim = 'mini@cpr@char_a@cpr_str', 'cpr_pumpchest'
-                    ESX.ShowNotification("Revive in Progress..")
+                    EditableFunctions.Notify("Revive in Progress..")
     
                     for i = 1, 15 do
                         Wait(900)
@@ -28,10 +28,10 @@
                     TriggerServerEvent('esx_ambulancejob:removeItem', 'medikit')
                     TriggerServerEvent('esx_ambulancejob:revive', GetPlayerServerId(closestPlayer))
                 else
-                    ESX.ShowNotification("Player isnt critically injured")
+                    EditableFunctions.Notify("Player isnt critically injured")
                 end
             else
-                ESX.ShowNotification("You dont have a medikit")
+                EditableFunctions.Notify("You dont have a medikit")
             end
             isBusy = false
         end, 'medikit')

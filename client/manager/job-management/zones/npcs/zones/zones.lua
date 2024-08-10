@@ -31,7 +31,7 @@ function job_management_zones_npcs_NPCZones(data)
                 end
 
                 local rotation = 200.0
-
+                
                 local box = lib.zones.box({
                     coords = coords,
                     size = size,
@@ -49,7 +49,7 @@ function job_management_zones_npcs_NPCZones(data)
                         end
                     end,
                     onEnter = function()
-                        jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcheading or 200.0, npc.name)
+                       jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcheading or 200.0, npc.name)
                     end,
                     onExit = function()
                         jobmanagement_zones_npcs_deleteNPCByName(npc.name)
