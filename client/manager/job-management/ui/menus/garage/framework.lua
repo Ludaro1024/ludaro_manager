@@ -16,3 +16,14 @@ function framework_GetVehicleData(vehicle)
         return ESX.Game.GetVehicleProperties(vehicle)
     end
 end
+
+function framework_getNearestStreetCoords(coords)
+    local _, closstRd, anotPos = GetClosestRoad(coords.x, coords.y, coords.z, 10, 1, true)
+    return closstRd
+end
+
+function framework_getVehicleData(vehicle)
+    if ESX then
+        return ESX.Game.GetVehicleProperties(vehicle)
+    end
+end

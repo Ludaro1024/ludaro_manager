@@ -1,5 +1,5 @@
-RegisterServerEvent('your_resource:onDuty')
-AddEventHandler('your_resource:onDuty', function()
+RegisterServerEvent('ludaro_mananger:onDuty')
+AddEventHandler('ludaro_mananger:onDuty', function()
     duty = duty_framework_getDuty(source)
     if duty == false then
         duty_framework_setDuty(source, true)
@@ -9,8 +9,8 @@ AddEventHandler('your_resource:onDuty', function()
     end
 end)
 
-RegisterServerEvent('your_resource:offDuty')
-AddEventHandler('your_resource:offDuty', function()
+RegisterServerEvent('ludaro_mananger:offDuty')
+AddEventHandler('ludaro_mananger:offDuty', function()
     duty = duty_framework_getDuty(source)
     if duty == true then
         duty_framework_setDuty(source, false)

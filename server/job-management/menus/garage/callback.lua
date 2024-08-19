@@ -9,3 +9,7 @@ end)
 lib.callback.register("ludaro_manager:parkout", function(source, vehicle)
     return parkout(source, vehicle)
 end)
+
+lib.callback.register("ludaro_manager:isOwned", function(source, plate)
+    return isOwned(source, plate)
+end)

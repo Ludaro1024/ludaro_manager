@@ -16,6 +16,6 @@ function getJob(source, otherplayerid)
             return xPlayer.job.name
         end
         local xPlayer = ESX.GetPlayerFromId(source)
-        return xPlayer.job.name
+        if xPlayer then return xPlayer.job.name else return "NONE" end
     end
 end
