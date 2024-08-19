@@ -27,11 +27,15 @@
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">{{ $t('garageParkoutCoords') }} (x, y, z)</label>
+        <label class="block mb-2">{{ $t('garageParkoutCoords') }} (x, y, z, heading)</label>
         <input type="number" v-model="job.garage.parkoutCoords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
         <input type="number" v-model="job.garage.parkoutCoords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
         <input type="number" v-model="job.garage.parkoutCoords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-        <button @click="fetchCurrentCoords('garageParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
+        <input type="number" v-model="job.garage.parkoutCoords.heading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="heading">
+        <div class="flex space-x-2">
+          <button @click="fetchCurrentCoords('garageParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
+          <button @click="fetchCurrentHeading('garageParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
+        </div>
       </div>
 
       <div class="mt-4">
@@ -72,11 +76,15 @@
       </div>
 
       <div class="mt-4">
-        <label class="block mb-2">{{ $t('vehicleShopParkoutCoords') }} (x, y, z)</label>
+        <label class="block mb-2">{{ $t('vehicleShopParkoutCoords') }} (x, y, z, heading)</label>
         <input type="number" v-model="job.vehicleShop.parkoutCoords.x" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="x">
         <input type="number" v-model="job.vehicleShop.parkoutCoords.y" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="y">
         <input type="number" v-model="job.vehicleShop.parkoutCoords.z" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="z">
-        <button @click="fetchCurrentCoords('vehicleShopParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
+        <input type="number" v-model="job.vehicleShop.parkoutCoords.heading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="heading">
+        <div class="flex space-x-2">
+          <button @click="fetchCurrentCoords('vehicleShopParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
+          <button @click="fetchCurrentHeading('vehicleShopParkout')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
+        </div>
       </div>
 
       <div class="mt-4">
@@ -170,40 +178,44 @@ export default {
     };
   },
   beforeMount() {
+    const garageData = JSON.parse(this.job.ludaro_manager_garage || '{}');
 
-  const garageData = JSON.parse(this.job.ludaro_manager_garage || '{}');
+    this.job.garage = {
+      coords: garageData.coords || { x: 0, y: 0, z: 0 },
+      parkoutCoords: {
+        x: garageData.parkoutCoords ? garageData.parkoutCoords.x : 0,
+        y: garageData.parkoutCoords ? garageData.parkoutCoords.y : 0,
+        z: garageData.parkoutCoords ? garageData.parkoutCoords.z : 0,
+        heading: garageData.parkoutCoords ? garageData.parkoutCoords.heading : 0
+      },
+      type: garageData.type || 'npc',
+      npcModel: garageData.npcModel || '',
+      npcHeading: garageData.npcHeading || 0,
+      markerId: garageData.markerId || 0,
+      markerColor: garageData.markerColor || { r: 0, g: 0, b: 0 },
+      markerScale: garageData.markerScale || 1
+    };
 
-  this.job.garage = {
-    coords: garageData.coords || { x: 0, y: 0, z: 0 },
-    parkoutCoords: garageData.parkoutCoords || { x: 0, y: 0, z: 0 },
-    type: garageData.type || 'npc',
-    npcModel: garageData.npcModel || '',
-    npcHeading: garageData.npcHeading || 0,
-    markerId: garageData.markerId || 0,
-    markerColor: garageData.markerColor || { r: 0, g: 0, b: 0 },
-    markerScale: garageData.markerScale || 1
-  };
+    const vehicleShopData = JSON.parse(this.job.ludaro_manager_vehicleShop || '{}');
 
-
-
-  const vehicleShopData = JSON.parse(this.job.ludaro_manager_vehicleShop || '{}');
-
-
-  this.job.vehicleShop = {
-    coords: vehicleShopData.coords || { x: 0, y: 0, z: 0 },
-    parkoutCoords: vehicleShopData.parkoutCoords || { x: 0, y: 0, z: 0 },
-    type: vehicleShopData.type || 'npc',
-    npcModel: vehicleShopData.npcModel || '',
-    npcHeading: vehicleShopData.npcHeading || 0,
-    markerId: vehicleShopData.markerId || 0,
-    markerColor: vehicleShopData.markerColor || { r: 0, g: 0, b: 0 },
-    markerScale: vehicleShopData.markerScale || 1,
-    vehicles: vehicleShopData.vehicles || [],
-    buyWithSocietyMoney: vehicleShopData.buyWithSocietyMoney || false
-  };
-
-
-},
+    this.job.vehicleShop = {
+      coords: vehicleShopData.coords || { x: 0, y: 0, z: 0 },
+      parkoutCoords: {
+        x: vehicleShopData.parkoutCoords ? vehicleShopData.parkoutCoords.x : 0,
+        y: vehicleShopData.parkoutCoords ? vehicleShopData.parkoutCoords.y : 0,
+        z: vehicleShopData.parkoutCoords ? vehicleShopData.parkoutCoords.z : 0,
+        heading: vehicleShopData.parkoutCoords ? vehicleShopData.parkoutCoords.heading : 0
+      },
+      type: vehicleShopData.type || 'npc',
+      npcModel: vehicleShopData.npcModel || '',
+      npcHeading: vehicleShopData.npcHeading || 0,
+      markerId: vehicleShopData.markerId || 0,
+      markerColor: vehicleShopData.markerColor || { r: 0, g: 0, b: 0 },
+      markerScale: vehicleShopData.markerScale || 1,
+      vehicles: vehicleShopData.vehicles || [],
+      buyWithSocietyMoney: vehicleShopData.buyWithSocietyMoney || false
+    };
+  },
   methods: {
     fetchCurrentCoords(section) {
       fetch(`https://${GetParentResourceName()}/getCurrentCoords`, {
@@ -213,51 +225,59 @@ export default {
         },
         body: JSON.stringify({})
       })
-      .then((response) => response.json())
-      .then((coords) => {
-        if (coords) {
-          if (section === 'garage') {
-            this.job.garage.coords = { x: coords.x, y: coords.y, z: coords.z };
-          } else if (section === 'garageParkout') {
-            this.job.garage.parkoutCoords = { x: coords.x, y: coords.y, z: coords.z };
-          } else if (section === 'vehicleShop') {
-            this.job.vehicleShop.coords = { x: coords.x, y: coords.y, z: coords.z };
-          } else if (section === 'vehicleShopParkout') {
-            this.job.vehicleShop.parkoutCoords = { x: coords.x, y: coords.y, z: coords.z };
+        .then((response) => response.json())
+        .then((coords) => {
+          if (coords) {
+            if (section === 'garage') {
+              this.job.garage.coords = { x: coords.x, y: coords.y, z: coords.z };
+            } else if (section === 'garageParkout') {
+              this.job.garage.parkoutCoords.x = coords.x;
+              this.job.garage.parkoutCoords.y = coords.y;
+              this.job.garage.parkoutCoords.z = coords.z;
+            } else if (section === 'vehicleShop') {
+              this.job.vehicleShop.coords = { x: coords.x, y: coords.y, z: coords.z };
+            } else if (section === 'vehicleShopParkout') {
+              this.job.vehicleShop.parkoutCoords.x = coords.x;
+              this.job.vehicleShop.parkoutCoords.y = coords.y;
+              this.job.vehicleShop.parkoutCoords.z = coords.z;
+            }
+            this.$emit('update-job', this.job);
           }
-          this.$emit('update-job', this.job);
-        }
-      })
-      .catch((error) => {
-        console.error('Failed to fetch current coords:', error);
-      });
+        })
+        .catch((error) => {
+          console.error('Failed to fetch current coords:', error);
+        });
     },
     fetchCurrentHeading(section) {
-      console.log('fetchCurrentHeading called for section:', section); // Log the section to see which part of the code is calling this method.
+      console.log('fetchCurrentHeading called for section:', section);
 
       fetch(`https://${GetParentResourceName()}/getCurrentHeading`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json; charset=UTF-8'
-  },
-  body: JSON.stringify({})
-})
-.then((response) => response.json())
-.then((data) => {
-  console.log('Parsed heading data:', data); // Log the parsed heading data to ensure it's correctly received and parsed.
-  data.heading = Math.round(data.heading);  // Rounding the heading value to the nearest whole number.
-  if (data.heading) {  // Accessing the heading value from the object.
-    if (section === 'vehicleShop') {
-      this.job.vehicleShop.npcHeading = data.heading;  // Setting the heading value.
-    } else {
-      this.job.garage.npcHeading = data.heading;  // Setting the heading value.
-    }
-    this.$emit('update-job', this.job);
-  }
-})
-.catch((error) => {
-  console.error('Failed to fetch current heading:', error);
-});
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({})
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Parsed heading data:', data);
+          data.heading = Math.round(data.heading);
+          if (data.heading) {
+            if (section === 'vehicleShop') {
+              this.job.vehicleShop.npcHeading = data.heading;
+            } else if (section === 'vehicleShopParkout') {
+              this.job.vehicleShop.parkoutCoords.heading = data.heading;
+            } else if (section === 'garage') {
+              this.job.garage.npcHeading = data.heading;
+            } else if (section === 'garageParkout') {
+              this.job.garage.parkoutCoords.heading = data.heading;
+            }
+            this.$emit('update-job', this.job);
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to fetch current heading:', error);
+        });
     },
     initializeMarkerColor(section) {
       if (section === 'vehicleShop') {

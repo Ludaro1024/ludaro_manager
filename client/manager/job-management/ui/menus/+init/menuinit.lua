@@ -8,4 +8,7 @@ function openMenu(data, jobname)
   if opentype == "garage" then
     openGarageMenu(data, jobname)
   end
+  if opentype == "vehicleShop" then
+    openVehicleShopMenu(data, jobname)
+  end
 end

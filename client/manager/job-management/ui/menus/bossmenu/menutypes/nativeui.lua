@@ -1,5 +1,8 @@
 if Config.Menu == "NativeUI" then
     function openBossMenu(data, jobName)
+        if _menuPool:IsAnyMenuOpen() then
+            return
+        end
         local bossmenuData = jobmenu_bossmenu_getBossMenuData(jobName)
         local players = ESX.Game.GetPlayersInArea(GetEntityCoords(PlayerPedId()), 10.0)
         local xPlayer = ESX.GetPlayerData()

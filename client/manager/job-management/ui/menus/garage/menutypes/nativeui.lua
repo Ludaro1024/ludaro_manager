@@ -1,5 +1,8 @@
 if Config.Menu == "NativeUI" then
     function openGarageMenu(garageData)
+        if _menuPool:IsAnyMenuOpen() then
+            return
+        end
         local sharedvehicles, personalvehicles = garage_getGarageData()
 
         local menu = NativeUI.CreateMenu(Locale("garage"), "")

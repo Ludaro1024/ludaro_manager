@@ -27,3 +27,9 @@ function framework_getVehicleData(vehicle)
         return ESX.Game.GetVehicleProperties(vehicle)
     end
 end
+
+function framework_deleteVehicle(vehicle)
+    if ESX then
+        ESX.Game.DeleteVehicle(vehicle)
+    end
+end

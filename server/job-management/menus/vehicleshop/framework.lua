@@ -26,3 +26,14 @@ function framework_getGrade(source)
     end
     return 0
 end
+
+
+function job_management_vehicleshop_hasEnoughMoney(source, price)
+    if ESX then
+        local xPlayer = ESX.GetPlayerFromId(source)
+        if xPlayer then
+            return xPlayer.getMoney() >= price
+        end
+    end
+    return false
+end

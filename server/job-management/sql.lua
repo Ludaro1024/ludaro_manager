@@ -499,8 +499,6 @@ function job_management_callback_saveBossMenu(data)
 end
 
 function job_management_callback_saveEmployee(data)
-    ("savedata")
-    (ESX.DumpTable(data))
     if ESX then
         xPlayer = ESX.GetPlayerFromIdentifier(data.employee.identifier)
         if xPlayer then
