@@ -1,7 +1,20 @@
 if Config.Menu == "esx_menu_default" then
     function openGarageMenu(garageData)
+        local elements = prepareGarageMenuElements()
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'garage_menu', {
+            title = Locale("garage"),
+            align = 'top-left',
+            elements = elements
+        }, function(data, menu)
+            handleGarageMenuSelection(data, menu, garageData)
+        end, function(data, menu)
+            menu.close()
+        end)
+    end
+
+    function prepareGarageMenuElements()
         local elements = {}
-        sharedvehicles, personalvehicles = garage_getGarageData()
+        local sharedvehicles, personalvehicles = garage_getGarageData()
 
         if #sharedvehicles > 0 then
             table.insert(elements, {label = Locale("shared_vehicles"), value = "shared_vehicles"})
@@ -10,29 +23,27 @@ if Config.Menu == "esx_menu_default" then
         if #personalvehicles > 0 then
             table.insert(elements, {label = Locale("personal_vehicles"), value = "personal_vehicles"})
         end
-        hascars = #personalvehicles > 0 or #sharedvehicles > 0 
 
         table.insert(elements, {label = Locale("park_in"), value = "park_in"})
-        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'garage_menu', {
-            title = Locale("garage"),
-            align = 'top-left',
-            elements = elements
-        }, function(data, menu)
-            if data.current.value == "shared_vehicles" and hascars then
-                openSharedVehiclesMenu(sharedvehicles, garageData)
-            elseif data.current.value == "personal_vehicles" and hascars then
-                openPersonalVehiclesMenu(personalvehicles)
-            elseif data.current.value == "park_in" then
-                openParkInMenu()
-            end
-        end, function(data, menu)
-            menu.close()
-        end)
+        return elements
+    end
+
+    function handleGarageMenuSelection(data, menu, garageData)
+        local sharedvehicles, personalvehicles = garage_getGarageData()
+        local hasCars = #personalvehicles > 0 or #sharedvehicles > 0
+
+        if data.current.value == "shared_vehicles" and hasCars then
+            openSharedVehiclesMenu(sharedvehicles, garageData)
+        elseif data.current.value == "personal_vehicles" and hasCars then
+            openPersonalVehiclesMenu(personalvehicles)
+        elseif data.current.value == "park_in" then
+            openParkInMenu()
+        end
     end
 
     function openSharedVehiclesMenu(sharedvehicles, garageData)
         local elements = {}
-        for k, v in pairs(sharedvehicles) do
+        for _, v in pairs(sharedvehicles) do
             table.insert(elements, {label = v.plate, data = v})
         end
 
@@ -41,35 +52,36 @@ if Config.Menu == "esx_menu_default" then
             align = 'top-left',
             elements = elements
         }, function(data, menu)
-            local garageData = garageData
-            local vehicleData = data.current.data
-            local model = json.decode(vehicleData.vehicle).model
-                print(ESX.DumpTable(vehicleData))
-                print(#(GetEntityCoords(PlayerPedId(), vector3(garageData.parkoutCoords.x, garageData.parkoutCoords.y, garageData.parkoutCoords.z))))
-            if #(GetEntityCoords(PlayerPedId(), vector3(garageData.parkoutCoords.x, garageData.parkoutCoords.y, garageData.parkoutCoords.z))) < 5.0 then
-                garageData.parkoutCoords = GetNearestStreetCoords(GetEntityCoords(PlayerPedId()))
-            end
-            local cb = garage_parkout(vehicleData.vehicle)
-            if cb then
-                EditableFunctions.Notify(Locale("vehicle_parkedout"))
-                ESX.Game.SpawnVehicle(model, {x = garageData.parkoutCoords.x, y = garageData.parkoutCoords.y, z = garageData.parkoutCoords.z}, garageData.heading, function(vehicle)
-                    ESX.Game.SetVehicleProperties(vehicle, json.decode(vehicleData.vehicle))
-                end)
-             
-            else
-                EditableFunctions.Notify(Locale("error"))
-            end
-         
-            menu.close()
+            handleSharedVehicleSelection(data, menu, garageData)
         end, function(data, menu)
             menu.close()
         end)
     end
 
+    function handleSharedVehicleSelection(data, menu, garageData)
+        local vehicleData = data.current.data
+        local model = json.decode(vehicleData.vehicle).model
+
+        if #(GetEntityCoords(PlayerPedId(), vector3(garageData.parkoutCoords.x, garageData.parkoutCoords.y, garageData.parkoutCoords.z))) < 5.0 then
+            garageData.parkoutCoords =framework_getNearestStreetCoords(GetEntityCoords(PlayerPedId()))
+        end
+
+        if garage_parkout(vehicleData.vehicle) then
+            EditableFunctions.Notify(Locale("vehicle_parkedout"))
+            ESX.Game.SpawnVehicle(model, {x = garageData.parkoutCoords.x, y = garageData.parkoutCoords.y, z = garageData.parkoutCoords.z}, garageData.heading, function(vehicle)
+                ESX.Game.SetVehicleProperties(vehicle, json.decode(vehicleData.vehicle))
+            end)
+        else
+            EditableFunctions.Notify(Locale("error"))
+        end
+
+        menu.close()
+    end
+
     function openPersonalVehiclesMenu(personalvehicles)
         local elements = {}
 
-        for k, v in pairs(personalvehicles) do
+        for _, v in pairs(personalvehicles) do
             table.insert(elements, {label = v.vehicle, value = v})
         end
 
@@ -78,12 +90,17 @@ if Config.Menu == "esx_menu_default" then
             align = 'top-left',
             elements = elements
         }, function(data, menu)
-            local vehicleData = data.current.value
-            if vehicleData.stored == 1 then
-                
-           
-            local cb = garage_parkout(vehicleData)
-            if cb then
+            handlePersonalVehicleSelection(data, menu)
+        end, function(data, menu)
+            menu.close()
+        end)
+    end
+
+    function handlePersonalVehicleSelection(data, menu)
+        local vehicleData = data.current.value
+
+        if vehicleData.stored == 1 then
+            if garage_parkout(vehicleData) then
                 ESX.Game.SpawnVehicle(vehicleData.model, {x = vehicleData.garageCoords.x, y = vehicleData.garageCoords.y, z = vehicleData.garageCoords.z}, vehicleData.heading, function(vehicle)
                     ESX.Game.SetVehicleProperties(vehicle, vehicleData)
                 end)
@@ -93,43 +110,47 @@ if Config.Menu == "esx_menu_default" then
         else
             EditableFunctions.Notify(Locale("vehicle_not_stored"))
         end
-            menu.close()
-        end, function(data, menu)
-            menu.close()
-        end)
+
+        menu.close()
     end
 
     function openParkInMenu()
-        local elements = {}
-
-        vehiclesnearby = garage_framework_getVehiclesNearby()
-
-
-        for k, v in pairs(vehiclesnearby) do
-            local plate = GetVehicleNumberPlateText(v.vehicle)
-            isowned = garage_isOwned(plate)
-            if isowned then
-            table.insert(elements, {label = plate, value = v.vehicle})
-            end
-        end
+        local elements = prepareParkInMenuElements()
 
         ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'park_in_menu', {
             title = Locale("park_in"),
             align = 'top-left',
             elements = elements
         }, function(data, menu)
-            local vehicleData = framework_getVehicleData(data.current.value)
-            local cb = garage_parkin(vehicleData)
-            if cb then
-                ESX.Game.DeleteVehicle(data.current.value)
-            else
-                EditableFunctions.Notify(Locale("error"))
-            end
-            menu.close()
+            handleParkInSelection(data, menu)
         end, function(data, menu)
             menu.close()
         end)
     end
+
+    function prepareParkInMenuElements()
+        local elements = {}
+        local vehiclesNearby = garage_framework_getVehiclesNearby()
+
+        for _, v in pairs(vehiclesNearby) do
+            local plate = GetVehicleNumberPlateText(v.vehicle)
+            if garage_isOwned(plate) then
+                table.insert(elements, {label = plate, value = v.vehicle})
+            end
+        end
+
+        return elements
+    end
+
+    function handleParkInSelection(data, menu)
+        local vehicleData = framework_getVehicleData(data.current.value)
+
+        if garage_parkin(vehicleData) then
+            ESX.Game.DeleteVehicle(data.current.value)
+        else
+            EditableFunctions.Notify(Locale("error"))
+        end
+
+        menu.close()
+    end
 end
-
-

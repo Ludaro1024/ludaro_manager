@@ -1,5 +1,5 @@
 Config = {}
-Config.Menu = "esx_menu_default" -- psossible is: esx_menu_extended, NativeUI
+Config.Menu = "NativeUI" -- psossible is: esx_menu_extended, NativeUI
 Config.Range = 2.0 -- rannge for npcs annd markers where the player can interact with them
 Config.Tablet = true -- enable or disable the tablet Animation if the player is using the tablet 
 Config.AdminGroups = {"admin", "superadmin"} -- groups that are allowed to use the admin commands
