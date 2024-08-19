@@ -170,33 +170,40 @@ export default {
     };
   },
   beforeMount() {
-    const garageData = JSON.parse(this.job.ludaro_manager_garage || '{}');
-    this.job.garage = {
-      coords: garageData.coords || { x: 0, y: 0, z: 0 },
-      parkoutCoords: garageData.parkoutCoords || { x: 0, y: 0, z: 0 },
-      type: 'npc',
-      npcModel: '',
-      npcHeading: 0,
-      markerId: 0,
-      markerColor: { r: 0, g: 0, b: 0 },
-      markerScale: 1
-    };
-    const vehicleShopData = JSON.parse(this.job.ludaro_manager_vehicleShop || '{}');
-    this.job.vehicleShop = {
-      coords: vehicleShopData.coords || { x: 0, y: 0, z: 0 },
-      parkoutCoords: vehicleShopData.parkoutCoords || { x: 0, y: 0, z: 0 },
-      type: vehicleShopData.type || 'npc',
-      npcModel: vehicleShopData.npcModel || '',
-      npcHeading: vehicleShopData.npcHeading || 0,
-      markerId: vehicleShopData.markerId || 0,
-      markerColor: vehicleShopData.markerColor || { r: 0, g: 0, b: 0 },
-      markerScale: vehicleShopData.markerScale || 1,
-      vehicles: vehicleShopData.vehicles || [],
-      buyWithSocietyMoney: vehicleShopData.buyWithSocietyMoney || false
-    };
-    // console.log('Loaded garage data:', JSON.stringify(this.job.garage));
-    // console.log('Loaded vehicle shop data:', JSON.stringify(this.job.vehicleShop));
-  },
+
+  const garageData = JSON.parse(this.job.ludaro_manager_garage || '{}');
+
+  this.job.garage = {
+    coords: garageData.coords || { x: 0, y: 0, z: 0 },
+    parkoutCoords: garageData.parkoutCoords || { x: 0, y: 0, z: 0 },
+    type: garageData.type || 'npc',
+    npcModel: garageData.npcModel || '',
+    npcHeading: garageData.npcHeading || 0,
+    markerId: garageData.markerId || 0,
+    markerColor: garageData.markerColor || { r: 0, g: 0, b: 0 },
+    markerScale: garageData.markerScale || 1
+  };
+
+
+
+  const vehicleShopData = JSON.parse(this.job.ludaro_manager_vehicleShop || '{}');
+
+
+  this.job.vehicleShop = {
+    coords: vehicleShopData.coords || { x: 0, y: 0, z: 0 },
+    parkoutCoords: vehicleShopData.parkoutCoords || { x: 0, y: 0, z: 0 },
+    type: vehicleShopData.type || 'npc',
+    npcModel: vehicleShopData.npcModel || '',
+    npcHeading: vehicleShopData.npcHeading || 0,
+    markerId: vehicleShopData.markerId || 0,
+    markerColor: vehicleShopData.markerColor || { r: 0, g: 0, b: 0 },
+    markerScale: vehicleShopData.markerScale || 1,
+    vehicles: vehicleShopData.vehicles || [],
+    buyWithSocietyMoney: vehicleShopData.buyWithSocietyMoney || false
+  };
+
+
+},
   methods: {
     fetchCurrentCoords(section) {
       fetch(`https://${GetParentResourceName()}/getCurrentCoords`, {
@@ -226,27 +233,31 @@ export default {
       });
     },
     fetchCurrentHeading(section) {
+      console.log('fetchCurrentHeading called for section:', section); // Log the section to see which part of the code is calling this method.
+
       fetch(`https://${GetParentResourceName()}/getCurrentHeading`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8'
-        },
-        body: JSON.stringify({})
-      })
-      .then((response) => response.json())
-      .then((heading) => {
-        if (heading) {
-          if (section === 'vehicleShop') {
-            this.job.vehicleShop.npcHeading = heading;
-          } else {
-            this.job.garage.npcHeading = heading;
-          }
-          this.$emit('update-job', this.job);
-        }
-      })
-      .catch((error) => {
-        console.error('Failed to fetch current heading:', error);
-      });
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json; charset=UTF-8'
+  },
+  body: JSON.stringify({})
+})
+.then((response) => response.json())
+.then((data) => {
+  console.log('Parsed heading data:', data); // Log the parsed heading data to ensure it's correctly received and parsed.
+  data.heading = Math.round(data.heading);  // Rounding the heading value to the nearest whole number.
+  if (data.heading) {  // Accessing the heading value from the object.
+    if (section === 'vehicleShop') {
+      this.job.vehicleShop.npcHeading = data.heading;  // Setting the heading value.
+    } else {
+      this.job.garage.npcHeading = data.heading;  // Setting the heading value.
+    }
+    this.$emit('update-job', this.job);
+  }
+})
+.catch((error) => {
+  console.error('Failed to fetch current heading:', error);
+});
     },
     initializeMarkerColor(section) {
       if (section === 'vehicleShop') {

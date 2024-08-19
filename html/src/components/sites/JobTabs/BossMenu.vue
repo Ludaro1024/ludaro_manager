@@ -18,6 +18,7 @@
       </div>
       <button @click="fetchCurrentCoords" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentCoords') }}</button>
     </div>
+    
     <div class="mb-4">
       <label class="block mb-2 font-bold">{{ $t('bossMenuGradeAccess') }}</label>
       <select v-model="localBossMenu.grade" @change ="initializegrade(localBossMenu.grade)" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
@@ -26,12 +27,14 @@
         </option>
       </select>
     </div>
+    
     <div class="mb-4">
       <label class="block mb-2 font-bold">{{ $t('bossMenuNpcMarker') }}</label>
       <select v-model="localBossMenu.type" @change="initializeMarkerColor" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
         <option value="npc">{{ $t('npc') }}</option>
         <option value="marker">{{ $t('marker') }}</option>
       </select>
+      
       <div v-if="localBossMenu.type === 'npc'">
         <div class="flex flex-col">
           <label class="mb-1">{{ $t('npcModel') }}:</label>
@@ -47,6 +50,7 @@
         </div>
         <button @click="fetchCurrentHeading" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
       </div>
+      
       <div v-else-if="localBossMenu.type === 'marker'">
         <div class="flex flex-col">
           <label class="mb-1">{{ $t('markerId') }}:</label>
@@ -82,6 +86,7 @@
     </div>
   </div>
 </template>
+
 
 
 <script>
@@ -142,7 +147,6 @@ export default {
         if (coords) {
           this.localBossMenu.coords = { x: coords.x, y: coords.y, z: coords.z };
           this.updateJobBossMenu();
-          // console.log('Updated localBossMenu coords:', this.localBossMenu.coords);
         }
       })
       .catch((error) => {
@@ -160,9 +164,8 @@ export default {
       .then((response) => response.json())
       .then((heading) => {
         if (heading.heading) {
-          this.localBossMenu.npcHeading = heading.heading;
+          this.localBossMenu.npcHeading = Math.round(heading.heading); // Round the heading to the nearest integer
           this.updateJobBossMenu();
-          // console.log('Updated localBossMenu heading:', this.localBossMenu.npcHeading);
         }
       })
       .catch((error) => {
@@ -173,13 +176,11 @@ export default {
       if (!this.localBossMenu.marker.markerColor) {
         this.localBossMenu.marker.markerColor = { r: 0, g: 0, b: 0 };
         this.updateJobBossMenu();
-        // console.log('Initialized marker color to default:', this.localBossMenu.marker.markerColor);
       }
     },
     initializeGrade(grade) {
       this.localBossMenu.grade = grade;
       this.updateJobBossMenu();
-      // console.log('Initialized grade:', this.localBossMenu.grade);  
     },
     updateJobBossMenu() {
       this.job.bossmenu = { ...this.localBossMenu };
@@ -196,3 +197,4 @@ export default {
   }
 };
 </script>
+

@@ -185,6 +185,7 @@
     RegisterNUICallback('getCurrentHeading', function(data, cb)
         local ped = PlayerPedId()
         local heading = GetEntityHeading(ped)
+        print("Heading: " .. heading)
         cb({ heading = heading })
     end)
     
