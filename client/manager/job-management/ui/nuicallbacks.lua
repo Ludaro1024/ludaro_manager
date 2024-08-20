@@ -205,3 +205,10 @@
         cb({ success = success })
     end)
     
+
+    RegisterNUICallback("getCurrentClothes", function(data, cb)
+        TriggerEvent('skinchanger:getSkin', function(skin)
+            cb( {skin = skin})
+        end)
+    end)
+    

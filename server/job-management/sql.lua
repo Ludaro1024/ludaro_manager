@@ -35,51 +35,95 @@ end
 function job_management_callback_saveJob(job)
     if ESX then
         Debug(3, "Saving job to the database: " .. json.encode(job))
-        local name = job.name
-        local label = job.label
-        local whitelisted = job.whitelisted
-        local bossmenu = job.bossmenu
-        local interactions = job.interactions
-        local garage = job.garage
-        local onoffduty = job.onoffduty
-        local stashes = job.stashes
-        local shops = job.shops
-        local processing = job.processing
-        local vehicleshop = job.vehicleShop
-        local societyPaid = job.societypaid
+        print(ESX.DumpTable(job))
+
+        -- Fetch existing job data from the database
+        local existingJob = MySQL.query.await('SELECT * FROM jobs WHERE name = @name', {
+            ['@name'] = job.name
+        })
+
+        if existingJob[1] then
+            existingJob = existingJob[1]
+        else
+            Debug(2, "Job not found in the database: " .. job.name)
+            return false
+        end
+
+        -- Table of properties to check
+        local propertiesToCheck = {
+            bossmenu = "ludaro_manager_bossmenu",
+            interactions = "ludaro_manager_interactions",
+            garage = "ludaro_manager_garage",
+            onoffduty = "ludaro_manager_onoffduty",
+            stashes = "ludaro_manager_stashes",
+            vehicleShop = "ludaro_manager_vehicleShop",
+            societyPaid = "ludaro_manager_societyPaid",
+            clothing = "ludaro_manager_clothes"
+        }
+
+        -- Function to check if a coordinate object is default (0, 0, 0)
+         function isDefaultCoords(coords)
+            if coords ~= type("table") then
+            return coords.x == 0 and coords.y == 0 and coords.z == 0
+        end
+    end
+
+        -- Helper function to check for default or empty values
+        local function useExistingIfDefault(newValue, existingValue)
+            if type(newValue) == "table" then
+                if newValue.coords and isDefaultCoords(newValue.coords) then
+                    return existingValue
+                end
+                return newValue
+            elseif newValue == nil or newValue == "" then
+                return existingValue
+            else
+                return newValue
+            end
+        end
+
+        -- Loop through properties and update the job object
+        for key, columnName in pairs(propertiesToCheck) do
+            if key ~= "societyPaid" then
+                job[key] = useExistingIfDefault(job[key], json.decode(existingJob[columnName]))
+            else
+                job[key] = job[key] or existingJob[columnName]
+            end
+        end
 
         -- Convert the tables to JSON strings, but replace nil with actual nil (not JSON "null")
-        local bossmenu_json = bossmenu and json.encode(bossmenu) or nil
-        local interactions_json = interactions and json.encode(interactions) or nil
-        local garage_json = garage and json.encode(garage) or nil
-        local onoffduty_json = onoffduty and json.encode(onoffduty) or nil
-        local stashes_json = stashes and json.encode(stashes) or nil
-        local shops_json = shops and json.encode(shops) or nil
-        local processing_json = processing and json.encode(processing) or nil
-        local vehicleshop_json = vehicleshop and json.encode(vehicleshop) or nil
+        local bossmenu_json = job.bossmenu and json.encode(job.bossmenu) or nil
+        local interactions_json = job.interactions and json.encode(job.interactions) or nil
+        local garage_json = job.garage and json.encode(job.garage) or nil
+        local onoffduty_json = job.onoffduty and json.encode(job.onoffduty) or nil
+        local stashes_json = job.stashes and json.encode(job.stashes) or nil
+        local vehicleShop_json = job.vehicleShop and json.encode(job.vehicleShop) or nil
+        local clothing_json = job.clothing and json.encode(job.clothing) or nil
 
-        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_shops = @shops, ludaro_manager_processing = @processing, ludaro_manager_vehicleShop = @vehicleShop, ludaro_manager_societyPaid = @societyPaid WHERE name = @name', {
-            ['@name'] = name,
-            ['@label'] = label,
-            ['@whitelisted'] = whitelisted,
+        -- Execute the SQL update with the processed data
+        MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_vehicleShop = @vehicleShop, ludaro_manager_societyPaid = @societyPaid, ludaro_manager_clothing = @clothing WHERE name = @name', {
+            ['@name'] = job.name,
+            ['@label'] = job.label,
+            ['@whitelisted'] = job.whitelisted,
             ['@bossmenu'] = bossmenu_json,
             ['@interactions'] = interactions_json,
             ['@garage'] = garage_json,
             ['@onoffduty'] = onoffduty_json,
             ['@stashes'] = stashes_json,
-            ['@shops'] = shops_json,
-            ['@processing'] = processing_json,
-            ['@vehicleShop'] = vehicleshop_json,
-            ['@societyPaid'] = societyPaid
+            ['@vehicleShop'] = vehicleShop_json,
+            ['@societyPaid'] = job.societypaid,
+            ['@clothing'] = clothing_json
         }, function(rowsChanged)
             if rowsChanged > 0 then
-                Debug(2, "Job saved successfully: " .. name)
+                Debug(2, "Job saved successfully: " .. job.name)
                 return true
             else
-                Debug(2, "Failed to save job: " .. name)
+                Debug(2, "Failed to save job: " .. job.name)
                 return false
             end
         end)
+        
+        -- Refresh the jobs in the framework
         framework_refreshJobs()
     end
 end
@@ -533,8 +577,7 @@ function jobmanagement_zones_npcs_getNPCData()
         Debug(3, "Fetching NPC data from the database")
         local query = [[
             SELECT name, label, ludaro_manager_bossmenu, ludaro_manager_interactions,
-                   ludaro_manager_garage, ludaro_manager_onoffduty, ludaro_manager_stashes,
-                   ludaro_manager_shops, ludaro_manager_processing, ludaro_manager_vehicleShop 
+                   ludaro_manager_garage, ludaro_manager_onoffduty, ludaro_manager_stashes ludaro_manager_vehicleShop 
             FROM jobs
         ]]
    
@@ -542,13 +585,12 @@ function jobmanagement_zones_npcs_getNPCData()
         local npcdata = {}
 
         for _, npc in ipairs(npcs) do
+            local ludaro_manager_outfits = json.decode(npc.ludaro_manager_clothes) or {}
             local ludaro_manager_bossmenu = json.decode(npc.ludaro_manager_bossmenu) or {}
             local ludaro_manager_interactions = json.decode(npc.ludaro_manager_interactions) or {}
             local ludaro_manager_garage = json.decode(npc.ludaro_manager_garage) or {}
             local ludaro_manager_onoffduty = json.decode(npc.ludaro_manager_onoffduty) or {}
             local ludaro_manager_stashes = json.decode(npc.ludaro_manager_stashes) or {}
-            local ludaro_manager_shops = json.decode(npc.ludaro_manager_shops) or {}
-            local ludaro_manager_processing = json.decode(npc.ludaro_manager_processing) or {}
             local ludaro_manager_vehicleShop = json.decode(npc.ludaro_manager_vehicleShop) or {}
             if next(ludaro_manager_bossmenu) then
             ludaro_manager_bossmenu.openType = "bossmenu"
@@ -565,14 +607,12 @@ function jobmanagement_zones_npcs_getNPCData()
             if next(ludaro_manager_stashes) then
             ludaro_manager_stashes.openType = "stashes"
             end
-            if next(ludaro_manager_shops) then
-            ludaro_manager_shops.openType = "shops"
-            end
-            if next(ludaro_manager_processing) then
-            ludaro_manager_processing.openType = "processing"
-            end
             if next(ludaro_manager_vehicleShop) then
             ludaro_manager_vehicleShop.openType = "vehicleShop"
+            end
+
+            if next(ludaro_manager_outfits) then
+                ludaro_manager_outfits.openType = "clothes"
             end
 
             table.insert(npcdata, {
@@ -584,9 +624,8 @@ function jobmanagement_zones_npcs_getNPCData()
                     garage = ludaro_manager_garage,
                     onoffduty = ludaro_manager_onoffduty,
                     stashes = ludaro_manager_stashes,
-                    shops = ludaro_manager_shops,
-                    processing = ludaro_manager_processing,
-                    vehicleShop = ludaro_manager_vehicleShop
+                    vehicleShop = ludaro_manager_vehicleShop,
+                    outfits = ludaro_manager_outfits
                 }
             })
         end

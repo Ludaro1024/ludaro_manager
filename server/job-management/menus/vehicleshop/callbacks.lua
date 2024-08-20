@@ -1,5 +1,5 @@
 lib.callback.register('ludaro_manager:buyVehicle', function(source, vehicleData, platePrefix, society, grade)
-    print("what")
+
     return job_management_vehicleshop_buyVehicle(source, vehicleData, platePrefix, society, grade)
  end)
  lib.callback.register('ludaro_manager:hasEnoughMoney', function(source, price)

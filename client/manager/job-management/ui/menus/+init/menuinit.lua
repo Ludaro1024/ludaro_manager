@@ -11,4 +11,7 @@ function openMenu(data, jobname)
   if opentype == "vehicleShop" then
     openVehicleShopMenu(data, jobname)
   end
+  if opentype == "onoffduty" then
+    openOnOffDutyMenu(data, jobname)
+  end
 end

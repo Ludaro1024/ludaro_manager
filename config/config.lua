@@ -9,4 +9,4 @@ Config.KeyMapping = { -- keymapping for the commands
     openInteractions = {"F4", "openinteractions", "Open Job Interactions"},
 }
 
-Config.ExtraOffDutyJobs = true -- WILL CREATE JOBS WITH OFFDUTY_NAME OF THE JOB TO PREVENT CERTAIN THINGS FROM HAPPENING
+Config.ExtraOffDutyJobs = true -- WILL CREATE JOBS WITH OFFDUTY_NAME OF THE JOB TO PREVENT CERTAIN THINGS FROM HAPPENING AND WILL SWITCH PLAYERS TO THOSE JOBS IF THEY ARE OFFDUTY

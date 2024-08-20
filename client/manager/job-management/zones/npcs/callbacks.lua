@@ -12,3 +12,7 @@ end
 function jobmanagement_zones_npcs_getJobandGrade(source)
     return lib.callback.await("ludaro_manager:getJobandGrade", false, source)
 end
+
+function jobmanagement_zones_getDuty()
+    return lib.callback.await("ludaro_manager:getDuty", false)
+end

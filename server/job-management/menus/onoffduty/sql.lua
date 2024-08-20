@@ -1,9 +1,9 @@
 function duty_sql_getOffDutyJob(jobname)
-    local result = MySQL.Sync.fetchAll("SELECT * FROM jobs WHERE name = @name", {
+    local result = MySQL.Sync.fetchAll("SELECT name FROM jobs WHERE name = @name", {
         ['@name'] = jobname .. "_offduty"
     })
     if result[1] then
-        return result[1].offduty
+        return result[1].name
     end
     return false
 end

@@ -6,11 +6,15 @@ zones = {}
 -- @param accessgrade: The required grade for access
 -- @param job: The current job of the player
 -- @param grade: The current grade of the player
+-- @param type: The type of access required
 -- @return boolean: Returns true if access is allowed, false otherwise
-function job_management_zones_npcs_Allowed(accessjob, accessgrade, job, grade)
+function job_management_zones_npcs_Allowed(accessjob, accessgrade, job, grade, type)
+    if type == "onoffduty" then
+        job = string.gsub(job, "_offduty", "")
+    end
     grade = grade or 0
     accessgrade = accessgrade or 0
-    return accessjob == job and accessgrade <= grade
+    return accessjob == job and accessgrade <= grade 
 end
 
 -- job_management_zones_npcs_NPCZones
@@ -31,7 +35,7 @@ function job_management_zones_npcs_NPCZones(data)
                 end
 
                 local rotation = 200.0
-                
+             
                 local box = lib.zones.box({
                     coords = coords,
                     size = size,
@@ -40,7 +44,7 @@ function job_management_zones_npcs_NPCZones(data)
                     inside = function(self)
                         if self.coords then
                             local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
-                            if inrange and job_management_zones_npcs_Allowed(npc.name, managerData.grade, job, grade) then
+                            if inrange and job_management_zones_npcs_Allowed(npc.name, managerData.grade, job, grade, _) then
                                 EditableFunctions.ShowHelpNotification(Locale("open_menu"))
                                 if IsControlJustReleased(0, 38) then
                                     openMenu(managerData, npc.name)
@@ -65,8 +69,10 @@ end
 -- job_management_zones_npc_removeAllNPCZones
 -- Removes all NPC zones from the zones table
 function job_management_zones_npc_removeAllNPCZones()
-    for _, v in pairs(zones) do
+    for k, v in pairs(zones) do
         v:remove()
+        zones[k] = nil  -- Properly removes the reference from the zones table
     end
-    zones = {}
+    jobmanagement_zones_npcs_deleteAllNPCs()
 end
+

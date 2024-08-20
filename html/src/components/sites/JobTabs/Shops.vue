@@ -118,21 +118,6 @@ export default {
     };
   },
   beforeMount() {
-    this.job.shops = JSON.parse(this.job.ludaro_manager_shops || '[]');
-    if (!this.job.shops) {
-      this.job.shops = [];
-    }
-    this.job.shops = this.job.shops.map(shop => ({
-      coords: shop.coords || { x: 0, y: 0, z: 0 },
-      name: shop.name || '',
-      items: shop.items ? shop.items.map(item => ({
-        name: item.name || '',
-        price: item.price || 0,
-        stock: item.stock || 0,
-        minimumGrade: item.minimumGrade || ''
-      })) : []
-    }));
-    // console.log('Loaded job data:', JSON.stringify(this.job.shops));
   },
   methods: {
     fetchCurrentCoords(index = null, isNew = false) {

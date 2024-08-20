@@ -4,7 +4,6 @@ function job_management_zzload_Init()
     -- Remove all existing marker and NPC zones
     job_management_zones_marker_removeAllMarkerZones()
     job_management_zones_npc_removeAllNPCZones()
-    
     -- Get new NPC data
     local data = jobmanagement_zones_npcs_getNPCData()
     

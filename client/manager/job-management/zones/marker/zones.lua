@@ -5,12 +5,16 @@ markerzones = {}
 -- @param accessgrade: The required grade for access
 -- @param job: The current job of the player
 -- @param grade: The current grade of the player
+-- @param type: The type of access required
 -- @return boolean: Returns true if access is allowed, false otherwise
-function job_management_zones_marker_Allowed(accessjob, accessgrade, job, grade)
+function job_management_zones_marker_Allowed(accessjob, accessgrade, job, grade, type)
+    if type == "onoffduty" then
+        job = string.gsub(job, "_offduty", "")
+    end
     grade = grade or 0
     accessgrade = accessgrade or 0
     if type(accessgrade) == "string" then accessgrade = 0 end
-    return accessjob == job and accessgrade <= grade
+    return accessjob == job and accessgrade <= grade 
 end
 
 -- job_management_zones_marker_createMarkerZones
@@ -54,6 +58,7 @@ function job_management_zones_marker_createMarkerZones(dataa)
                     debug = Debuglevel >= 4,
                     job = job,
                     grade = grade,
+                    type = _,
                     parentName = jobname,
                     inside = function(self)
                         DrawMarker(
@@ -68,7 +73,7 @@ function job_management_zones_marker_createMarkerZones(dataa)
 
                         local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
 
-                        if inrange and job_management_zones_marker_Allowed(self.parentName, self.grade, self.job, self.grade) then
+                        if inrange and job_management_zones_marker_Allowed(self.parentName, self.grade, self.job, self.grade, self.type) then
                             EditableFunctions.ShowHelpNotification(Locale("open_menu"))
                             if IsControlJustReleased(0, 38) then
                                 openMenu(self.marker, self.parentName)

@@ -8,6 +8,7 @@ ADD COLUMN ludaro_manager_onoffduty JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_stashes JSON DEFAULT NULL,
 ADD COLUMN ludaro_manager_vehicleShop JSON DEFAULT NULL;
 ADD COLUMN ludaro_manager_societyPaid INT DEFAULT 0;
+ADD COLUMN ludaro_manager_clothes JSON DEFAULT NULL;
  ]]
 
     query2 = [[
