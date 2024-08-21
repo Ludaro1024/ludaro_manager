@@ -150,19 +150,51 @@ export default {
   methods: {
     loadClothesData() {
       try {
-        const clothes = JSON.parse(this.job.ludaro_manager_clothes || '[]');
-        this.localClothes = clothes.map(outfit => ({
-          name: outfit.name || '',
-          gradeAccess: outfit.gradeAccess || 0,
-          skin: outfit.skin || { ...this.clothingFields },
-        }));
+
+        let parsedData = JSON.parse(this.job.ludaro_manager_clothing || '{}');
+     
+        if (typeof parsedData === 'string') {
+          parsedData = JSON.parse(parsedData);
+        }
+
+        console.log('Type:', typeof parsedData);
+        if (typeof parsedData === 'string') {
+          parsedData = JSON.parse(parsedData);
+        }
+
+
+
+
+        if (typeof parsedData === 'object' && parsedData !== null) {
+          this.localClothes = parsedData.localClothes || [];
+          this.npcSettings = parsedData.npcSettings || {
+            type: 'npc',
+            npcModel: '',
+            npcHeading: 0,
+            coords: { x: 0, y: 0, z: 0 },
+            markerId: 0,
+            markerCoords: { x: 0, y: 0, z: 0 },
+            markerColor: { r: 0, g: 0, b: 0 },
+          };
+        } else {
+
+          throw new Error('Parsed data is neither an array nor a valid object' + typeof parsedData);
+        }
       } catch (error) {
-        console.error('Error parsing clothes data:', error);
+        console.error('Error loading data:', error);
         this.localClothes = [];
+        this.npcSettings = {
+          type: 'npc',
+          npcModel: '',
+          npcHeading: 0,
+          coords: { x: 0, y: 0, z: 0 },
+          markerId: 0,
+          markerCoords: { x: 0, y: 0, z: 0 },
+          markerColor: { r: 0, g: 0, b: 0 },
+        };
       }
     },
     fetchCurrentClothing(index) {
-      console.log('Fetching current clothing...');
       fetch(`https://${GetParentResourceName()}/getCurrentClothes`, {
         method: 'POST',
         headers: {
@@ -170,14 +202,8 @@ export default {
         },
         body: JSON.stringify({})
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
-        console.log('Data received:', data);
         if (data.skin) {
           for (let key in this.clothingFields) {
             if (data.skin.hasOwnProperty(key)) {
@@ -195,6 +221,7 @@ export default {
     },
     removeOutfit(index) {
       this.localClothes.splice(index, 1);
+      this.updateJobClothes();
     },
     addOutfit() {
       this.localClothes.push({
@@ -202,28 +229,63 @@ export default {
         gradeAccess: 0,
         skin: { ...this.clothingFields },
       });
+      this.updateJobClothes();
     },
     initializeMarkerColor() {
       if (this.npcSettings.type === 'marker') {
         this.npcSettings.markerColor = { r: 255, g: 0, b: 0 }; // Default to red
       }
+      this.updateJobClothes(); // Ensure job data is updated when marker color is initialized
     },
     fetchCurrentCoords() {
-      // Fetch and set the current coordinates for NPC
-      // This is a placeholder function; replace with actual logic to get the current coordinates
-      this.npcSettings.coords = { x: 1234, y: 5678, z: 9 }; // Example coordinates
+      fetch(`https://${GetParentResourceName()}/getCurrentCoords`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({})
+      })
+      .then(response => response.json())
+      .then(coords => {
+        if (coords) {
+          this.npcSettings.coords = { x: coords.x, y: coords.y, z: coords.z };
+          this.updateJobClothes();
+        }
+      })
+      .catch(error => {
+        console.error('Failed to fetch current coords:', error);
+      });
     },
     fetchCurrentHeading() {
-      // Fetch and set the current heading for NPC
-      // This is a placeholder function; replace with actual logic to get the current heading
-      this.npcSettings.npcHeading = 90; // Example heading
+      fetch(`https://${GetParentResourceName()}/getCurrentHeading`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({})
+      })
+      .then(response => response.json())
+      .then(heading => {
+        if (heading.heading) {
+          this.npcSettings.npcHeading = heading.heading;
+          this.updateJobClothes();
+        }
+      })
+      .catch(error => {
+        console.error('Failed to fetch current heading:', error);
+      });
     },
     updateJobClothes() {
-      // Update the job clothes data
-      this.job.ludaro_manager_clothes = JSON.stringify(this.localClothes);
+      this.job.ludaro_manager_clothing = {
+        localClothes: this.localClothes,
+        npcSettings: this.npcSettings
+      };
       this.$emit('update-job', this.job);
+      
     }
+
   },
+  
 };
 </script>
 

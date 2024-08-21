@@ -35,8 +35,7 @@ end
 function job_management_callback_saveJob(job)
     if ESX then
         Debug(3, "Saving job to the database: " .. json.encode(job))
-        print(ESX.DumpTable(job))
-
+        
         -- Fetch existing job data from the database
         local existingJob = MySQL.query.await('SELECT * FROM jobs WHERE name = @name', {
             ['@name'] = job.name
@@ -58,15 +57,16 @@ function job_management_callback_saveJob(job)
             stashes = "ludaro_manager_stashes",
             vehicleShop = "ludaro_manager_vehicleShop",
             societyPaid = "ludaro_manager_societyPaid",
-            clothing = "ludaro_manager_clothes"
+            clothing = "ludaro_manager_clothing"
         }
 
         -- Function to check if a coordinate object is default (0, 0, 0)
-         function isDefaultCoords(coords)
-            if coords ~= type("table") then
-            return coords.x == 0 and coords.y == 0 and coords.z == 0
+        function isDefaultCoords(coords)
+            if type(coords) == "table" then
+                return coords.x == 0 and coords.y == 0 and coords.z == 0
+            end
+            return false
         end
-    end
 
         -- Helper function to check for default or empty values
         local function useExistingIfDefault(newValue, existingValue)
@@ -98,8 +98,8 @@ function job_management_callback_saveJob(job)
         local onoffduty_json = job.onoffduty and json.encode(job.onoffduty) or nil
         local stashes_json = job.stashes and json.encode(job.stashes) or nil
         local vehicleShop_json = job.vehicleShop and json.encode(job.vehicleShop) or nil
-        local clothing_json = job.clothing and json.encode(job.clothing) or nil
-
+        local clothing_json = json.encode(job.ludaro_manager_clothing) or nil
+    
         -- Execute the SQL update with the processed data
         MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_vehicleShop = @vehicleShop, ludaro_manager_societyPaid = @societyPaid, ludaro_manager_clothing = @clothing WHERE name = @name', {
             ['@name'] = job.name,
@@ -127,6 +127,7 @@ function job_management_callback_saveJob(job)
         framework_refreshJobs()
     end
 end
+
 
 
 
