@@ -29,7 +29,7 @@ if Config.Menu == "NativeUI" then
                     end
                     EditableFunctions.Notify(Locale("buying_vehicle"))
                  
-              print(ESX.DumpTable(vehicleshop))
+              
 
                     ESX.Game.SpawnVehicle(v.model, vector3(vehicleshop.parkoutCoords.x, vehicleshop.parkoutCoords.y, vehicleshop.parkoutCoords.z), vehicleshop.parkoutCoords.heading, function(spawnedVehicle)
                        SetEntityHeading(spawnedVehicle, vehicleshop.parkoutCoords.heading)

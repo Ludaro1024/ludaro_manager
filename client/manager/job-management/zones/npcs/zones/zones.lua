@@ -22,10 +22,14 @@ end
 -- @param data: The data containing NPC zone information
 function job_management_zones_npcs_NPCZones(data)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
-    
+
     for _, npc in ipairs(data) do
-        
+      
         for _, managerData in pairs(npc.data) do
+        
+          if managerData.openType == "clothes" then
+            managerData = managerData.npcSettings
+          end
             if managerData and managerData.type == "npc" and next(managerData.coords) then
                 local coords = vec3(managerData.coords.x, managerData.coords.y, managerData.coords.z)
                 local size = vec3(20, 20, 20) -- Default size

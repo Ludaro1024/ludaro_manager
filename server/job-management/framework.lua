@@ -7,6 +7,10 @@ function framework_refreshJobs()
                xPlayer.triggerEvent("ludaro_manager:refreshZones")
             end
         end
+
+        if Config.DeleteGradesWithNoJobUponRefreshing then
+            sql_DeleteGradesWithNoJobUponRefreshing()
+        end
     end
 end
 

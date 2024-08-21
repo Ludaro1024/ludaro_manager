@@ -29,13 +29,14 @@ function job_management_sql_GetAllGrades()
     return grades
 end
 
---- Save a job to the database.
+-- Save a job to the database.
 -- @param table job The job data.
 -- @return boolean Success status.
 function job_management_callback_saveJob(job)
     if ESX then
         Debug(3, "Saving job to the database: " .. json.encode(job))
-        
+        print(ESX.DumpTable(job))
+
         -- Fetch existing job data from the database
         local existingJob = MySQL.query.await('SELECT * FROM jobs WHERE name = @name', {
             ['@name'] = job.name
@@ -47,59 +48,69 @@ function job_management_callback_saveJob(job)
             Debug(2, "Job not found in the database: " .. job.name)
             return false
         end
+        
 
-        -- Table of properties to check
-        local propertiesToCheck = {
-            bossmenu = "ludaro_manager_bossmenu",
-            interactions = "ludaro_manager_interactions",
-            garage = "ludaro_manager_garage",
-            onoffduty = "ludaro_manager_onoffduty",
-            stashes = "ludaro_manager_stashes",
-            vehicleShop = "ludaro_manager_vehicleShop",
-            societyPaid = "ludaro_manager_societyPaid",
-            clothing = "ludaro_manager_clothing"
+        print(ESX.DumpTable(existingJob))
+
+        -- Default values
+        local defaultValues = {
+            bossmenu = {},
+            interactions = {},
+            garage = { type = "npc", markerScale = 1, npcModel = "", npcHeading = 0, coords = { x = 0, y = 0, z = 0 }, markerColor = { r = 0, g = 0, b = 0 }, markerId = 0, parkoutCoords = { x = 0, y = 0, z = 0, heading = 0 } },
+            onoffduty = { type = "npc", markerScale = 1, npcModel = "", coords = { x = 0, y = 0, z = 0 }, markerHeading = 0 },
+            stashes = {},
+            vehicleShop = {},
+            societyPaid = {},
+            clothing = { localClothes = { [1] = { name = "", skin = {} } }, npcSettings = { markerId = 0, markerColor = { r = 0, g = 0, b = 0 }, npcModel = "", coords = { x = 0, y = 0, z = 0 }, npcHeading = 0 } }
         }
 
-        -- Function to check if a coordinate object is default (0, 0, 0)
-        function isDefaultCoords(coords)
-            if type(coords) == "table" then
-                return coords.x == 0 and coords.y == 0 and coords.z == 0
-            end
-            return false
-        end
-
-        -- Helper function to check for default or empty values
-        local function useExistingIfDefault(newValue, existingValue)
-            if type(newValue) == "table" then
-                if newValue.coords and isDefaultCoords(newValue.coords) then
-                    return existingValue
-                end
-                return newValue
-            elseif newValue == nil or newValue == "" then
-                return existingValue
+        -- Helper function to use existing value if default is set
+        local function useExistingIfDefault(newValue, existingValue, defaultValue)
+            if newValue == nil or (type(newValue) == "table" and next(newValue) == nil) then
+                return existingValue or defaultValue
             else
                 return newValue
             end
         end
+        -- Define properties to check
+        local propertiesToCheck = {
+           bossmenu = "ludaro_manager_bossmenu",
+           interactions = "ludaro_manager_interactions",
+           garage = "ludaro_manager_garage",
+           onoffduty = "ludaro_manager_onoffduty",
+           stashes = "ludaro_manager_stashes",
+           vehicleShop = "ludaro_manager_vehicleShop",
+           societyPaid = "ludaro_manager_societyPaid",
+           clothing = "ludaro_manager_clothing"
+       }
 
-        -- Loop through properties and update the job object
-        for key, columnName in pairs(propertiesToCheck) do
-            if key ~= "societyPaid" then
-                job[key] = useExistingIfDefault(job[key], json.decode(existingJob[columnName]))
-            else
-                job[key] = job[key] or existingJob[columnName]
+
+        -- Prepare job data to be updated
+        local function prepareJobData(jobData)
+            local updatedJob = {}
+            for key, columnName in pairs(propertiesToCheck) do
+                updatedJob[key] = useExistingIfDefault(jobData[key], json.decode(existingJob[columnName]), defaultValues[key])
             end
+            return updatedJob
         end
 
-        -- Convert the tables to JSON strings, but replace nil with actual nil (not JSON "null")
-        local bossmenu_json = job.bossmenu and json.encode(job.bossmenu) or nil
-        local interactions_json = job.interactions and json.encode(job.interactions) or nil
-        local garage_json = job.garage and json.encode(job.garage) or nil
-        local onoffduty_json = job.onoffduty and json.encode(job.onoffduty) or nil
-        local stashes_json = job.stashes and json.encode(job.stashes) or nil
-        local vehicleShop_json = job.vehicleShop and json.encode(job.vehicleShop) or nil
-        local clothing_json = json.encode(job.ludaro_manager_clothing) or nil
-    
+       
+        -- Prepare the updated job data
+        local updatedJob = prepareJobData(job)
+
+        -- Convert the tables to JSON strings
+        local function encodeOrNil(value)
+            return value and type(value) == "table" and json.encode(value) or nil
+        end
+
+        local bossmenu_json = encodeOrNil(updatedJob.bossmenu)
+        local interactions_json = encodeOrNil(updatedJob.interactions)
+        local garage_json = encodeOrNil(updatedJob.garage)
+        local onoffduty_json = encodeOrNil(updatedJob.onoffduty)
+        local stashes_json = encodeOrNil(updatedJob.stashes)
+        local vehicleShop_json = encodeOrNil(updatedJob.vehicleShop)
+        local clothing_json = encodeOrNil(updatedJob.clothing)
+
         -- Execute the SQL update with the processed data
         MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_vehicleShop = @vehicleShop, ludaro_manager_societyPaid = @societyPaid, ludaro_manager_clothing = @clothing WHERE name = @name', {
             ['@name'] = job.name,
@@ -122,7 +133,7 @@ function job_management_callback_saveJob(job)
                 return false
             end
         end)
-        
+
         -- Refresh the jobs in the framework
         framework_refreshJobs()
     end
@@ -578,15 +589,17 @@ function jobmanagement_zones_npcs_getNPCData()
         Debug(3, "Fetching NPC data from the database")
         local query = [[
             SELECT name, label, ludaro_manager_bossmenu, ludaro_manager_interactions,
-                   ludaro_manager_garage, ludaro_manager_onoffduty, ludaro_manager_stashes ludaro_manager_vehicleShop 
+                   ludaro_manager_garage, ludaro_manager_onoffduty, ludaro_manager_stashes, ludaro_manager_clothing, ludaro_manager_vehicleShop 
             FROM jobs
         ]]
    
         local npcs = MySQL.query.await(query)
         local npcdata = {}
-
+      
         for _, npc in ipairs(npcs) do
-            local ludaro_manager_outfits = json.decode(npc.ludaro_manager_clothes) or {}
+         
+            local ludaro_manager_outfits = json.decode(npc.ludaro_manager_clothing) or {}
+        
             local ludaro_manager_bossmenu = json.decode(npc.ludaro_manager_bossmenu) or {}
             local ludaro_manager_interactions = json.decode(npc.ludaro_manager_interactions) or {}
             local ludaro_manager_garage = json.decode(npc.ludaro_manager_garage) or {}
@@ -635,3 +648,20 @@ function jobmanagement_zones_npcs_getNPCData()
     end
 end
 
+
+function  sql_DeleteGradesWithNoJobUponRefreshing()
+-- make me an sql query that goes thrhough job_grades and every entry on job_grades if job_name doesnt exist in jobs under the column name it will delete it
+    if ESX then
+        Debug(3, "Deleting grades with no job upon refreshing")
+        MySQL.Async.execute('DELETE FROM job_grades WHERE job_name NOT IN (SELECT name FROM jobs)', {}, function(rowsChanged)
+            if rowsChanged > 0 then
+                Debug(2, "Grades with no job deleted successfully")
+                return true
+            else
+                Debug(2, "Failed to delete grades with no job")
+                return false
+            end
+        end)
+    end 
+
+end

@@ -25,6 +25,9 @@ function job_management_zones_marker_createMarkerZones(dataa)
 
     for k, v in pairs(dataa) do
         for _, marker in pairs(v.data) do
+            if marker.openType == "clothes" then
+                marker = marker.npcSettings
+              end
             if marker.type == "marker" then
 
                 local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)

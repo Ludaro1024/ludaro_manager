@@ -3,7 +3,6 @@
 -- @param cb: The callback function to send the response
     RegisterNUICallback('getSocietys', function(data, cb)
         local societies = society_management_callback_getSocietys()
-        ESX.DumpTable(societies)
         cb({societies})
     end)
     
