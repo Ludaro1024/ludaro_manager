@@ -141,27 +141,19 @@ export default {
         markerColor: { r: 0, g: 0, b: 0 },
       },
       clothingFields: {
-        tshirt_1: 0,
-        tshirt_2: 0,
-        torso_1: 0,
-        torso_2: 0,
-        decals_1: 0,
-        decals_2: 0,
-        arms: 0,
-        pants_1: 0,
-        pants_2: 0,
-        shoes_1: 0,
-        shoes_2: 0,
-        mask_1: 0,
-        mask_2: 0,
-        bproof_1: 0,
-        bproof_2: 0,
-        chain_1: 0,
-        chain_2: 0,
-        helmet_1: 0,
-        helmet_2: 0,
-        glasses_1: 0,
-        glasses_2: 0,
+        hair: 0,
+        face: 0,
+        glasses: 0,
+        mask: 0,
+        top: 0,
+        pants: 0,
+        shoes: 0,
+        accessories: 0,
+        undershirt: 0,
+        vest: 0,
+        badges: 0,
+        hat: 0,
+        backpack: 0,
       },
     };
   },
@@ -172,13 +164,16 @@ export default {
     async loadClothesData() {
       try {
         let parsedData = JSON.parse(this.job.ludaro_manager_clothing || '{}');
-
+        
         if (typeof parsedData === 'string') {
           parsedData = JSON.parse(parsedData);
         }
-
+        
         if (typeof parsedData === 'object' && parsedData !== null) {
-          this.localClothes = parsedData.localClothes || [];
+          this.localClothes = parsedData.localClothes.map(outfit => ({
+            ...outfit,
+            skin: { ...this.clothingFields, ...outfit.skin } // Ensure skin properties are properly mapped
+          }));
           this.npcSettings = parsedData.npcSettings || this.getDefaultNpcSettings();
         } else {
           throw new Error('Parsed data is neither an array nor a valid object');
@@ -211,11 +206,7 @@ export default {
         });
         const data = await response.json();
         if (data.skin) {
-          Object.keys(this.clothingFields).forEach(key => {
-            if (data.skin.hasOwnProperty(key)) {
-              this.localClothes[index].skin[key] = data.skin[key];
-            }
-          });
+          this.localClothes[index].skin = { ...this.clothingFields, ...data.skin };
           this.updateJobClothes();
         } else {
           console.error('No skin data received');
@@ -292,3 +283,5 @@ export default {
 <style scoped>
 /* Add your styles here */
 </style>
+
+TODO: FIX
