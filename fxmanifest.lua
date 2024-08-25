@@ -45,7 +45,6 @@ client_scripts({
 
 server_scripts({
 	"@oxmysql/lib/MySQL.lua",
-	"server/framework.lua",
 	"server/autosql.lua",
 	"server/**/*",
 })

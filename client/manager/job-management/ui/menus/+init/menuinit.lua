@@ -17,4 +17,8 @@ function openMenu(data, jobname)
   if opentype == "clothes" then
     openClothesMenu(data, jobname)
   end
+
+  if opentype == "stashes" then
+    EditableFunctions.OpenStash(data, jobname)
+  end
 end

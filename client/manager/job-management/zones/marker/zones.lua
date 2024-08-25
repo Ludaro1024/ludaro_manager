@@ -23,74 +23,84 @@ end
 function job_management_zones_marker_createMarkerZones(dataa)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
 
-    for k, v in pairs(dataa) do
-   
-        for _, marker in pairs(v.data) do
-            print(marker.openType)
-            if marker.type == "marker" then
+    -- Helper function to process each marker
+    local function processMarker(marker, jobname)
+        if marker.type == "marker" then
+            local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
+            local size = vec3(15, 15, 15)
+            local rotation = 200.0
 
-                local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
-                local size = vec3(15, 15, 15)
-                local rotation = 200.0
+            local defaultmarkerdata = {
+                markerId = 1,
+                markerScale = 1.0,
+                markerColor = {r = 255, g = 0, b = 0, a = 255},
+                bobUpAndDown = false,
+                faceCamera = false
+            }
 
-                local defaultmarkerdata = {
-                    markerId = 1,
-                    markerScale = 1.0,
-                    markerColor = {r = 255, g = 0, b = 0, a = 255},
-                    bobUpAndDown = false,
-                    faceCamera = false
-                }
+            -- Apply default data if not provided
+            marker.marker = marker.marker or {}
+            marker.marker.markerId = marker.marker.markerId or defaultmarkerdata.markerId
+            marker.marker.markerScale = marker.marker.markerScale or defaultmarkerdata.markerScale
+            marker.marker.markerColor = marker.marker.markerColor or defaultmarkerdata.markerColor
+            marker.marker.bobUpAndDown = marker.marker.bobUpAndDown or defaultmarkerdata.bobUpAndDown
+            marker.marker.faceCamera = marker.marker.faceCamera or defaultmarkerdata.faceCamera
 
-                -- Apply default data if not provided
-                marker.marker = marker.marker or {}
-                marker.marker.markerId = marker.marker.markerId or defaultmarkerdata.markerId
-                marker.marker.markerScale = marker.marker.markerScale or defaultmarkerdata.markerScale
-                marker.marker.markerColor = marker.marker.markerColor or defaultmarkerdata.markerColor
-                marker.marker.bobUpAndDown = marker.marker.bobUpAndDown or defaultmarkerdata.bobUpAndDown
-                marker.marker.faceCamera = marker.marker.faceCamera or defaultmarkerdata.faceCamera
+            local box = lib.zones.box({
+                coords = coords,
+                marker = marker,
+                size = size,
+                rotation = rotation,
+                debug = Debuglevel >= 4,
+                job = job,
+                grade = grade,
+                parentName = jobname,
+                inside = function(self)
+                    DrawMarker(
+                        self.marker.marker.markerId, 
+                        self.coords.x, self.coords.y, self.coords.z, 
+                        0.0, 0.0, 0.0, 
+                        0.0, 0.0, 0.0, 
+                        self.marker.marker.markerScale, self.marker.marker.markerScale, self.marker.marker.markerScale, 
+                        self.marker.marker.markerColor.r, self.marker.marker.markerColor.g, self.marker.marker.markerColor.b, 255, 
+                        self.marker.marker.bobUpAndDown, self.marker.marker.faceCamera, 2, nil, nil
+                    )
 
-                local jobname = v.name
-                local zoneType = marker.type
+                    local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
 
-                local box = lib.zones.box({
-                    coords = coords,
-                    marker = marker,
-                    size = size,
-                    rotation = rotation,
-                    debug = Debuglevel >= 4,
-                    job = job,
-                    grade = grade,
-                    type = _,
-                    parentName = jobname,
-                    inside = function(self)
-                        DrawMarker(
-                            self.marker.marker.markerId, 
-                            self.coords.x, self.coords.y, self.coords.z, 
-                            0.0, 0.0, 0.0, 
-                            0.0, 0.0, 0.0, 
-                            self.marker.marker.markerScale + 0.0, self.marker.marker.markerScale + 0.0, self.marker.marker.markerScale + 0.0, 
-                            self.marker.marker.markerColor.r, self.marker.marker.markerColor.g, self.marker.marker.markerColor.b, 255, 
-                            self.marker.marker.bobUpAndDown, self.marker.marker.faceCamera, 2, nil, nil
-                        )
-
-                        local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
-
-                        if inrange and job_management_zones_marker_Allowed(self.parentName, self.grade, self.job, self.grade, self.type) then
-                            EditableFunctions.ShowHelpNotification(Locale("open_menu"))
-                            if IsControlJustReleased(0, 38) then
-                                openMenu(self.marker, self.parentName)
-                            end
+                    if inrange and job_management_zones_marker_Allowed(self.parentName, self.grade, self.job, self.grade) then
+                        EditableFunctions.ShowHelpNotification(Locale("open_menu"))
+                        if IsControlJustReleased(0, 38) then
+                            openMenu(self.marker, self.parentName)
                         end
-                    end,
-                    onEnter = function() end,
-                    onExit = function() end
-                })
+                    end
+                end,
+                onEnter = function() end,
+                onExit = function() end
+            })
 
-                table.insert(markerzones, box)
+            table.insert(markerzones, box)
+        end
+    end
+
+    -- Iterate over the data
+    for k, v in pairs(dataa) do
+        for key, section in pairs(v.data) do
+            if type(section) == "table" and section.type == "marker" then
+                -- Process the marker directly if it's of type "marker"
+                processMarker(section, v.name)
+            elseif type(section) == "table" then
+                -- Iterate over nested sections if they are tables
+                for _, subSection in pairs(section) do
+                    if type(subSection) == "table" then
+                    processMarker(subSection, v.name)
+                    end
+                end
             end
         end
     end
 end
+
 
 -- job_management_zones_marker_removeAllMarkerZones
 -- Removes all marker zones from the markerzones table

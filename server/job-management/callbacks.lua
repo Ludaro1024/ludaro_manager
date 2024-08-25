@@ -71,9 +71,7 @@ lib.callback.register("ludaro_manager:saveEmployee", function(source, data)
    return job_management_callback_saveEmployee(data)
 end)
 
-lib.callback.register("ludaro_manager:getNPCData", function(source, data)
-   return jobmanagement_zones_npcs_getNPCData()
-end)
+
 
 lib.callback.register('ludaro_manager:getName', function(source, id)
    return framework_getPlayerName(identifier)

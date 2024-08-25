@@ -68,6 +68,16 @@
       </div>
 
       <div class="mt-4">
+        <label class="block mb-2">{{ $t('maxGrade') }}</label>
+        <select v-model="stash.maxGrade"
+          class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white">
+          <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
+            {{ grade.label }} (ID: {{ grade.grade }})
+          </option>
+        </select>
+      </div>
+
+      <div class="mt-4">
         <label class="block mb-2">{{ $t('officialStash') }}</label>
         <input type="checkbox" v-model="stash.official">
       </div>
@@ -107,6 +117,7 @@ export default {
           slots: stash.slots || 0,
           weight: stash.weight || 0,
           official: stash.official || false,
+          maxGrade: stash.maxGrade || 0,
         }));
       } catch (error) {
         console.error('Error parsing stashes data:', error);
@@ -149,6 +160,7 @@ export default {
         slots: 0,
         weight: 0,
         official: false,
+        maxGrade: 0,
       });
       this.updateJobStashes();
     },

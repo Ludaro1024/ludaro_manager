@@ -1,9 +1,9 @@
 -- jobmanagement_zones_npcs_getNPCData
 -- Retrieves NPC data via a callback
 -- @return table: Returns the NPC data
-_ENV["jobmanagement_zones_npcs_getNPC&MarkerData"] = function ()
-    return lib.callback.await("ludaro_manager:getNPCData", false)
-end
+lib.callback.register("ludaro_manager:getNPCData", function(source, data)
+    return jobmanagement_zones_npcs_getNPCData()
+ end)
 
 -- jobmanagement_zones_npcs_getJobandGrade
 -- Retrieves the job and grade of a player via a callback

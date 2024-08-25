@@ -77,6 +77,8 @@
                 class="w-1/3 p-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="B" min="0" max="255">
             </div>
           </div>
+          <button @click="fetchCurrentCoords" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            {{ $t('useCurrentCoords') }}</button>
         </div>
       </div>
     </div>
@@ -287,6 +289,7 @@ export default {
         const coords = await response.json();
         if (coords) {
           this.npcSettings.coords = { x: coords.x, y: coords.y, z: coords.z };
+          this.npcSettings.markerCoords = { x: coords.x, y: coords.y, z: coords.z }; // Set for marker as well
           this.updateJobClothes();
         }
       } catch (error) {
@@ -330,7 +333,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* Add your styles here */

@@ -155,3 +155,6 @@ function job_management_callback_saveEmployee(data)
     return success
 end
 
+function jobmanagement_zones_npcs_getNPCData()
+    return lib.callback.await("ludaro_manager:getNPCData", false)
+end
