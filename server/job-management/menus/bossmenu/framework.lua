@@ -5,7 +5,11 @@ function getGrade(source, otherplayerid)
             return xPlayer.job.grade
         end
         local xPlayer = ESX.GetPlayerFromId(source)
+        if xPlayer then
         return xPlayer.job.grade
+        else
+            return 0 
+        end
     end
 end
 

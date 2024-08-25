@@ -35,7 +35,7 @@ end
 function job_management_callback_saveJob(job)
     if ESX then
         Debug(3, "Saving job to the database: " .. json.encode(job))
-        print(ESX.DumpTable(job))
+        --(ESX.DumpTable(job))
 
         -- Fetch existing job data from the database
         local existingJob = MySQL.query.await('SELECT * FROM jobs WHERE name = @name', {
@@ -50,7 +50,7 @@ function job_management_callback_saveJob(job)
         end
         
 
-        print(ESX.DumpTable(existingJob))
+    job.clothing = job.ludaro_manager_clothing or {}
 
         -- Default values
         local defaultValues = {
@@ -100,8 +100,29 @@ function job_management_callback_saveJob(job)
 
         -- Convert the tables to JSON strings
         local function encodeOrNil(value)
-            return value and type(value) == "table" and json.encode(value) or nil
+            if not value then
+                print("encodeOrNil: value is nil or false")
+                return nil
+            elseif type(value) == "string" then
+                -- Check if it's a valid JSON string by attempting to decode it
+                local decoded, pos, err = json.decode(value)
+                if decoded then
+                    print("encodeOrNil: value is already a JSON string")
+                    return value
+                else
+                    print("encodeOrNil: value is a regular string")
+                    return value
+                end
+            elseif type(value) ~= "table" then
+                print("encodeOrNil: value is not a table, it is a " .. type(value))
+                return nil
+            else
+                print("encodeOrNil: value is being encoded")
+                return json.encode(value)
+            end
         end
+        
+
 
         local bossmenu_json = encodeOrNil(updatedJob.bossmenu)
         local interactions_json = encodeOrNil(updatedJob.interactions)
@@ -582,15 +603,22 @@ function job_management_callback_saveEmployee(data)
         end
     end
 end
--- Get NPC Data for spawning NPCS
+-- Get NPC Data for spawning NPCS AND MARKERS
 -- @return table The NPC data.
-function jobmanagement_zones_npcs_getNPCData()
+function jobmanagement_zones_npcs_getNPCData() --
     if ESX then
         Debug(3, "Fetching NPC data from the database")
         local query = [[
             SELECT name, label, ludaro_manager_bossmenu, ludaro_manager_interactions,
-                   ludaro_manager_garage, ludaro_manager_onoffduty, ludaro_manager_stashes, ludaro_manager_clothing, ludaro_manager_vehicleShop 
+               ludaro_manager_garage, ludaro_manager_onoffduty, ludaro_manager_stashes, ludaro_manager_clothing, ludaro_manager_vehicleShop 
             FROM jobs
+            WHERE ludaro_manager_bossmenu IS NOT NULL
+            OR ludaro_manager_interactions IS NOT NULL
+            OR ludaro_manager_garage IS NOT NULL
+            OR ludaro_manager_onoffduty IS NOT NULL
+            OR ludaro_manager_stashes IS NOT NULL
+            OR ludaro_manager_clothing IS NOT NULL
+            OR ludaro_manager_vehicleShop IS NOT NULL
         ]]
    
         local npcs = MySQL.query.await(query)
@@ -606,6 +634,7 @@ function jobmanagement_zones_npcs_getNPCData()
             local ludaro_manager_onoffduty = json.decode(npc.ludaro_manager_onoffduty) or {}
             local ludaro_manager_stashes = json.decode(npc.ludaro_manager_stashes) or {}
             local ludaro_manager_vehicleShop = json.decode(npc.ludaro_manager_vehicleShop) or {}
+            local ludaro_manager_clothes = json.decode(npc.ludaro_manager_clothing) or {}
             if next(ludaro_manager_bossmenu) then
             ludaro_manager_bossmenu.openType = "bossmenu"
             end
@@ -629,6 +658,10 @@ function jobmanagement_zones_npcs_getNPCData()
                 ludaro_manager_outfits.openType = "clothes"
             end
 
+            if next(ludaro_manager_clothes) then
+                ludaro_manager_clothes.openType = "clothes"
+            end
+
             table.insert(npcdata, {
                 name = npc.name,
                 label = npc.label,
@@ -639,7 +672,7 @@ function jobmanagement_zones_npcs_getNPCData()
                     onoffduty = ludaro_manager_onoffduty,
                     stashes = ludaro_manager_stashes,
                     vehicleShop = ludaro_manager_vehicleShop,
-                    outfits = ludaro_manager_outfits
+                    clothing = ludaro_manager_clothes,
                 }
             })
         end

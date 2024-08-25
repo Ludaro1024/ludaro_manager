@@ -21,7 +21,7 @@
     
     <div class="mb-4">
       <label class="block mb-2 font-bold">{{ $t('bossMenuGradeAccess') }}</label>
-      <select v-model="localBossMenu.grade" @change ="initializegrade(localBossMenu.grade)" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
+      <select v-model="localBossMenu.grade" @change="initializeGrade(localBossMenu.grade)" class="w-full p-2 border border-gray-300 rounded bg-gray-700 text-white">
         <option v-for="grade in job.grades" :key="grade.grade" :value="grade.grade">
           {{ grade.label }} (ID: {{ grade.grade }})
         </option>
@@ -87,8 +87,6 @@
   </div>
 </template>
 
-
-
 <script>
 export default {
   props: ['job'],
@@ -112,28 +110,36 @@ export default {
     };
   },
   beforeMount() {
-    try {
-      const bossmenu = JSON.parse(this.job.ludaro_manager_bossmenu || '{}');
-      this.localBossMenu = {
-        coords: bossmenu.coords || { x: 0, y: 0, z: 0 },
-        grade: bossmenu.grade || 0,
-        type: bossmenu.type || 'npc',
-        npcModel: bossmenu.npcModel || '',
-        npcHeading: bossmenu.npcHeading || 0,
-        npcRange: bossmenu.npcRange || 0,
-        marker: {
-          markerId: bossmenu.marker ? bossmenu.marker.markerId : 0,
-          markerColor: bossmenu.marker ? bossmenu.marker.markerColor : { r: 0, g: 0, b: 0 },
-          markerScale: bossmenu.marker ? bossmenu.marker.markerScale : 1,
-          bobUpAndDown: bossmenu.marker ? bossmenu.marker.bobUpAndDown : false,
-          faceCamera: bossmenu.marker ? bossmenu.marker.faceCamera : false
-        }
-      };
-    } catch (error) {
-      console.error('Error parsing bossmenu data:', error);
-    }
+    this.initializeData();
   },
   methods: {
+    initializeData() {
+      try {
+        const bossmenu = JSON.parse(this.job.ludaro_manager_bossmenu || '{}');
+
+        console.log("BossMenu data before processing:", bossmenu); // Debugging output
+
+        this.localBossMenu = {
+          coords: bossmenu.coords || { x: 0, y: 0, z: 0 },
+          grade: bossmenu.grade || 0,
+          type: bossmenu.type || 'npc',
+          npcModel: bossmenu.npcModel || '',
+          npcHeading: bossmenu.npcHeading || 0,
+          npcRange: bossmenu.npcRange || 0,
+          marker: {
+            markerId: bossmenu.marker ? bossmenu.marker.markerId : 0,
+            markerColor: bossmenu.marker ? bossmenu.marker.markerColor : { r: 0, g: 0, b: 0 },
+            markerScale: bossmenu.marker ? bossmenu.marker.markerScale : 1,
+            bobUpAndDown: bossmenu.marker ? bossmenu.marker.bobUpAndDown : false,
+            faceCamera: bossmenu.marker ? bossmenu.marker.faceCamera : false
+          }
+        };
+
+        console.log("Initialized localBossMenu:", this.localBossMenu); // Debugging output
+      } catch (error) {
+        console.error('Error parsing bossmenu data:', error);
+      }
+    },
     fetchCurrentCoords() {
       fetch(`https://${GetParentResourceName()}/getCurrentCoords`, {
         method: 'POST',
@@ -184,6 +190,7 @@ export default {
     },
     updateJobBossMenu() {
       this.job.bossmenu = { ...this.localBossMenu };
+      console.log("Updated job data:", this.job.bossmenu); // Debugging output
       this.$emit('update-job', this.job);
     }
   },
@@ -197,4 +204,3 @@ export default {
   }
 };
 </script>
-

@@ -7,8 +7,8 @@ markerzones = {}
 -- @param grade: The current grade of the player
 -- @param type: The type of access required
 -- @return boolean: Returns true if access is allowed, false otherwise
-function job_management_zones_marker_Allowed(accessjob, accessgrade, job, grade, type)
-    if type == "onoffduty" then
+function job_management_zones_marker_Allowed(accessjob, accessgrade, job, grade, typee)
+    if typee == "onoffduty" then
         job = string.gsub(job, "_offduty", "")
     end
     grade = grade or 0
@@ -24,10 +24,9 @@ function job_management_zones_marker_createMarkerZones(dataa)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
 
     for k, v in pairs(dataa) do
+   
         for _, marker in pairs(v.data) do
-            if marker.openType == "clothes" then
-                marker = marker.npcSettings
-              end
+            print(marker.openType)
             if marker.type == "marker" then
 
                 local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)

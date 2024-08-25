@@ -141,19 +141,36 @@ export default {
         markerColor: { r: 0, g: 0, b: 0 },
       },
       clothingFields: {
-        hair: 0,
-        face: 0,
-        glasses: 0,
-        mask: 0,
-        top: 0,
-        pants: 0,
-        shoes: 0,
-        accessories: 0,
-        undershirt: 0,
-        vest: 0,
-        badges: 0,
-        hat: 0,
-        backpack: 0,
+        arms: 0,
+        arms_2: 0,
+        bags_1: 0,
+        bags_2: 0,
+        bproof_1: 0,
+        bproof_2: 0,
+        bracelets_1: 0,
+        bracelets_2: 0,
+        chain_1: 0,
+        chain_2: 0,
+        decals_1: 0,
+        decals_2: 0,
+        ears_1: 0,
+        ears_2: 0,
+        glasses_1: 0,
+        glasses_2: 0,
+        helmet_1: 0,
+        helmet_2: 0,
+        mask_1: 0,
+        mask_2: 0,
+        pants_1: 0,
+        pants_2: 0,
+        shoes_1: 0,
+        shoes_2: 0,
+        torso_1: 0,
+        torso_2: 0,
+        tshirt_1: 0,
+        tshirt_2: 0,
+        watches_1: 0,
+        watches_2: 0
       },
     };
   },
@@ -163,21 +180,29 @@ export default {
   methods: {
     async loadClothesData() {
       try {
-        let parsedData = JSON.parse(this.job.ludaro_manager_clothing || '{}');
+        // Initialize with default settings if undefined
+        let parsedData = this.job.ludaro_manager_clothing
+          ? JSON.parse(this.job.ludaro_manager_clothing)
+          : { localClothes: [], npcSettings: this.getDefaultNpcSettings() };
         
+        // If parsedData is a string (double-parsed scenario)
         if (typeof parsedData === 'string') {
           parsedData = JSON.parse(parsedData);
         }
-        
-        if (typeof parsedData === 'object' && parsedData !== null) {
+
+        // Ensure localClothes is an array
+        if (Array.isArray(parsedData.localClothes)) {
           this.localClothes = parsedData.localClothes.map(outfit => ({
             ...outfit,
+          
             skin: { ...this.clothingFields, ...outfit.skin } // Ensure skin properties are properly mapped
           }));
-          this.npcSettings = parsedData.npcSettings || this.getDefaultNpcSettings();
         } else {
-          throw new Error('Parsed data is neither an array nor a valid object');
+          this.localClothes = [];
         }
+
+        // Load NPC settings or default if not present
+        this.npcSettings = parsedData.npcSettings || this.getDefaultNpcSettings();
       } catch (error) {
         console.error('Error loading data:', error);
         this.localClothes = [];
@@ -196,24 +221,41 @@ export default {
       };
     },
     async fetchCurrentClothing(index) {
-      try {
-        const response = await fetch(`https://${GetParentResourceName()}/getCurrentClothes`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: JSON.stringify({})
-        });
-        const data = await response.json();
-        if (data.skin) {
-          this.localClothes[index].skin = { ...this.clothingFields, ...data.skin };
-          this.updateJobClothes();
-        } else {
-          console.error('No skin data received');
+        try {
+            const response = await fetch(`https://${GetParentResourceName()}/getCurrentClothes`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+            if (data.skin && typeof data.skin === 'object') {
+                console.log('Fetched skin data:', data.skin);
+
+                // Merge fetched skin data with existing clothingFields
+                this.localClothes[index].skin = { ...this.clothingFields, ...data.skin };
+
+                // Ensure the name is set, if necessary
+                if (!this.localClothes[index].name) {
+                    this.localClothes[index].name = `Outfit ${index + 1}`;
+                }
+
+                // Update job clothes in the job object
+                this.updateJobClothes();
+            } else {
+                console.error('Skin data is missing or not an object:', data.skin);
+            }
+        } catch (error) {
+            console.error('Failed to fetch current clothing:', error);
         }
-      } catch (error) {
-        console.error('Failed to fetch current clothing:', error);
-      }
+    },
+    updateJobClothes() {
+        this.job.ludaro_manager_clothing = JSON.stringify({
+            localClothes: this.localClothes,
+            npcSettings: this.npcSettings
+        });
+        this.$emit('update-job', this.job);
     },
     removeOutfit(index) {
       this.localClothes.splice(index, 1);
@@ -270,18 +312,26 @@ export default {
       }
     },
     updateJobClothes() {
+      // Log the current state before updating to debug issues
+      console.log('Updating job with clothes and NPC settings:', {
+        localClothes: this.localClothes,
+        npcSettings: this.npcSettings
+      });
+    
+
       this.job.ludaro_manager_clothing = JSON.stringify({
         localClothes: this.localClothes,
         npcSettings: this.npcSettings
       });
+
+      // Emit the updated job object to the parent component
       this.$emit('update-job', this.job);
     }
   },
 };
 </script>
 
+
 <style scoped>
 /* Add your styles here */
 </style>
-
-TODO: FIX

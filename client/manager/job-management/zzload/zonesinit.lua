@@ -5,7 +5,7 @@ function job_management_zzload_Init()
     job_management_zones_marker_removeAllMarkerZones()
     job_management_zones_npc_removeAllNPCZones()
     -- Get new NPC data
-    local data = jobmanagement_zones_npcs_getNPCData()
+    local data = _ENV["jobmanagement_zones_npcs_getNPC&MarkerData"]()
     
     -- Create NPC zones based on the retrieved data
     job_management_zones_npcs_NPCZones(data)

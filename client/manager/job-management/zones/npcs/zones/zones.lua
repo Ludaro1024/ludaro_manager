@@ -14,7 +14,7 @@ function job_management_zones_npcs_Allowed(accessjob, accessgrade, job, grade, t
     end
     grade = grade or 0
     accessgrade = accessgrade or 0
-    return accessjob == job and accessgrade <= grade 
+    return accessjob == job and accessgrade <= grade
 end
 
 -- job_management_zones_npcs_NPCZones
@@ -24,12 +24,16 @@ function job_management_zones_npcs_NPCZones(data)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
 
     for _, npc in ipairs(data) do
-      
         for _, managerData in pairs(npc.data) do
-        
-          if managerData.openType == "clothes" then
-            managerData = managerData.npcSettings
-          end
+            if managerData.openType == "clothes" then
+                local npcSettings = managerData.npcSettings
+                for key, value in pairs(npcSettings) do
+                    managerData[key] = value
+                end
+                managerData.npcSettings = nil
+                managerData.openType = "clothes"
+                managerData.localClothes = managerData.localClothes
+            end
             if managerData and managerData.type == "npc" and next(managerData.coords) then
                 local coords = vec3(managerData.coords.x, managerData.coords.y, managerData.coords.z)
                 local size = vec3(20, 20, 20) -- Default size
@@ -39,7 +43,7 @@ function job_management_zones_npcs_NPCZones(data)
                 end
 
                 local rotation = 200.0
-             
+
                 local box = lib.zones.box({
                     coords = coords,
                     size = size,
@@ -57,7 +61,8 @@ function job_management_zones_npcs_NPCZones(data)
                         end
                     end,
                     onEnter = function()
-                       jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcheading or 200.0, npc.name)
+                        jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcheading or 200.0,
+                            npc.name)
                     end,
                     onExit = function()
                         jobmanagement_zones_npcs_deleteNPCByName(npc.name)
@@ -75,8 +80,7 @@ end
 function job_management_zones_npc_removeAllNPCZones()
     for k, v in pairs(zones) do
         v:remove()
-        zones[k] = nil  -- Properly removes the reference from the zones table
+        zones[k] = nil -- Properly removes the reference from the zones table
     end
     jobmanagement_zones_npcs_deleteAllNPCs()
 end
-

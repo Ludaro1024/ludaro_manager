@@ -4,6 +4,9 @@ EditableFunctions = {
     end,
     Notify = function(msg)
         ESX.ShowNotification(msg)
+    end,
+
+    OpenStash = function(data)
     end
 
 }
