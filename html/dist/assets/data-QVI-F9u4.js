@@ -1,1 +1,0 @@
-import{_ as t,a as e,c as a,b as s}from"./index-Dur-R-5O.js";const c={},n={class:"under-construction"},o=s("div",{class:"message"},[s("span",{class:"text"},"🚧 Under Construction 👷‍♀️🚧"),s("br"),s("span",{class:"text"},"This site is not available right now.")],-1),r=[o];function i(_,d){return e(),a("div",n,r)}const f=t(c,[["render",i]]);export{f as default};

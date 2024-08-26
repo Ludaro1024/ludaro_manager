@@ -99,7 +99,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 
 const loading = ref(true);
 const users = ref([]);
@@ -108,6 +108,7 @@ const selectedUser = ref(null);
 const searchQuery = ref('');
 const sortKey = ref('identifier');
 
+// Fetch users from the server
 const fetchUsers = async () => {
   try {
     const response = await fetch(`https://${GetParentResourceName()}/getUsers`);
@@ -121,6 +122,7 @@ const fetchUsers = async () => {
   }
 };
 
+// Filter and sort users based on search query and sort key
 const filterUsers = () => {
   filteredUsers.value = users.value.filter(user => {
     const query = searchQuery.value.toLowerCase();
@@ -133,6 +135,7 @@ const filterUsers = () => {
   }).sort((a, b) => a[sortKey.value].localeCompare(b[sortKey.value]));
 };
 
+// Open the edit user popup
 const editUser = (user) => {
   selectedUser.value = { 
     ...user, 
@@ -147,6 +150,7 @@ const editUser = (user) => {
   };
 };
 
+// Save the edited user data
 const saveUser = async () => {
   try {
     const response = await fetch(`https://${GetParentResourceName()}/editUser`, {
@@ -158,13 +162,24 @@ const saveUser = async () => {
     });
     const result = await response.json();
     if (result.success) {
-      // Update user data in the list
+      // Update the user data in the main users array
       const index = users.value.findIndex(u => u.identifier === selectedUser.value.identifier);
       if (index !== -1) {
-        users.value[index] = { ...selectedUser.value };
-        filterUsers();
-        closePopup();
+        users.value[index] = {
+          ...users.value[index],
+          ...selectedUser.value, // Update only the edited fields
+          firstname: selectedUser.value.newFirstname,
+          lastname: selectedUser.value.newLastname,
+          dateofbirth: selectedUser.value.newDateOfBirth,
+          sex: selectedUser.value.newSex,
+          height: selectedUser.value.newHeight,
+          group: selectedUser.value.newGroup,
+          job: selectedUser.value.newJob,
+          job_grade: selectedUser.value.newJobGrade
+        };
+        filterUsers(); // Refresh the filtered users list
       }
+      closePopup();
     } else {
       console.error('Failed to update user:', result.error);
     }
@@ -173,9 +188,13 @@ const saveUser = async () => {
   }
 };
 
+// Close the edit popup
 const closePopup = () => {
   selectedUser.value = null;
 };
+
+// Watch for changes in the search query to filter users in real-time
+watch([searchQuery, sortKey], filterUsers);
 
 onMounted(() => {
   fetchUsers();

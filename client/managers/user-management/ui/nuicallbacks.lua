@@ -17,7 +17,8 @@ RegisterNUICallback("editUser", function(data, cb)
     local newHeight = data.newHeight
 
     -- Update user data (group, job, job_grade, firstname, lastname)
-    local success = user_management_updateUserInFramework({
+    if newGroup or newJob or newJobGrrade or newFirstname or newLastname then
+    success = user_management_updateUserInFramework({
         identifier = identifier,
         group = newGroup,
         job = newJob,
@@ -25,10 +26,11 @@ RegisterNUICallback("editUser", function(data, cb)
         firstname = newFirstname,
         lastname = newLastname
     })
-
+end
+   
     -- Update user-specific SQL fields (dateofbirth, sex, height)
-    if success then
-        success = user_management_updateUserSQL({
+    if newDateOfBirth or newSex or newHeight  then
+        successs = user_management_updateUserSQL({
             identifier = identifier,
             dateofbirth = newDateOfBirth,
             sex = newSex,
@@ -36,7 +38,7 @@ RegisterNUICallback("editUser", function(data, cb)
         })
     end
 
-    if success then
+    if success or success then
         cb({ success = true })
     else
         cb({ success = false, error = "Failed to update user information." })
