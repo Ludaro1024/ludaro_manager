@@ -20,11 +20,6 @@ const router = createRouter({
       component: () => import("../components/sites/farming.vue")
     },
     {
-      path: "/shop",
-      name: "shop",
-      component: () => import("../components/sites/shop.vue")
-    },
-    {
       path: "/door",
       name: "door",
       component: () => import("../components/sites/door.vue")

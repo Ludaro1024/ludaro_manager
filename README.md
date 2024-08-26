@@ -57,9 +57,6 @@ https://streamable.com/lp9kde
 - **Farming Managing:** Oversee farming operations and resources.
 - **Farming Editing:** Enhance farming complexity with advanced settings and options.
 
-### SHOPS
-
-- Manage in-game shops, including inventory, pricing, and more.
 
 ### DOORLOCK
 

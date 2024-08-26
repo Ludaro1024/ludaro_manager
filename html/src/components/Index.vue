@@ -14,7 +14,6 @@ const updateItems = () => {
     { route: "job", name: t('jobManagement'), active: false },
     { route: "society", name: t('societyManagement'), active: false },
     { route: "farming", name: t('farmingManagement'), active: false },
-    { route: "shop", name: t('shopManagement'), active: false },
     { route: "door", name: t('doorManagement'), active: false },
     { route: "data", name: t('dataManagement'), active: false },
     { route: "user", name: t('userManagement'), active: false },
