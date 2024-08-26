@@ -54,6 +54,11 @@ const router = createRouter({
       name: "interactions",
       component: () => import("../components/sites/society.vue")
     },
+    {
+      path: "/wiki",
+      name: "wiki",
+      component: () => import("../components/sites/wiki.vue")
+    }
   ]
 })
 

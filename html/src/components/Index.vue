@@ -20,6 +20,7 @@ const updateItems = () => {
     { route: "data", name: t('dataManagement'), active: false },
     { route: "user", name: t('userManagement'), active: false },
     { route: "vehicle", name: t('vehicleManagement'), active: false },
+    { route: "wiki", name: t('wiki'), active: false }
   ];
 };
 
