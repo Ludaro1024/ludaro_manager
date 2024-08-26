@@ -32,8 +32,8 @@ This script is dependent on:
 - Vue Router
 
 ## Screenshots
-
-![Preview](https://streamable.com/lp9kde)
+Preview:
+https://streamable.com/lp9kde
 
 ## Documentation
 
