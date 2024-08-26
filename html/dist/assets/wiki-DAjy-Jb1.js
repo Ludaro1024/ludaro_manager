@@ -1,1 +1,0 @@
-import{_ as e,a as s,c as t,b as c}from"./index-DewJNQIB.js";const o={},r={class:"iframe-container"},a=c("iframe",{src:"https://ludaro.de",class:"iframe-content",frameborder:"0"},null,-1),n=[a];function _(i,d){return s(),t("div",r,n)}const l=e(o,[["render",_]]);export{l as default};

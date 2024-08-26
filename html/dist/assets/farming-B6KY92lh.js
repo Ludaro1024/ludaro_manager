@@ -1,1 +1,0 @@
-import{_ as e,a as t,c,b as s}from"./index-DewJNQIB.js";const n={},a={class:"under-construction"},o=s("div",{class:"message"},[s("span",{class:"text"},"🚧 Under Construction 👷‍♀️🚧"),s("br"),s("span",{class:"text"},"This site is not available right now.")],-1),r=[o];function i(_,d){return t(),c("div",a,r)}const f=e(n,[["render",i]]);export{f as default};

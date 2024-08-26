@@ -30,8 +30,8 @@ RegisterNetEvent('esx:playerDropped', function(playerId, reason)
 end)
 
 RegisterNetEvent('esx:playerLoaded', function(player, xPlayer, isNew)
-    if xPlayer then
-    if string.contains(xPlayer.getJob().name, "_offduty") then
+    if xPlayer  then
+    if string.find(xPlayer.getJob().name, "_offduty") then
         duty_framework_setDuty(player, true)
     end
     end
