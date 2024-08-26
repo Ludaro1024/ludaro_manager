@@ -13,7 +13,6 @@ const updateItems = () => {
     { route: "home", name: t('home'), active: true },
     { route: "job", name: t('jobManagement'), active: false },
     { route: "society", name: t('societyManagement'), active: false },
-    { route: "interactions", name: t('interactionsManagement'), active: false },
     { route: "farming", name: t('farmingManagement'), active: false },
     { route: "shop", name: t('shopManagement'), active: false },
     { route: "door", name: t('doorManagement'), active: false },
