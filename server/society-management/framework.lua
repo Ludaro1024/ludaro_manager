@@ -20,8 +20,10 @@ end
 function society_management_framework_addMoney(source, amount)
     if ESX then
         local xPlayer = ESX.GetPlayerFromId(source)
+        if amount ~= nil then
         xPlayer.addMoney(amount)
         return true
+        end
     end
     return false
 end

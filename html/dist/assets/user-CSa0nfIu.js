@@ -1,0 +1,1 @@
+import{_ as e,a as t,c,b as s}from"./index-86nUaT16.js";const n={},o={class:"under-construction"},a=s("div",{class:"message"},[s("span",{class:"text"},"🚧 Under Construction 👷‍♀️🚧"),s("br"),s("span",{class:"text"},"This site is not available right now.")],-1),r=[a];function i(_,d){return t(),c("div",o,r)}const u=e(n,[["render",i]]);export{u as default};

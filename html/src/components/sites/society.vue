@@ -1,193 +1,273 @@
 <template>
   <div>
     <div v-if="loading" class="loading-message">
-      <span class="text">Loading...</span>
+      <span>{{ $t('loading') }}</span>
     </div>
     <div v-else class="container mx-auto p-4">
       <div class="society-list-container overflow-y-auto max-h-[70vh]">
         <table class="society-table w-full table-auto">
           <thead>
             <tr>
-              <th class="px-4 py-2 text-white">Name</th>
-              <th class="px-4 py-2 text-white">Account</th>
-              <th class="px-4 py-2 text-white">Owner</th>
-              <th class="px-4 py-2 text-white">Money</th>
-              <th class="px-4 py-2 text-white">Actions</th>
+              <th class="px-4 py-2 text-white">{{ $t('name') }}</th>
+              <th class="px-4 py-2 text-white">{{ $t('label') }}</th>
+              <th class="px-4 py-2 text-white">{{ $t('money') }}</th>
+              <th class="px-4 py-2 text-white">{{ $t('actions') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="society in societies" :key="society.name" class="cursor-pointer hover:bg-gray-700 text-white">
               <td class="px-4 py-2">{{ society.name }}</td>
-              <td class="px-4 py-2">{{ society.account }}</td>
-              <td class="px-4 py-2">{{ society.owner || 'N/A' }}</td>
+              <td class="px-4 py-2">{{ society.label }}</td>
               <td class="px-4 py-2">{{ society.money }}</td>
               <td class="px-4 py-2">
-                <input v-model.number="society.addMoney" type="number" placeholder="Add Amount" class="p-1 border rounded bg-gray-700 text-white">
-                <button @click="addMoney(society.name)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Add</button>
-                <input v-model.number="society.removeMoney" type="number" placeholder="Remove Amount" class="p-1 border rounded bg-gray-700 text-white">
-                <button @click="removeMoney(society.name)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove</button>
+                <!-- Deposit Button -->
+                <button @click="openDepositPopup(society.name)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">{{ $t('deposit') }}</button>
+                
+                <!-- Withdraw Button -->
+                <button @click="openWithdrawPopup(society.name)" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">{{ $t('withdraw') }}</button>
+
+                <!-- Edit Society Money Button -->
+                <button @click="openEditPopup(society)" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">{{ $t('edit') }}</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <button class="add-society-button mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="openAddSocietyPopup">Add New Society</button>
+      <button class="add-society-button mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="openAddSocietyPopup">{{ $t('addNewSociety') }}</button>
+    </div>
+
+    <!-- Deposit Money Popup -->
+    <div v-if="showDepositPopup" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
+        <h3 class="text-lg font-bold mb-4">{{ $t('depositMoney') }}</h3>
+        <input type="number" v-model.number="transactionAmount" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('enterAmount') }}">
+        <div class="mt-4">
+          <button @click="depositMoney(currentSocietyName, transactionAmount)" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{{ $t('deposit') }}</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Withdraw Money Popup -->
+    <div v-if="showWithdrawPopup" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
+        <h3 class="text-lg font-bold mb-4">{{ $t('withdrawMoney') }}</h3>
+        <input type="number" v-model.number="transactionAmount" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('enterAmount') }}">
+        <div class="mt-4">
+          <button @click="withdrawMoney(currentSocietyName, transactionAmount)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">{{ $t('withdraw') }}</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Society Money Popup -->
+    <div v-if="showEditPopup" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
+        <h3 class="text-lg font-bold mb-4">{{ $t('editMoney') }}</h3>
+        <input type="number" v-model.number="currentSociety.money" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white" placeholder="{{ $t('enterAmount') }}">
+        <div class="mt-4">
+          <button @click="setSocietyMoney(currentSociety.name, currentSociety.money)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('save') }}</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
+        </div>
+      </div>
     </div>
 
     <!-- Add Society Popup -->
     <div v-if="showAddSocietyPopup" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
       <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Add New Society</h3>
+        <h3 class="text-lg font-bold mb-4">{{ $t('addNewSociety') }}</h3>
         <div class="mb-4">
-          <label class="block mb-2">Society Name</label>
+          <label class="block mb-2">{{ $t('societyName') }}</label>
           <input type="text" v-model="newSociety.name" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Account</label>
-          <input type="text" v-model="newSociety.account" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <label class="block mb-2">{{ $t('label') }}</label>
+          <input type="text" v-model="newSociety.label" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">Owner</label>
-          <input type="text" v-model="newSociety.owner" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
+          <label class="block mb-2">{{ $t('money') }}</label>
+          <input type="number" v-model="newSociety.money" class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mt-4">
-          <button @click="addNewSociety" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Society</button>
-          <button @click="showAddSocietyPopup = false" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Confirm Delete Society Popup -->
-    <div v-if="societyToDelete !== null" class="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div class="popup-content bg-gray-800 text-white p-4 rounded w-1/2">
-        <h3 class="text-lg font-bold mb-4">Confirm Delete Society</h3>
-        <p>Are you sure you want to delete this society?</p>
-        <div class="mt-4">
-          <button @click="deleteSociety(societyToDelete)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Yes</button>
-          <button @click="societyToDelete = null" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">No</button>
+          <button @click="addNewSociety" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">{{ $t('addSociety') }}</button>
+          <button @click="closePopup" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">{{ $t('cancel') }}</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      loading: true,
-      societies: [],
-      showAddSocietyPopup: false,
-      newSociety: {
-        name: '',
-        account: '',
-        owner: ''
-      },
-      societyToDelete: null
-    };
-  },
-  mounted() {
-    this.fetchSocieties();
-  },
-  methods: {
-    async fetchSocieties() {
-      try {
-        const response = await fetch(`https://${GetParentResourceName()}/getSocietys`);
-        const data = await response.json();
-        this.societies = data;
-      } catch (error) {
-        console.error('Failed to fetch societies:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    async addMoney(name) {
-      const society = this.societies.find(s => s.name === name);
-      if (society && society.addMoney) {
-        try {
-          const response = await fetch(`https://${GetParentResourceName()}/addMoney`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: JSON.stringify({ name, amount: society.addMoney })
-          });
-          const result = await response.json();
-          if (result.success) {
-            society.money += society.addMoney;
-            society.addMoney = 0; // Reset the input
-          }
-        } catch (error) {
-          console.error('Failed to add money:', error);
-        }
-      }
-    },
-    async removeMoney(name) {
-      const society = this.societies.find(s => s.name === name);
-      if (society && society.removeMoney) {
-        try {
-          const response = await fetch(`https://${GetParentResourceName()}/removeMoney`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: JSON.stringify({ name, amount: society.removeMoney })
-          });
-          const result = await response.json();
-          if (result.success) {
-            society.money -= society.removeMoney;
-            society.removeMoney = 0; // Reset the input
-          }
-        } catch (error) {
-          console.error('Failed to remove money:', error);
-        }
-      }
-    },
-    openAddSocietyPopup() {
-      this.showAddSocietyPopup = true;
-    },
-    async addNewSociety() {
-      try {
-        const response = await fetch(`https://${GetParentResourceName()}/addSociety`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: JSON.stringify(this.newSociety)
-        });
-        const result = await response.json();
-        if (result.success) {
-          this.societies.push(result.society);
-          this.showAddSocietyPopup = false;
-          this.newSociety = { name: '', account: '', owner: '' };
-        }
-      } catch (error) {
-        console.error('Failed to add new society:', error);
-      }
-    },
-    confirmDeleteSociety(name) {
-      this.societyToDelete = name;
-    },
-    async deleteSociety(name) {
-      try {
-        const response = await fetch(`https://${GetParentResourceName()}/deleteSociety`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: JSON.stringify({ name })
-        });
-        const result = await response.json();
-        if (result.success) {
-          this.societies = this.societies.filter(s => s.name !== name);
-          this.societyToDelete = null;
-        }
-      } catch (error) {
-        console.error('Failed to delete society:', error);
-      }
-    }
+<script setup>
+import { ref, onMounted } from 'vue';
+
+const loading = ref(true);
+const societies = ref([]);
+const showDepositPopup = ref(false);
+const showWithdrawPopup = ref(false);
+const showEditPopup = ref(false);
+const showAddSocietyPopup = ref(false);
+const transactionAmount = ref(0);
+const currentSocietyName = ref(null);
+const currentSociety = ref(null);
+const newSociety = ref({
+  name: '',
+  label: '',
+  money: 0,
+});
+
+const fetchSocieties = async () => {
+  try {
+    const response = await fetch(`https://${GetParentResourceName()}/getSocietys`);
+    const data = await response.json();
+    societies.value = data[0];  // Adjust to match the data format you provided
+  } catch (error) {
+    console.error('Error fetching societies:', error);
+  } finally {
+    loading.value = false;
   }
 };
+
+const updateSocietyMoney = (name, amount) => {
+  const society = societies.value.find(s => s.name === name);
+  if (society) {
+    society.money = amount;
+  }
+};
+
+const depositMoney = async (name, amount) => {
+  try {
+    const response = await fetch(`https://${GetParentResourceName()}/depositSocietyMoney`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({ society: name, amount })
+    });
+    const result = await response.json();
+    if (result.success) {
+      // Update the society's money by adding the deposited amount
+      const society = societies.value.find(s => s.name === name);
+      if (society) {
+        society.money += amount;  // Directly update the money in the UI
+      }
+      closePopup();
+    } else {
+      console.error('Error depositing money:', result.error);
+    }
+  } catch (error) {
+    console.error('Error depositing money:', error);
+  }
+};
+
+const withdrawMoney = async (name, amount) => {
+  try {
+    // Find the society by name
+    const society = societies.value.find(s => s.name === name);
+    
+    // Check if the withdrawal would cause a negative balance
+    if (society && society.money >= amount) {
+      const response = await fetch(`https://${GetParentResourceName()}/withdrawSocietyMoney`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({ society: name, amount })
+      });
+      const result = await response.json();
+      if (result.success) {
+        // Update the society's money by subtracting the withdrawn amount
+        society.money -= amount;  // Directly update the money in the UI
+        closePopup();
+      } else {
+        console.error('Error withdrawing money:', result.error);
+      }
+    } else {
+      // Handle the case where the withdrawal is not possible due to insufficient funds
+      // alert('Withdrawal not possible: Insufficient funds');
+    }
+  } catch (error) {
+    console.error('Error withdrawing money:', error);
+  }
+};
+
+
+const setSocietyMoney = async (name, amount) => {
+  try {
+    const response = await fetch(`https://${GetParentResourceName()}/setSocietyMoney`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({ society: name, amount })
+    });
+    const result = await response.json();
+    if (result.success) {
+      updateSocietyMoney(name, amount);
+      closePopup();
+    }
+  } catch (error) {
+    console.error('Error setting society money:', error);
+  }
+};
+
+const openDepositPopup = (name) => {
+  currentSocietyName.value = name;
+  transactionAmount.value = 0;
+  showDepositPopup.value = true;
+};
+
+const openWithdrawPopup = (name) => {
+  currentSocietyName.value = name;
+  transactionAmount.value = 0;
+  showWithdrawPopup.value = true;
+};
+
+const openEditPopup = (society) => {
+  currentSociety.value = { ...society };
+  showEditPopup.value = true;
+};
+
+const openAddSocietyPopup = () => {
+  showAddSocietyPopup.value = true;
+};
+
+const addNewSociety = async () => {
+  try {
+    const response = await fetch(`https://${GetParentResourceName()}/addSociety`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify(newSociety.value)
+    });
+    const result = await response.json();
+    if (result.success) {
+      societies.value.push(result.society);
+      closePopup();
+      newSociety.value = { name: '', label: '', money: 0 };
+    }
+  } catch (error) {
+    console.error('Error adding society:', error);
+  }
+};
+
+const closePopup = () => {
+  showDepositPopup.value = false;
+  showWithdrawPopup.value = false;
+  showEditPopup.value = false;
+  showAddSocietyPopup.value = false;
+  transactionAmount.value = 0;
+  currentSocietyName.value = null;
+  currentSociety.value = null;
+};
+
+const confirmDeleteSociety = (name) => {
+  // Implementation for confirming and deleting a society.
+};
+
+onMounted(() => {
+  fetchSocieties();
+});
 </script>
 
 <style scoped>

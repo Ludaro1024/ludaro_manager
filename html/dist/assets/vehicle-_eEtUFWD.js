@@ -1,1 +1,0 @@
-import{_ as e,a as t,c,b as s}from"./index-ba6VHj06.js";const n={},o={class:"under-construction"},a=s("div",{class:"message"},[s("span",{class:"text"},"🚧 Under Construction 👷‍♀️🚧"),s("br"),s("span",{class:"text"},"This site is not available right now.")],-1),r=[a];function i(_,d){return t(),c("div",o,r)}const h=e(n,[["render",i]]);export{h as default};
