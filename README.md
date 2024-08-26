@@ -35,6 +35,9 @@ This script is dependent on:
 Preview:
 https://streamable.com/lp9kde
 
+https://github.com/user-attachments/assets/8ebdce70-d3d7-41ca-bc83-ad765cb68e62
+
+
 ## Documentation
 
 [Documentation](https://github.com/Ludaro1024/ludaro_manager/wiki)
