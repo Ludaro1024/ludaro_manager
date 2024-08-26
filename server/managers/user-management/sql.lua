@@ -30,9 +30,9 @@ function user_management_updateUserSQL(data)
         UPDATE
             users
         SET
-            dateofbirth = @dateofbirth,
-            sex = @sex,
-            height = @height
+            `dateofbirth` = @dateofbirth,
+            `sex` = @sex,
+            `height` = @height
         WHERE
             identifier = @identifier;
     ]]
@@ -42,6 +42,6 @@ function user_management_updateUserSQL(data)
         ['@height'] = data.height,
         ['@identifier'] = data.identifier
     })
-    return affectedRows > 0
+    return #affectedRows > 0
 end
 
