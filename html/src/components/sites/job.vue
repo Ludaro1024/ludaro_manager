@@ -314,7 +314,7 @@ export default {
     // Ensure properties like onoffduty and stashes are properly copied
     job.onoffduty = { ...job.onoffduty };
     job.stashes = [...job.stashes];
-    console.log("Job data before saving:", JSON.stringify(job)); // Debugging output
+    ; // Debugging output
     // Send the updated job data to the server
     fetch(`https://${GetParentResourceName()}/saveJob`, {
       method: 'POST',

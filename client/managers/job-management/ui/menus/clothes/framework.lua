@@ -1,5 +1,5 @@
 function job_management_clothes_changeClothes(clothes)
-    print(clothes)
+    
     TriggerEvent('skinchanger:loadSkin', clothes)
 end
 

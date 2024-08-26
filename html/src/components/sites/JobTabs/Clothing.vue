@@ -233,7 +233,7 @@ export default {
             });
             const data = await response.json();
             if (data.skin && typeof data.skin === 'object') {
-                console.log('Fetched skin data:', data.skin);
+                ;
 
                 // Merge fetched skin data with existing clothingFields
                 this.localClothes[index].skin = { ...this.clothingFields, ...data.skin };

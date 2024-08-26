@@ -5,5 +5,5 @@ end
 
 InteractionsFunctions["test"] = function()
     -- your code for testing
-    print("Yay")
+    
 end

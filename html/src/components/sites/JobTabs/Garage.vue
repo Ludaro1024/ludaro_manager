@@ -249,7 +249,7 @@ export default {
         });
     },
     fetchCurrentHeading(section) {
-      console.log('fetchCurrentHeading called for section:', section);
+      ;
 
       fetch(`https://${GetParentResourceName()}/getCurrentHeading`, {
         method: 'POST',
@@ -260,7 +260,7 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log('Parsed heading data:', data);
+          ;
           data.heading = Math.round(data.heading);
           if (data.heading) {
             if (section === 'vehicleShop') {

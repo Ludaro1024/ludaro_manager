@@ -1,7 +1,7 @@
 function openMenu(data, jobname)
     opentype = data.openType
-    print(ESX.DumpTable(data))
-  print(opentype)
+    
+  
   if opentype == "bossmenu" then
     openBossMenu(data, jobname)
   end

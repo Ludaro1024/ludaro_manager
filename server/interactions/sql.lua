@@ -1,7 +1,7 @@
 function interactions_getInteractionsFromPlayer(source)
 
     local job = framework_getJob(source)
-    print(job)
+    
     local interactions = MySQL.scalar.await('SELECT ludaro_manager_interactions FROM jobs WHERE name = @name', {
         ['@name'] = job 
     })

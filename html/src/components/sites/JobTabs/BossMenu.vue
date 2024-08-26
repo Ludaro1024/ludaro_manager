@@ -117,7 +117,7 @@ export default {
       try {
         const bossmenu = JSON.parse(this.job.ludaro_manager_bossmenu || '{}');
 
-        console.log("BossMenu data before processing:", bossmenu); // Debugging output
+        ; // Debugging output
 
         this.localBossMenu = {
           coords: bossmenu.coords || { x: 0, y: 0, z: 0 },
@@ -135,7 +135,7 @@ export default {
           }
         };
 
-        console.log("Initialized localBossMenu:", this.localBossMenu); // Debugging output
+        ; // Debugging output
       } catch (error) {
         console.error('Error parsing bossmenu data:', error);
       }
@@ -190,7 +190,7 @@ export default {
     },
     updateJobBossMenu() {
       this.job.bossmenu = { ...this.localBossMenu };
-      console.log("Updated job data:", this.job.bossmenu); // Debugging output
+      ; // Debugging output
       this.$emit('update-job', this.job);
     }
   },

@@ -46,7 +46,7 @@ const closeUI = () => {
     },
     body: JSON.stringify({})
   });
-  // console.log("closing UI..")
+  // 
 };
 
 const handleEscapeKey = (event) => {
@@ -56,14 +56,14 @@ const handleEscapeKey = (event) => {
 };
 
 const changeLocale = (newLocale) => {
-  // console.log("setting locale.. " + newLocale);
+  // ;
   localStorage.setItem('locale', newLocale);
   locale.value = newLocale;
   i18n.global.locale = newLocale;
 };
 
 watch(locale, (newLocale) => {
-  // console.log("Locale changed to:", newLocale);
+  // ;
   i18n.global.locale = newLocale;
   updateItems(); // Update items based on new locale
 });
@@ -75,7 +75,7 @@ onMounted(() => {
     locale.value = savedLocale; // Initialize locale
     i18n.global.locale = savedLocale;
   }
-  // console.log("Mounted with locale:", locale.value);
+  // ;
 });
 
 onBeforeUnmount(() => {

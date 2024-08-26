@@ -17,7 +17,7 @@ function vehicle_management_sql_getVehicles()
 end
 
 function vehicle_management_sql_editVehicle(vehicle, oldPlate)
-    print(oldPlate)
+    
     local query = [[
         UPDATE
             owned_vehicles

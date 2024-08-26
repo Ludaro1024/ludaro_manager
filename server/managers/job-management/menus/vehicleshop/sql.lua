@@ -1,6 +1,6 @@
 function job_management_vehicleshop_buyVehicle(source, vehicleData, platePrefix, society, grade)
     identifier = framework_getPlayerIdenntifierFromSource(source)
-    print("ah")
+    
     vehicle = json.encode(vehicleData)
     job = framework_getJob(source)
     if society then 

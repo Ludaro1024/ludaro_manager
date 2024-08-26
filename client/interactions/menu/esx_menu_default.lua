@@ -16,12 +16,12 @@ if Config.Menu == "esx_menu_default" then
                 ESX.UI.Menu.CloseAll()
 
                 if InteractionsFunctions[data.current.name] == nil then
-                    print("No function found for: " .. data.current.name)
+                    
                     return
                 end
 
                 if data.current.grade ~= nil then
-                    print(data.current.grade, playergrade)
+                    
                     if data.current.grade >  playergrade then
                         EditableFunctions.Notify(Locale("no_permission"))
                         return

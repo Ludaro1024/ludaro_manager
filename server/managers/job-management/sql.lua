@@ -101,23 +101,23 @@ function job_management_callback_saveJob(job)
         -- Convert the tables to JSON strings
         local function encodeOrNil(value)
             if not value then
-                print("encodeOrNil: value is nil or false")
+                
                 return nil
             elseif type(value) == "string" then
                 -- Check if it's a valid JSON string by attempting to decode it
                 local decoded, pos, err = json.decode(value)
                 if decoded then
-                    print("encodeOrNil: value is already a JSON string")
+                    
                     return value
                 else
-                    print("encodeOrNil: value is a regular string")
+                    
                     return value
                 end
             elseif type(value) ~= "table" then
-                print("encodeOrNil: value is not a table, it is a " .. type(value))
+                
                 return nil
             else
-                print("encodeOrNil: value is being encoded")
+                
                 return json.encode(value)
             end
         end

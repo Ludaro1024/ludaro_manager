@@ -35,7 +35,7 @@ if Config.Menu == "NativeUI" then
                        SetEntityHeading(spawnedVehicle, vehicleshop.parkoutCoords.heading)
                        -- TODO: FIX HEADINNG
                         local plate = vehicleshop_buyVehicleandSetPlate(framework_GetVehicleData(spawnedVehicle), plateprefix, societyowned, buygrade)
-                        print(plate)
+                        
                         SetVehicleNumberPlateText(spawnedVehicle, plate)
                     end)
                     

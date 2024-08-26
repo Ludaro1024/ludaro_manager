@@ -9,7 +9,7 @@ if Config.Menu == "NativeUI" then
                 menu:AddItem(item)
                 item.Activated = function(sender, index)
                     if InteractionsFunctions[v[1]] == nil then
-                        print("No function found for: " .. v[1])
+                        
                         return
                     end
                     if v[3] ~= nil then

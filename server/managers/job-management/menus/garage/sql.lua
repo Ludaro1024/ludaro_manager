@@ -21,7 +21,7 @@ function parkout(source, vehicle)
     identifier = framework_getPlayerIdenntifierFromSource(source)
     plate = vehicle.plate
     job = framework_getJob(source)
-    print(job)
+    
     if plate == nil then return false end
     if identifier == nil then return false end
     MySQL.Sync.execute("UPDATE owned_vehicles SET stored = @stored WHERE plate = @plate AND (owner = @identifier OR owner = @job)", {['@stored'] = 1, ['@plate'] = plate, ['@identifier'] = identifier , ['@job'] = job})
@@ -31,7 +31,7 @@ end
 function isOwned(source, plate)
     identifier = framework_getPlayerIdenntifierFromSource(source)
     job = framework_getJob(source)
-    print("ah")
+    
     if identifier == nil then return false end
     local result = MySQL.Sync.fetchAll("SELECT * FROM owned_vehicles WHERE plate = @plate AND (owner = @identifier OR owner = @job)", {['@plate'] = plate, ['@identifier'] = identifier, ['@job'] = job})
     if result[1] then

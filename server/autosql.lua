@@ -3,7 +3,7 @@ MySQL.ready(function()
         for _, column in ipairs(columns) do
             local query = string.format("ALTER TABLE %s ADD COLUMN IF NOT EXISTS %s %s;", tableName, column.name, column.type)
             MySQL.Async.execute(query, {}, function()
-                print("Added missing column '" .. column.name .. "' to table '" .. tableName .. "'")
+                
             end)
         end
     end
@@ -69,11 +69,11 @@ MySQL.ready(function()
                     MySQL.Async.fetchAll(checkquery, {}, function(result)
                         if result ~= nil and next(result) ~= nil then
                             allSetup = true
-                            print("Database setup completed.")
+                          
                         end
                     end)
                 else
-                    print("Database setup incomplete. Retrying...")
+                    
                 end
             end)
 
@@ -81,5 +81,9 @@ MySQL.ready(function()
         end
     end
 
+   
+
     ensureDatabaseSetup()
 end)
+
+

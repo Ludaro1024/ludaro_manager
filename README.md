@@ -33,15 +33,14 @@ This script is dependent on:
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![Preview](https://streamable.com/lp9kde)
 
 ## Documentation
 
-[Documentation](https://ludaro.de)
+[Documentation](https://github.com/Ludaro1024/ludaro_manager/wiki)
 
 ## Features
 
-- Light/dark mode toggle
 - Live previews
 - Fullscreen mode
 - Cross-platform
