@@ -2,7 +2,7 @@
 local tablet = false
 local tabletDict = "amb@code_human_in_bus_passenger_idles@female@tablet@base"
 local tabletAnim = "base"
-local tabletProp = `prop_cs_tablet`
+local tabletProp = "prop_cs_tablet"
 local tabletBone = 60309
 local tabletOffset = vector3(0.03, 0.002, -0.0)
 local tabletRot = vector3(10.0, 160.0, 0.0)

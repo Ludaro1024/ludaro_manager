@@ -150,11 +150,18 @@ function job_management_callback_saveBossMenu(data)
     return success
 end
 
+
+
+-- Save the employee data for a job.
+-- @param table data The employee data.
+-- @return boolean Success status.
 function job_management_callback_saveEmployee(data)
-    local success = lib.callback.await("ludaro_manager:saveEmployee", false, data)
-    return success
+    return lib.callback.await("ludaro_manager:saveEmployee", false, data)
 end
 
+-- Save the vehicle data for a job.
+-- @param table data The vehicle data.
+-- @return boolean Success status.
 function jobmanagement_zones_npcs_getNPCData()
     return lib.callback.await("ludaro_manager:getNPCData", false)
 end

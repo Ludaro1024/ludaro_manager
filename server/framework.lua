@@ -1,3 +1,6 @@
+-- framework_initFramework
+-- Used to initialize the framework.
+-- @return void
 function framework_initFramework()
     if (GetResourceState("es_extended") == "started") then
         if (exports["es_extended"] and exports["es_extended"].getSharedObject) then
@@ -9,7 +12,10 @@ function framework_initFramework()
 end
 
 framework_initFramework()
-
+-- isAllowed
+-- Used to check if a player is allowed to use the UI.
+-- @param int source The player's server ID.
+-- @return bool If the player is allowed.
 function isAllowed(source)
     if ESX then
         local xPlayer = ESX.GetPlayerFromId(source)

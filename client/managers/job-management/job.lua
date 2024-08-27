@@ -1,3 +1,4 @@
+-- function to refrsh everythhing upon job change
 CreateThread(function()
     repeat Wait(0) until ESX ~= nil and ESX.GetPlayerData() ~= nil and ESX.GetPlayerData().job ~= nil
     job = ESX.GetPlayerData().job.name

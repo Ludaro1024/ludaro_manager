@@ -1,3 +1,8 @@
+
+-- interactions_getInteractionsFromPlayer
+-- Used to get the interactions from a player.
+-- @param int source The player's server ID.
+-- @return table The interactions.
 function interactions_getInteractionsFromPlayer(source)
 
     local job = framework_getJob(source)

@@ -1,4 +1,4 @@
--- Callback to retrieve all users
+-- Callback to retrieve all users from servercallbacks.lua
 RegisterNUICallback("getUsers", function(data, cb)
     local users = user_management_getUsers()  -- Fetch users from the database
     cb({ success = true, users = users })

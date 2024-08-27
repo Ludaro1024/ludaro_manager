@@ -17,6 +17,9 @@ function job_management_zones_npcs_Allowed(accessjob, accessgrade, job, grade, t
     return accessjob == job and accessgrade <= grade
 end
 
+-- job_management_zones_npcs_NPCZones
+-- Creates NPC zones for the job management system
+-- @param data: The data to create the zones from
 
 function job_management_zones_npcs_NPCZones(data)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()

@@ -1,3 +1,7 @@
+
+-- OpenMenu()
+-- This function is called from the job-management script to open the specific menus
+-- @param data: The data of the menu
 function openMenu(data, jobname)
     opentype = data.openType
     
