@@ -21,6 +21,7 @@ RegisterNUICallback("getVehicles", function(data, cb)
 end)
 
 RegisterNUICallback("editVehicle", function(data, cb)
+
     local oldPlate = data.oldPlate  -- Original plate
     local newPlate = data.newPlate  -- Modified plate
     local newModel = data.newModel  -- Modified model
@@ -50,5 +51,45 @@ RegisterNUICallback("editVehicle", function(data, cb)
         end
     else
         cb({ success = false, error = "Vehicle not found." })
+    end
+end)
+
+
+-- Callback to add a new vehicle
+RegisterNUICallback("addVehicle", function(data, cb)
+    local newVehicle = {
+        plate = data.newPlate,
+        model = data.newModel,
+        owner = data.newOwner,
+        job = data.newJob,
+        stored = data.stored
+    }
+
+    ismodelvalid = IsModelInCdimage(newVehicle.model)
+    if not ismodelvalid then
+        cb({ success = false, error = "Model is not valid." })
+        return
+    end
+
+    local success, vehicle = vehicle_management_addVehicleToDatabase(newVehicle)
+
+    if success then
+        cb({ success = true, vehicle = vehicle })
+    else
+        cb({ success = false, error = "Failed to add vehicle." })
+    end
+end)
+
+
+
+RegisterNuiCallback("deleteVehicle", function(data, cb)
+    local plate = data.vehicle.plate  -- Plate of the vehicle to delete
+
+    local success = vehicle_management_deleteVehicle(plate)
+
+    if success then
+        cb({ success = true })
+    else
+        cb({ success = false, error = "Failed to delete vehicle." })
     end
 end)

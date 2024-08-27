@@ -35,10 +35,6 @@ lib.callback.register('ludaro_manager:deleteInteractionfromjob', function(source
    return job_management_sql_removeInteractionfromjob(jobName, index)
 end)
 
-lib.callback.register('ludaro_manager:addVehicle', function(source, jobName, vehicle)
-   return job_management_callback_addVehicle(jobName, vehicle)
-end)
-
 lib.callback.register('ludaro_manager:deleteVehicle', function(source, jobName, index)
    return job_management_callback_deleteVehicle(jobName, index)
 end)
@@ -71,6 +67,10 @@ lib.callback.register("ludaro_manager:saveEmployee", function(source, data)
    return job_management_callback_saveEmployee(data)
 end)
 
+
+lib.callback.register("ludaro_manager:getNPCData", function(source, data)
+   return jobmanagement_zones_npcs_getNPCData()
+end)
 
 
 lib.callback.register('ludaro_manager:getName', function(source, id)

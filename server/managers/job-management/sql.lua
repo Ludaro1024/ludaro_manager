@@ -131,7 +131,7 @@ function job_management_callback_saveJob(job)
         local stashes_json = encodeOrNil(updatedJob.stashes)
         local vehicleShop_json = encodeOrNil(updatedJob.vehicleShop)
         local clothing_json = encodeOrNil(updatedJob.clothing)
-
+        job.whitelisted = job.whitelisted or 0
         -- Execute the SQL update with the processed data
         MySQL.Async.execute('UPDATE jobs SET label = @label, whitelisted = @whitelisted, ludaro_manager_bossmenu = @bossmenu, ludaro_manager_interactions = @interactions, ludaro_manager_garage = @garage, ludaro_manager_onoffduty = @onoffduty, ludaro_manager_stashes = @stashes, ludaro_manager_vehicleShop = @vehicleShop, ludaro_manager_societyPaid = @societyPaid, ludaro_manager_clothing = @clothing WHERE name = @name', {
             ['@name'] = job.name,
@@ -414,101 +414,8 @@ function job_management_sql_removeInteractionfromjob(jobName, index)
     end
 end
 
---- Add a vehicle to a job in the database.
--- @param string jobName The job name.
--- @param table vehicle The vehicle data.
--- @return boolean Success status.
-function job_management_callback_addVehicle(jobName, vehicle)
-    if ESX then
-        Debug(3, "Adding vehicle to job in the database: " .. jobName .. " - " .. json.encode(vehicle))
-        MySQL.Async.execute('INSERT INTO job_vehicles (job_name, vehicle) VALUES (@job_name, @vehicle)', {
-            ['@job_name'] = jobName,
-            ['@vehicle'] = json.encode(vehicle)
-        }, function(rowsChanged)
-            if rowsChanged > 0 then
-                Debug(2, "Vehicle added successfully to job: " .. jobName)
-                return true
-            else
-                Debug(2, "Failed to add vehicle to job: " .. jobName)
-                return false
-            end
-        end)
-    end
-end
-
---- Delete a vehicle from a job in the database.
--- @param string jobName The job name.
--- @param number index The vehicle index.
--- @return boolean Success status.
-function job_management_callback_deleteVehicle(jobName, index)
-    if ESX then
-        Debug(3, "Deleting vehicle from job in the database: " .. jobName .. " - Index: " .. index)
-        local job = MySQL.query.await("SELECT vehicles FROM jobs WHERE name = ?", {jobName})
-        local vehicles = json.decode(job.vehicles)
-        table.remove(vehicles, index)
-        MySQL.Async.execute('UPDATE jobs SET vehicles = @vehicles WHERE name = @name', {
-            ['@vehicles'] = json.encode(vehicles),
-            ['@name'] = jobName
-        }, function(rowsChanged)
-            if rowsChanged > 0 then
-                Debug(2, "Vehicle deleted successfully from job: " .. jobName)
-                return true
-            else
-                Debug(2, "Failed to delete vehicle from job: " .. jobName)
-                return false
-            end
-        end)
-    end
-end
 
 
---- Save armory data to the database.
--- @param string jobName The job name.
--- @param table armory The armory data.
--- @return boolean Success status.
-function job_management_callback_saveArmory(jobName, armory)
-    if ESX then
-        Debug(3, "Saving armory data to the database for job: " .. jobName)
-        MySQL.Async.execute('UPDATE ludaro_manager_armories SET weapons = @weapons, components = @components, ammo = @ammo, extras = @extras, blip_data = @blip_data WHERE job_name = @job_name', {
-            ['@weapons'] = json.encode(armory.weapons),
-            ['@components'] = json.encode(armory.components),
-            ['@ammo'] = json.encode(armory.ammo),
-            ['@extras'] = json.encode(armory.extras),
-            ['@blip_data'] = json.encode(armory.blip_data),
-            ['@job_name'] = jobName
-        }, function(rowsChanged)
-            if rowsChanged > 0 then
-                Debug(2, "Armory data saved successfully for job: " .. jobName)
-                return true
-            else
-                Debug(2, "Failed to save armory data for job: " .. jobName)
-                return false
-            end
-        end)
-    end
-end
-
---- Save clothing data to the database.
--- @param string jobName The job name.
--- @param table clothing The clothing data.
--- @return boolean Success status.
-function job_management_callback_saveClothing(jobName, clothing)
-    if ESX then
-        Debug(3, "Saving clothing data to the database for job: " .. jobName)
-        MySQL.Async.execute('UPDATE jobs SET clothing = @clothing WHERE name = @name', {
-            ['@clothing'] = json.encode(clothing),
-            ['@name'] = jobName
-        }, function(rowsChanged)
-            if rowsChanged > 0 then
-                Debug(2, "Clothing data saved successfully for job: " .. jobName)
-                return true
-            else
-                Debug(2, "Failed to save clothing data for job: " .. jobName)
-                return false
-            end
-        end)
-    end
-end
 
 --- Save stashes data to the database.
 -- @param string jobName The job name.
