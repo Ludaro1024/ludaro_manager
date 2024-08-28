@@ -1,4 +1,4 @@
-Debuglevel = 4
+Debuglevel = 0
 function Debug(level, message)
     if Config.Debug and Debuglevel >= level then
         local info = debug.getinfo(2, "Sl")

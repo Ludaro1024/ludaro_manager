@@ -12,7 +12,7 @@
           v-model="searchQuery" 
           @input="filterUsers" 
           class="p-2 w-1/3 rounded bg-gray-700 text-white" 
-          placeholder="{{ $t('searchByNameIdentifierOrJob') }}" 
+          :placeholder="$t('searchByNameIdentifierOrJob')" 
         />
         <select v-model="sortKey" @change="sortUsers" class="p-2 rounded bg-gray-700 text-white">
           <option value="identifier">{{ $t('sortByIdentifier') }}</option>

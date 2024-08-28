@@ -12,7 +12,7 @@
           v-model="searchQuery" 
           @input="filterVehicles" 
           class="p-2 w-1/3 rounded bg-gray-700 text-white" 
-          placeholder="{{ $t('searchByPlateModelOrName') }}" 
+          :placeholder="$t('searchByPlateModelOrName')" 
         />
         <select v-model="sortKey" @change="sortVehicles" class="p-2 rounded bg-gray-700 text-white">
           <option value="plate">{{ $t('sortByPlate') }}</option>

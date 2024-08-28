@@ -157,5 +157,11 @@
   "wiki": "Wiki",
   "home": "Home",
   "deposit": "Deposit",
-  "withdraw": "Withdraw"
+  "withdraw": "Withdraw",
+  "editJob": "Edit Job",
+  "jobName": "Job Name",
+  "jobLabel": "Job Label",
+  "whitelisted": "Whitelisted",
+  "societyPaid": "Society Paid"
+  
 }

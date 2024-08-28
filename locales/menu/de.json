@@ -157,5 +157,10 @@
   "wiki": "Wiki",
   "home": "Startseite",
   "deposit": "Einzahlen",
-  "withdraw": "Abheben"
+  "withdraw": "Abheben",
+  "editJob": "Job bearbeiten",
+  "jobName": "Job Name",
+  "jobLabel": "Job Bezeichnung",
+  "whitelisted": "Whitelisted",
+  "societyPaid": "Gesellschaf bezahlt"
 }

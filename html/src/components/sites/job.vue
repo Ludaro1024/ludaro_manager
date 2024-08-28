@@ -57,13 +57,18 @@
             class="w-full p-2 mb-4 border border-gray-300 rounded bg-gray-700 text-white">
         </div>
         <div class="mb-4">
-          <label class="block mb-2">{{ $t('whitelisted') }}</label>
-          <input type="checkbox" v-model="jobs[editingJobName].whitelisted">
-        </div>
-        <div class="mb-4">
-          <label class="block mb-2">{{ $t('societyPaid') }}</label>
-          <input type="checkbox" v-model="jobs[editingJobName].societypaid">
-        </div>
+  <label class="flex items-center">
+    {{ $t('whitelisted') }}
+    <input type="checkbox" v-model="jobs[editingJobName].whitelisted" class="ml-2">
+  </label>
+</div>
+<div class="mb-4">
+  <label class="flex items-center">
+    {{ $t('societyPaid') }}
+    <input type="checkbox" v-model="jobs[editingJobName].societypaid" class="ml-2">
+  </label>
+</div>
+
         <div class="mb-4">
           <nav class="flex mb-4 border-b border-gray-600">
             <a v-for="tab in tabs" :key="tab" @click="activeTab = tab"
@@ -140,8 +145,6 @@ import Garage from './JobTabs/Garage.vue';
 import OnOffDuty from './JobTabs/OnOffDuty.vue';
 import Employees from './JobTabs/Employees.vue';
 import Stashes from './JobTabs/Stashes.vue';
-// import Shops from './JobTabs/Shops.vue';
-// import Processing from './JobTabs/Processing.vue';
 import Clothing from './JobTabs/Clothing.vue';
 export default {
   data() {
