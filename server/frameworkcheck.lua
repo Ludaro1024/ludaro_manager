@@ -1,3 +1,9 @@
+-- framework_checkFrameworkVersion
+-- This function checks if the ESX version is 1.2 or higher
+-- If the ESX version is lower than 1.2, the script will throw an error
+
+
+
 function frameworkcheck_checkFrameworkVersion()
     ESX = exports['es_extended']:getSharedObject()
     ESXversion = GetResourceMetadata("es_extended", 'version', 0)

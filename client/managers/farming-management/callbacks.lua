@@ -7,7 +7,7 @@ function farming_management_saveFarmingSpot(farmingSpot)
 end
 
 function farming_management_getJobs()
-    return lib.callback.await("ludaro_manager:getJobs", false)
+    return lib.callback.await("ludaro_manager:getJobss", false)
 end
 
 function farming_management_getAnimations()

@@ -43,7 +43,7 @@ function ToggleTablet(toggle)
                 end
             end
 
-            ClearPedSecondaryTask(playerPed)
+            ClearPedSecondaryTask(playerPed) 
 
             Citizen.Wait(450)
 
@@ -57,7 +57,7 @@ function ToggleTablet(toggle)
 end
 
 AddEventHandler('onResourceStop', function(resourceName)
-    if GetCurrentResourceName() == resourceName then
+    if GetCurrentResourceName() == resourceName then 
         if tablet then
             ToggleTablet(false)
             ClearPedTasksImmediately(PlayerPedId())

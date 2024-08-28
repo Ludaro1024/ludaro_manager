@@ -6,7 +6,7 @@ lib.callback.register("ludaro_manager:saveFarmingSpot", function(source, farming
     return farming_management_saveFarmingSpotToDB(farmingSpot)  -- Save to the database
 end)
 
-lib.callback.register("ludaro_manager:getJobs", function()
+lib.callback.register("ludaro_manager:getJobss", function()
     return farming_management_getJobsFromDB()  -- Fetch jobs from the database
 end)
 

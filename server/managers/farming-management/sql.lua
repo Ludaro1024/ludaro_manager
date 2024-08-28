@@ -9,7 +9,6 @@ end
 
 -- Function to save or update a farming spot in the database
 function farming_management_saveFarmingSpotToDB(farmingSpot)
-    print(ESX.DumpTable(farmingSpot))
     if farmingSpot.id then
         -- Update existing farming spot
         local query = [[

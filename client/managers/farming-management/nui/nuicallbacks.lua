@@ -7,7 +7,6 @@ end)
 -- Callback to save a farming spot
 RegisterNUICallback("saveFarmingSpot", function(data, cb)
     local farmingSpot = data.farmingSpot
-    print(ESX.DumpTable(data.farmingSpot))
     -- Save the farming spot in the server database
     local success = farming_management_saveFarmingSpot(farmingSpot)
 

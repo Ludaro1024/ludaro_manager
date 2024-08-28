@@ -23,7 +23,7 @@ end
 
 function job_management_zones_npcs_NPCZones(data)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
-        print("what")
+      
     -- Helper function to process individual manager data
     local function processManagerData(managerData, npcName)
         if managerData.openType == "clothes" then

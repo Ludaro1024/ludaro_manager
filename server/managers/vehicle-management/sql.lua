@@ -81,7 +81,7 @@ end
 
 
 function vehicle_management_sql_deleteVehicle(plate)
-    print("Deleting vehicle with plate: " .. plate)
+
     local query = [[
         DELETE FROM owned_vehicles WHERE plate = @plate;
     ]]

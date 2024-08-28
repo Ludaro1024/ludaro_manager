@@ -31,6 +31,6 @@ end
 -- Used to delete a vehicle from the database.
 -- @param string plate The plate of the vehicle.
 function vehicle_management_deleteVehicle(plate)
-    print(plate)
+
     return lib.callback.await("ludaro_manager:vehicle_managerdeleteVehicle", false, plate)
 end
