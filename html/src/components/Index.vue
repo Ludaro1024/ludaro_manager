@@ -91,9 +91,11 @@ onBeforeUnmount(() => {
             Ludaro-Manager
             <button @click="closeUI" class="absolute top-2 right-4 text-white">X</button>
             <div class="locale-changer absolute top-2 left-4">
-              <select v-model="locale" @change="changeLocale(locale)" class="text-black">
-                <option v-for="(lang, code) in languages" :key="code" :value="code">{{ lang }}</option>
-              </select>
+              <select v-model="locale" @change="changeLocale(locale)" class="bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150 shadow-sm">
+        <option v-for="(lang, code) in languages" :key="code" :value="code" class="text-white bg-gray-800 hover:bg-gray-700 focus:bg-gray-700">
+          {{ lang }}
+        </option>
+      </select>
             </div>
           </th>
         </tr>
