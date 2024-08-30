@@ -201,8 +201,7 @@ const fetchDebugLevel = async () => {
 
     // Parse the JSON response
     const data = await response.json();
-    
-    console.log(data.DebugLevel);
+  
     // Ensure the debug level is correctly set
     debugLevel.value = data.DebugLevel || 0;
     if (debugLevel.value > 3) {

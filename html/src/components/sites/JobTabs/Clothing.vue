@@ -316,10 +316,7 @@ export default {
     },
     updateJobClothes() {
       // Log the current state before updating to debug issues
-      console.log('Updating job with clothes and NPC settings:', {
-        localClothes: this.localClothes,
-        npcSettings: this.npcSettings
-      });
+ 
     
 
       this.job.ludaro_manager_clothing = JSON.stringify({

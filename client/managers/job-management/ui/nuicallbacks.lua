@@ -5,7 +5,7 @@
         Debug(4, "Fetching job data")
     
         local jobs = job_management_callback_getJobs()
-        print(ESX.DumpTable(jobs))
+
         Debug(3, "Job data fetched: " .. ESX.DumpTable(jobs))
 
         cb(jobs)

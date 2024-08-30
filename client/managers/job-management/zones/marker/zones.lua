@@ -27,7 +27,7 @@ function job_management_zones_marker_createMarkerZones(dataa)
     local function processMarker(marker, jobname)
         if marker.type == "marker" then
             local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
-            local size = vec3(15, 15, 15)
+            local size = vec3(Config.SpawnRange, Config.SpawnRange, Config.SpawnRange)
             local rotation = 200.0
 
             local defaultmarkerdata = {

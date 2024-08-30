@@ -3,7 +3,7 @@ function getGarageData(source, jobName)
     local grade = 0 or getGrade(source)
     if grade == nil or identifier == nil then return end
     local sharedvehicles = MySQL.Sync.fetchAll("SELECT * FROM owned_vehicles WHERE (owner = @job AND ludaro_manager_grade >= @grade) OR (owner = @job AND (ludaro_manager_grade IS NULL OR @grade IS NULL)) AND stored != 1", {['@job'] = jobName, ['@grade'] = grade})
-    local personalvehicles = MySQL.Sync.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND ludaro_manager_job = @job AND ludaro_manager_grade >= @grade AND stored != 1", {['@identifier'] = identifier, ['@job'] = jobName, ['@grade'] = grade})
+    local personalvehicles = MySQL.Sync.fetchAll("SELECT * FROM owned_vehicles WHERE owner = @identifier AND ludaro_manager_job = @job AND ludaro_manager_grade >= @grade AND stored != 0", {['@identifier'] = identifier, ['@job'] = jobName, ['@grade'] = grade})
     return sharedvehicles, personalvehicles
 end
 
@@ -17,7 +17,7 @@ function parkin(source, vehicle)
 end
 
 function parkout(source, vehicle)
-    vehicle = json.decode(vehicle)
+    vehicle = vehicle or json.decode(vehicle)
     identifier = framework_getPlayerIdenntifierFromSource(source)
     plate = vehicle.plate
     job = framework_getJob(source)

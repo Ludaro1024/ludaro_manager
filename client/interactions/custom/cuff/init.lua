@@ -49,9 +49,7 @@ end)
 -- Uncuff
 
 RegisterNetEvent("ludaro_manager:police:uncuffPerson", function(id)
-	if id == nil or -1 then
-		return 
-	end
+	
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(id))
 	local playerPed = PlayerPedId()
 
@@ -70,9 +68,7 @@ RegisterNetEvent("ludaro_manager:police:uncuffPerson", function(id)
 end)
 
 RegisterNetEvent("ludaro_manager:user:getUncuffed", function(id)
-	if id == nil or -1 then
-		return 
-	end
+	
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(id))
 	local playerPed = PlayerPedId()
 

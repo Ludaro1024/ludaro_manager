@@ -35,7 +35,7 @@ if Config.Menu == "esx_menu_default" then
         if data.current.value == "shared_vehicles" and hasCars then
             openSharedVehiclesMenu(sharedvehicles, garageData)
         elseif data.current.value == "personal_vehicles" and hasCars then
-            openPersonalVehiclesMenu(personalvehicles)
+            openPersonalVehiclesMenu(personalvehicles, garageData)
         elseif data.current.value == "park_in" then
             openParkInMenu()
         end
@@ -60,16 +60,18 @@ if Config.Menu == "esx_menu_default" then
 
     function handleSharedVehicleSelection(data, menu, garageData)
         local vehicleData = data.current.data
-        local model = json.decode(vehicleData.vehicle).model
+        local vehicleProps = json.decode(vehicleData.vehicle)
+        local model = vehicleProps.model
 
-        if #(GetEntityCoords(PlayerPedId(), vector3(garageData.parkoutCoords.x, garageData.parkoutCoords.y, garageData.parkoutCoords.z))) < 5.0 then
-            garageData.parkoutCoords =framework_getNearestStreetCoords(GetEntityCoords(PlayerPedId()))
+        if #(GetEntityCoords(PlayerPedId()) - vector3(garageData.parkoutCoords.x, garageData.parkoutCoords.y, garageData.parkoutCoords.z)) > 5.0 then
+            garageData.parkoutCoords = framework_getNearestStreetCoords(GetEntityCoords(PlayerPedId()))
         end
 
         if garage_parkout(vehicleData.vehicle) then
             EditableFunctions.Notify(Locale("vehicle_parkedout"))
-            ESX.Game.SpawnVehicle(model, {x = garageData.parkoutCoords.x, y = garageData.parkoutCoords.y, z = garageData.parkoutCoords.z}, garageData.heading, function(vehicle)
-                ESX.Game.SetVehicleProperties(vehicle, json.decode(vehicleData.vehicle))
+            ESX.Game.SpawnVehicle(model, garageData.parkoutCoords, garageData.heading, function(vehicle)
+                ESX.Game.SetVehicleProperties(vehicle, vehicleProps)
+                SetVehicleNumberPlateText(vehicle, vehicleProps.plate)  -- Set the correct plate
             end)
         else
             EditableFunctions.Notify(Locale("error"))
@@ -78,11 +80,11 @@ if Config.Menu == "esx_menu_default" then
         menu.close()
     end
 
-    function openPersonalVehiclesMenu(personalvehicles)
+    function openPersonalVehiclesMenu(personalvehicles, garageData)
         local elements = {}
 
         for _, v in pairs(personalvehicles) do
-            table.insert(elements, {label = v.vehicle, value = v})
+            table.insert(elements, {label = v.plate, value = v})
         end
 
         ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'personal_vehicles_menu', {
@@ -90,19 +92,26 @@ if Config.Menu == "esx_menu_default" then
             align = 'top-left',
             elements = elements
         }, function(data, menu)
-            handlePersonalVehicleSelection(data, menu)
+            handlePersonalVehicleSelection(data, menu, garageData)
         end, function(data, menu)
             menu.close()
         end)
     end
 
-    function handlePersonalVehicleSelection(data, menu)
+    function handlePersonalVehicleSelection(data, menu, garageData)
         local vehicleData = data.current.value
+        local vehicleProps = json.decode(vehicleData.vehicle)
+        local model = vehicleProps.model
 
         if vehicleData.stored == 1 then
             if garage_parkout(vehicleData) then
-                ESX.Game.SpawnVehicle(vehicleData.model, {x = vehicleData.garageCoords.x, y = vehicleData.garageCoords.y, z = vehicleData.garageCoords.z}, vehicleData.heading, function(vehicle)
-                    ESX.Game.SetVehicleProperties(vehicle, vehicleData)
+                if #(GetEntityCoords(PlayerPedId()) - vector3(garageData.parkoutCoords.x, garageData.parkoutCoords.y, garageData.parkoutCoords.z)) > 5.0 then
+                    garageData.parkoutCoords = framework_getNearestStreetCoords(GetEntityCoords(PlayerPedId()))
+                end
+
+                ESX.Game.SpawnVehicle(model, garageData.parkoutCoords, garageData.heading, function(vehicle)
+                    ESX.Game.SetVehicleProperties(vehicle, vehicleProps)
+                    SetVehicleNumberPlateText(vehicle, vehicleProps.plate)  -- Set the correct plate
                 end)
             else
                 EditableFunctions.Notify(Locale("error"))

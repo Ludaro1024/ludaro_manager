@@ -83,7 +83,7 @@ function job_management_zones_npcs_NPCZones(data)
 
         if managerData and managerData.type == "npc" and next(managerData.coords) then
             local coords = vec3(managerData.coords.x, managerData.coords.y, managerData.coords.z)
-            local size = vec3(20, 20, 20) -- Default size
+            local size = vec3(Config.SpawnRange, Config.SpawnRange, Config.SpawnRange) -- Default size
 
             if managerData.npcRange and managerData.npcRange > 1 then
                 size = vec3(managerData.npcRange, managerData.npcRange, managerData.npcRange)

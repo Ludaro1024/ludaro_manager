@@ -36,15 +36,22 @@ if Config.Menu == "NativeUI" then
         if #personalvehicles > 0 then
             local personalSubMenu = _menuPool:AddSubMenu(menu, Locale("personal_vehicles"), "")
             for _, v in pairs(personalvehicles) do
-                local vehicleItem = NativeUI.CreateItem(v.vehicle, "")
+                local vehicleItem = NativeUI.CreateItem(v.plate, "")
                 personalSubMenu.SubMenu:AddItem(vehicleItem)
                 vehicleItem.Activated = function(ParentMenu, SelectedItem)
                     if v.stored == 1 then
                         local cb = garage_parkout(v)
                         if cb then
-                            ESX.Game.SpawnVehicle(v.model, {x = v.garageCoords.x, y = v.garageCoords.y, z = v.garageCoords.z}, v.heading, function(vehicle)
+                            parkoutcoords = garageData.parkoutCoords
+                            if #(GetEntityCoords(PlayerPedId(), vector3(parkoutcoords.x, parkoutcoords.y, parkoutcoords.z))) < 20.0 then
+                                parkoutcoords = framework_getNearestStreetCoords(GetEntityCoords(PlayerPedId()))
+                            end
+                
+                            v.model = json.decode(v.vehicle).model
+                            ESX.Game.SpawnVehicle(v.model, {x = parkoutcoords.x, y = parkoutcoords.y, z = parkoutcoords.z}, parkoutcoords.heading or 200.0, function(vehicle)
                                 ESX.Game.SetVehicleProperties(vehicle, v)
                             end)
+                            _menuPool:CloseAllMenus()
                         else
                             EditableFunctions.Notify(Locale("error"))
                         end
