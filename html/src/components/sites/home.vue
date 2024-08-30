@@ -11,7 +11,7 @@
           <div v-for="item in quickAccessItems" :key="item.route" class="quick-access-item" @click="navigateTo(item.route)">
             <div class="p-6 bg-gray-700 rounded-lg text-white text-center cursor-pointer hover:bg-gray-600 transition-colors duration-200">
               <h3 class="text-2xl font-medium">{{ item.name }}</h3>
-              <p class="text-md mt-2">{{ item.description }}</p>
+              <!-- <p class="text-md mt-2">{{ item.description }}</p> -->
             </div>
           </div>
         </div>

@@ -60,7 +60,8 @@ function job_management_zones_npcs_NPCZones(data)
                             if self.coords then
                                 local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
                                 if inrange and job_management_zones_npcs_Allowed(npcName, stash.grade, job, grade, _) then
-                                    EditableFunctions.ShowHelpNotification(Locale("open_menu"))
+                               
+                                    EditableFunctions.ShowHelpNotification(Locale("open_menu",  managerData.openType))
                                     if IsControlJustReleased(0, 38) then
                                         openMenu(stash, npcName)
                                     end
@@ -68,7 +69,7 @@ function job_management_zones_npcs_NPCZones(data)
                             end
                         end,
                         onEnter = function()
-                            jobmanagement_zones_npcs_createNPC(coords, stash.npcModel, stash.npcheading or 200.0, npcName)
+                            jobmanagement_zones_npcs_createNPC(coords, stash.npcModel, stash.npcHeading or stash.npcheading or  200.0, npcName)
                         end,
                         onExit = function()
                             jobmanagement_zones_npcs_deleteNPCByName(npcName)
@@ -99,7 +100,7 @@ function job_management_zones_npcs_NPCZones(data)
                     if self.coords then
                         local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
                         if inrange and job_management_zones_npcs_Allowed(npcName, managerData.grade, job, grade, _) then
-                            EditableFunctions.ShowHelpNotification(Locale("open_menu"))
+                            EditableFunctions.ShowHelpNotification(Locale("open_menu", managerData.openType))
                             if IsControlJustReleased(0, 38) then
                                 openMenu(managerData, npcName)
                             end
@@ -107,7 +108,7 @@ function job_management_zones_npcs_NPCZones(data)
                     end
                 end,
                 onEnter = function()
-                    jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcheading or 200.0, npcName)
+                    jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcHeading or 200.0, npcName)
                 end,
                 onExit = function()
                     jobmanagement_zones_npcs_deleteNPCByName(npcName)

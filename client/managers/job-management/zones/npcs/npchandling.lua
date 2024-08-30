@@ -8,6 +8,7 @@ npcs = {}
 -- @param name: The name identifier for the NPC
 -- @return npc: The created NPC entity
 function jobmanagement_zones_npcs_createNPC(coords, model, heading, name)
+
     if IsModelValid(model) then
 
     RequestModel(model)

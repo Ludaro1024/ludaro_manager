@@ -69,7 +69,7 @@ function job_management_zones_marker_createMarkerZones(dataa)
                     local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
 
                     if inrange and job_management_zones_marker_Allowed(self.parentName, self.grade, self.job, self.grade) then
-                        EditableFunctions.ShowHelpNotification(Locale("open_menu"))
+                        EditableFunctions.ShowHelpNotification(Locale("open_menu", self.parentName))
                         if IsControlJustReleased(0, 38) then
                             openMenu(self.marker, self.parentName)
                         end

@@ -1,1 +1,0 @@
-import{_ as n,a,c as o,b as s,t as e}from"./index-D4qT96aA.js";const c={},r={class:"under-construction"},_={class:"message"},i={class:"text"},l=s("br",null,null,-1),d={class:"text"};function u(t,p){return a(),o("div",r,[s("div",_,[s("span",i,e(t.$t("underConstruction")),1),l,s("span",d,e(t.$t("unavailable")),1)])])}const h=n(c,[["render",u]]);export{h as default};

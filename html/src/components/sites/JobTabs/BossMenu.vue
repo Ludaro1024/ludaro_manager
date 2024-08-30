@@ -43,11 +43,12 @@
         <div class="flex flex-col">
           <label class="mb-1">{{ $t('npcHeading') }}:</label>
           <input type="number" v-model="localBossMenu.npcHeading" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Heading">
+       
         </div>
-        <div class="flex flex-col">
+        <!-- <div class="flex flex-col">
           <label class="mb-1">{{ $t('npcRange') }}:</label>
           <input type="number" v-model="localBossMenu.npcRange" class="w-full p-2 mb-2 border border-gray-300 rounded bg-gray-700 text-white" placeholder="NPC Range">
-        </div>
+        </div> -->
         <button @click="fetchCurrentHeading" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">{{ $t('useCurrentHeading') }}</button>
       </div>
       
@@ -170,7 +171,7 @@ export default {
       .then((response) => response.json())
       .then((heading) => {
         if (heading.heading) {
-          this.localBossMenu.npcHeading = Math.round(heading.heading); // Round the heading to the nearest integer
+          this.localBossMenu.npcHeading = heading.heading;
           this.updateJobBossMenu();
         }
       })

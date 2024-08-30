@@ -261,7 +261,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           ;
-          data.heading = Math.round(data.heading);
+          data.heading = data.heading;
           if (data.heading) {
             if (section === 'vehicleShop') {
               this.job.vehicleShop.npcHeading = data.heading;

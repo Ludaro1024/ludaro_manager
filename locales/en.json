@@ -4,7 +4,7 @@
   "already_on_duty": "You are already on duty.",
   "off_duty": "Off duty.",
   "already_off_duty": "You are already off duty.",
-  "open_menu": "Open menu.",
+  "open_menu": "Open %s.",
   "vehicle_shop": "Vehicle shop.",
   "buying_vehicle": "Buying vehicle...",
   "duty_menu": "Duty menu.",

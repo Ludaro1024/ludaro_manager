@@ -127,7 +127,7 @@ export default {
         .then((response) => response.json())
         .then((heading) => {
           if (heading.heading) {
-            this.localOnOffDuty.npcHeading = Math.round(heading.heading);  // Rounding the heading value to the nearest whole number
+            this.localOnOffDuty.npcHeading = heading.heading;  // Rounding the heading value to the nearest whole number
             this.updateJobOnOffDuty();
           }
         })

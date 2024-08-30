@@ -1,6 +1,6 @@
 Config = {}
 Config.Menu = "NativeUI" -- psossible is: esx_menu_extended, NativeUI
-Config.Range = 2.0 -- rannge for npcs annd markers where the player can interact with them
+Config.Range = 4.0 -- rannge for npcs annd markers where the player can interact with them
 Config.Tablet = true -- enable or disable the tablet Animation if the player is using the tablet 
 Config.AdminGroups = {"admin", "superadmin"} -- groups that are allowed to use the admin commands
 -- LEAVE THE KEYMAPPINGS PLEASE IN THE SAME ORDER, OTHERWISE THE KEYMAPPINGS WILL NOT WORK OR BREAK THE SCRIPT

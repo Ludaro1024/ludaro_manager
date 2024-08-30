@@ -260,15 +260,7 @@ export default {
         Object.keys(jobsData).forEach(jobName => {
           const job = jobsData[jobName];
 
-          job.onoffduty = job.onoffduty || {
-            coords: { x: 0, y: 0, z: 0 },
-            type: 'npc',
-            npcModel: '',
-            npcHeading: 0,
-            markerId: 0,
-            markerColor: { r: 0, g: 0, b: 0 },
-            markerScale: 1,
-          };
+          job.onoffduty = job.onoffduty;
 
           job.stashes = job.stashes || [];
           // Initialize other properties similarly...
@@ -314,7 +306,7 @@ export default {
       markerId: 0
     };
 
-    // Ensure properties like onoffduty and stashes are properly copied
+   
     job.onoffduty = { ...job.onoffduty };
     job.stashes = [...job.stashes];
     ; // Debugging output
