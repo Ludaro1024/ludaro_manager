@@ -36,7 +36,7 @@ Simplify user management with:
 ### 5. Vehicle-Manager
 Comprehensive vehicle control for your server:
 - **Vehicle Management:** Grant, remove, or edit vehicles in the server with ease.
-- **Customization Options:** Tailor vehicles to align with the theme and specific needs of your RP server.
+- **Customization Options:** Tailor vehicles to align with the theme and specific needs of your RP servers.
 
 
 ## Roadmap
