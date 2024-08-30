@@ -7,7 +7,7 @@
 
     @param tbl (table): The table to search through.
     @param index (any): The value to search for and remove from the table.
-    
+
     @return table: The modified table with the element removed, if found.
 ]]
 function removeIndexIfPresent(tbl, index)
@@ -29,7 +29,7 @@ end
     It combines these into a single list of employees.
 
     @param jobName (string): The name of the job to retrieve employees for.
-    
+
     @return table: A table containing employee data (identifier, firstname, lastname, job_grade, job).
 ]]
 function getEmployees(jobName)
@@ -39,26 +39,28 @@ function getEmployees(jobName)
     -- Get online players with the specified job
     for _, playerId in pairs(ESX.GetPlayers()) do
         local xPlayer = ESX.GetPlayerFromId(playerId)
-        if xPlayer.job.name == jobName then
-            local fullname = xPlayer.getName()
-            local firstname = fullname:match("([^%s]+)")
-            local lastname = fullname:match("%s([^%s]+)")
+        if xPlayer then
+            if xPlayer.job.name == jobName then
+                local fullname = xPlayer.getName()
+                local firstname = fullname:match("([^%s]+)")
+                local lastname = fullname:match("%s([^%s]+)")
 
-            table.insert(employees, {
-                identifier = xPlayer.identifier,
-                firstname = firstname,
-                lastname = lastname,
-                job_grade = xPlayer.job.grade,
-                job = xPlayer.job.name
-            })
+                table.insert(employees, {
+                    identifier = xPlayer.identifier,
+                    firstname = firstname,
+                    lastname = lastname,
+                    job_grade = xPlayer.job.grade,
+                    job = xPlayer.job.name
+                })
 
-            table.insert(onlineIdentifiers, xPlayer.identifier)
+                table.insert(onlineIdentifiers, xPlayer.identifier)
+            end
         end
     end
 
     -- Fetch offline players with the specified job from the database
     local offlinePlayers = MySQL.Sync.fetchAll(
-        'SELECT firstname, lastname, job_grade, job, identifier FROM users WHERE job = @job', 
+        'SELECT firstname, lastname, job_grade, job, identifier FROM users WHERE job = @job',
         { ['@job'] = jobName }
     )
 

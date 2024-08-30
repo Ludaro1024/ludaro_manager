@@ -1,6 +1,7 @@
 --- Get all jobs from the database.
 -- @return table The jobs data.
 function job_management_sql_GetJobs()
+   
     if ESX then
         Debug(3, "Fetching jobs from the database")
         local jobs = MySQL.query.await("SELECT * FROM jobs")

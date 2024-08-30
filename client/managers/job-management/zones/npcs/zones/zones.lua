@@ -113,7 +113,6 @@ function job_management_zones_npcs_NPCZones(data)
                     end
                 end,
                 onEnter = function()
-                    print("creating npc" .. npcspawnName)
                     jobmanagement_zones_npcs_createNPC(coords, managerData.npcModel, managerData.npcHeading or 200.0, npcspawnName)
                 end,
                 onExit = function()

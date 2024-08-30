@@ -3,7 +3,7 @@
 -- @param cb: The callback function to send the response
     RegisterNUICallback('getJobData', function(data, cb)
         Debug(4, "Fetching job data")
-    
+       
         local jobs = job_management_callback_getJobs()
 
         Debug(3, "Job data fetched: " .. ESX.DumpTable(jobs))
