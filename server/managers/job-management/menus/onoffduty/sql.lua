@@ -70,4 +70,27 @@ end
 --[[
     MySQL Initialization: Create Off-Duty Jobs if Not Exist
 
-    This init
+    This initialization code runs when the MySQL connection is ready. It checks if off-duty jobs exist,
+    and if not, it creates off-duty versions of all jobs found in the database.
+]]
+MySQL.ready(function()
+    if Config.ExtraOffDutyJobs == true then
+        local alljobs = MySQL.Sync.fetchAll("SELECT * FROM jobs")
+        local offdutyjobexist = false
+        
+        for _, v in pairs(alljobs) do
+            local jobname = v.name
+            if string.find(jobname, "_offduty") then
+                offdutyjobexist = true
+                break
+            end
+        end
+        
+        if not offdutyjobexist then
+            for _, v in pairs(alljobs) do
+                local jobname = v.name
+                duty_sql_createOffDutyJobWithGrades(jobname)
+            end
+        end
+    end
+end)

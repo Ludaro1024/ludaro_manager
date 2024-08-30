@@ -24,7 +24,7 @@ function jobmanagement_zones_npcs_createNPC(coords, model, heading, name)
     end
 
     -- Create the NPC at the specified coordinates
-    local npc = CreatePed(4, model, coords.x, coords.y, coords.z - 1.5, heading, true, true)
+    local npc = CreatePed(4, model, coords.x, coords.y, coords.z - 1.5, heading, false, false)
     SetEntityAsMissionEntity(npc, true, true)
     SetBlockingOfNonTemporaryEvents(npc, true)
     FreezeEntityPosition(npc, true)
