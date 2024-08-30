@@ -92,7 +92,7 @@ function job_management_zones_npcs_NPCZones(data)
 
         -- Handling direct NPCs
         if managerData and managerData.type == "npc" and managerData.coords then
-            local coords = vec3(managerData.coords.x, managerData.coords.y, managerData.coords.z)
+            local coords = vec3(managerData.coords.x, managerData.coords.y, getGroundCoords(managerData.coords))
             local size = vec3(managerData.npcRange or Config.SpawnRange, managerData.npcRange or Config.SpawnRange, managerData.npcRange or Config.SpawnRange)
             local rotation = 200.0
 
@@ -149,3 +149,25 @@ function job_management_zones_npc_removeAllNPCZones()
     zones = {} -- Clear the zones table
     jobmanagement_zones_npcs_deleteAllNPCs()
 end
+
+
+-- getGroundCoords
+-- Performs a raycast downwards to find the ground Z coordinate.
+-- If the distance to the ground is above 2 meters, it returns the original Z coordinate.
+-- Otherwise, it returns the ground Z coordinate + 1.5 (for npc height)
+-- @param coords (vector3): The input coordinates (X, Y, Z).
+-- @return z (number): The appropriate Z coordinate, either the ground Z or the original Z.
+
+function getGroundCoords(coords)
+    coords = vector3(coords.x, coords.y, coords.z)
+    local hit, entityHit, endCoords, surfaceNormal, materialHash = lib.raycast.fromCoords(coords, coords - vec3(0, 0, 2), 4294967295)
+    if hit then
+        return endCoords.z + 1.5
+    else
+      
+        return coords.z
+    end
+end
+
+
+

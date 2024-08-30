@@ -65,4 +65,6 @@ Config.DeleteGradesWithNoJobUponRefreshing = true
 -- Locale Setting
 -- Sets the language/locale for the script.
 -- Example: "en" for English, "de" for German, etc.
-Config.Locale = "de"
+
+-- THIS ONLY WORKS ONCE UPON STARTING THE SCRIPT IF YOU WANT TO CHANGE THIS LIVE YOU NEED TO RESTART OX_LIB!
+Config.Locale = "en"
