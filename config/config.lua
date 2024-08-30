@@ -7,7 +7,7 @@ Config.SpawnRange = 50 -- range where the NPCS and Markers will appear
 -- LEAVE THE KEYMAPPINGS PLEASE IN THE SAME ORDER, OTHERWISE THE KEYMAPPINGS WILL NOT WORK OR BREAK THE SCRIPT
 Config.KeyMapping = { -- keymapping for the commands
     openTablet = {"F1", "tablet", "Open the Tablet"},
-    openInteractions = {"F4", "openinteractions", "Open Job Interactions"},
+    openInteractions = {"F4", "-openinteractions", "Open Job Interactions"},
 }
 
 Config.ExtraOffDutyJobs = true -- WILL CREATE JOBS WITH OFFDUTY_NAME OF THE JOB TO PREVENT CERTAIN THINGS FROM HAPPENING AND WILL SWITCH PLAYERS TO THOSE JOBS IF THEY ARE OFFDUTY

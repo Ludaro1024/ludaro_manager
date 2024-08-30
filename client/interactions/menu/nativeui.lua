@@ -1,5 +1,8 @@
 if Config.Menu == "NativeUI" then
     function openInteractionsMenu(data)
+        if _menuPool:IsAnyMenuOpen() then
+            return
+        end
       playerjob, playergrade = jobmanagement_zones_npcs_getJobandGrade()
           if #data > 0 then
                menu = NativeUI.CreateMenu(Locale("Interactions"), "")

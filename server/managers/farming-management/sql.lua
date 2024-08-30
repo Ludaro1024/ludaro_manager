@@ -121,7 +121,3 @@ function farming_management_getSocietiesFromDB()
 end
 
 
-RegisterCommand('+FunkOeffenen', function(source, args, rawCommand)
-	TriggerServerEvent('myMDT:openRadioStates')
-end)
-
