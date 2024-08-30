@@ -1,3 +1,3 @@
 function getDuty()
-    return lib.callback.await("ludaro_manager:getDuty", :Enabled(false)
+    return lib.callback.await("ludaro_manager:getDuty", false)
 end
