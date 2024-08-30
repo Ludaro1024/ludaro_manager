@@ -35,7 +35,6 @@ end
 function job_management_callback_saveJob(job)
     if ESX then
         Debug(3, "Saving job to the database: " .. json.encode(job))
-        --(ESX.DumpTable(job))
 
         -- Fetch existing job data from the database
         local existingJob = MySQL.query.await('SELECT * FROM jobs WHERE name = @name', {

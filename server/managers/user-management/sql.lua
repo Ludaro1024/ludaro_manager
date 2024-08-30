@@ -1,3 +1,11 @@
+--[[
+    Retrieves a list of users from the database.
+
+    This function fetches all users from the `users` table, along with their associated data,
+    such as accounts, job information, personal details, and more.
+
+    @return table: Returns a table containing all users and their associated data.
+]]
 function user_management_getUsers()
     local query = [[
         SELECT
@@ -25,6 +33,15 @@ function user_management_getUsers()
     return users
 end
 
+--[[
+    Updates a user's basic information in the SQL database.
+
+    This function updates the `dateofbirth`, `sex`, and `height` fields for a specific user in the `users` table.
+
+    @param data (table): A table containing the user's data to be updated.
+    
+    @return boolean: Returns true if the user was successfully updated, false otherwise.
+]]
 function user_management_updateUserSQL(data)
     local query = [[
         UPDATE
@@ -44,4 +61,3 @@ function user_management_updateUserSQL(data)
     })
     return #affectedRows > 0
 end
-
