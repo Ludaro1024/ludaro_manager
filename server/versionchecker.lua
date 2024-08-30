@@ -18,7 +18,7 @@ end
 -- Function to perform the HTTP request and check for updates
 local function checkVersion()
     local url = "https://api.github.com/repos/" .. owner .. "/" .. repoName .. "/contents/" .. scriptname
-
+    
     PerformHttpRequest(url, function(statusCode, response, headers)
         if statusCode == 200 then
             local highestVersion = currentversion
@@ -27,7 +27,7 @@ local function checkVersion()
             local files = json.decode(response)
             if files and type(files) == "table" then
                 for _, file in ipairs(files) do
-                    local version = tonumber(file.name:match("(%d+)%.json$"))
+                    local version = tonumber(file.name:match("(%d+%.%d+)%.json$"))
                     if version then
                         table.insert(versionFiles, version)
                     end
