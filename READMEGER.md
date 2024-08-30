@@ -64,6 +64,9 @@ Umfassende Fahrzeugkontrolle für Ihren Server:
 - [ ] Hinzufügen fortschrittlicher Optionen zur Fahrzeugbearbeitung.
 - [ ] Implementierung einer Fahrzeugverfolgung für eine bessere Serververwaltung.
 
+### Blips-Manager
+- Demnächst?
+
 # Menu Systems
 Alle Systeme in Ludaro-Manager sind in NativeUI oder esx_menu_default geschrieben bisjetzt, aber es ist geplant in der zukunft für mehrere Menü-Systeme etwas einzubauen (ox_lib, ox_context etc.)
 

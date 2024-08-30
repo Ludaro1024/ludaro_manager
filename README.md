@@ -65,6 +65,9 @@ Comprehensive vehicle control for your server:
 - [ ] Add advanced vehicle editing options.
 - [ ] Implement vehicle history tracking for better server management.
 
+### Blips-Manager
+- Soon?
+
 # Menu Systems
 All current menus in Ludaro-Manager are written using esx_menu_default and NativeUI. Future updates will include support for more advanced menu systems, such as ox_lib, radial menus, and esx_context.
 
