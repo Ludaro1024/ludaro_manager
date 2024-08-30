@@ -67,3 +67,9 @@ InteractionsFunctions["search"] = function()
    
 end
 
+
+function UseInteraction(name)
+    if InteractionsFunctions[name] then
+        InteractionsFunctions[name]()
+    end
+end

@@ -1,10 +1,10 @@
 fx_version("cerulean")
 game("gta5")
 lua54("yes")
-
+name("ludaro_manager")
 author("Ludaro")
-description("Ludaro Vue Boilerplate")
-version("1.0.0")
+description("Ludaro Manager is a FiveM resource that allows you to manage your server with ease. It includes a lot of features that will help you manage your server.")
+version("1")
 
 client_scripts({
 	"client/NativeUILua/Wrapper/Utility.lua",
@@ -66,4 +66,5 @@ files({
 dependencies({
 	"ox_lib",
 	"oxmysql",
+	"es_extended",
 })

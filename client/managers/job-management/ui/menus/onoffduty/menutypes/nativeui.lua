@@ -9,14 +9,14 @@ if Config.Menu == "NativeUI" then
         local onDutyItem = NativeUI.CreateItem(Locale("on_duty"), "")
         menu:AddItem(onDutyItem)
         onDutyItem.Activated = function(sender, item)
-                TriggerServerEvent('ludaro_mananger:onDuty')
+                onDuty()
         end
 
         local offDutyItem = NativeUI.CreateItem(Locale("off_duty"), "")
         menu:AddItem(offDutyItem)
         offDutyItem.Activated = function(sender, item)
          
-                TriggerServerEvent('ludaro_mananger:offDuty')
+             offDuty()
         end
 
         _menuPool:RefreshIndex()

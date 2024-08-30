@@ -1,80 +1,105 @@
 # Ludaro-Manager
 
-A Manager for Not-so-Tech-Savvy FiveM RP Individuals, for Free!
+**A Free Manager for Not-so-Tech-Savvy FiveM RP Individuals!**
+
+Ludaro-Manager is a comprehensive tool designed for users who might not be tech-savvy, helping them efficiently manage their FiveM Roleplay servers. This tool includes five main sub-categories, each focusing on different aspects of server management, making your FiveM RP experience more streamlined and user-friendly.
+
+## Sub-Categories
+
+### 1. Job-Manager
+Easily manage all job-related tasks with the following features:
+- **BossMenu (Grade Accessible):** Allows players with appropriate grades to manage employee hiring, firing, and promotions.
+- **Clothing Menu (With Outfits):** Provides customizable outfit options for employees based on their job roles.
+- **Employee System for Admins:** A dedicated system for admins to manage employees, including adding or removing them, and adjusting job details.
+- **Grade Management Tab:** A straightforward interface to modify or set grades within jobs, ensuring proper role hierarchy.
+- **Standalone On/Off Duty System:** Allows employees to clock in and out of their jobs independently, with full export support.
+- **Stash System:** (Upcoming) A customizable storage system for each job, enabling role-specific stashes.
+- **Custom Interactions System:** A versatile feature where you can implement and customize job-specific interactions, enhancing roleplay scenarios.
+
+### 2. Farming-Manager (Coming Soon) 🚧👷‍♀️
+Currently under development, the Farming Manager will include:
+- **Farming Spots:** Manage various farming locations, each with specific tools, grade requirements, and customizable code execution.
+- **Custom Animations/Cutscenes:** Enhance the roleplay experience with unique animations or cutscenes for each farming activity.
+- **Future Features:** Additional functionalities and improvements based on community feedback and evolving server needs.
+
+### 3. Door-Manager (Coming Soon) 🚧👷‍♀️
+An intuitive system to manage doors within your server:
+- **Door Creation:** Easily create and customize doors in the game world.
+- **Keypad and Lock Systems:** Integrate keypads or lock doors with specific items, adding layers of security and realism.
+- **Advanced Customization:** Implement custom functionalities that suit your server's unique requirements.
+
+### 4. User-Manager
+Simplify user management with:
+- **User Management:** Edit and manage all ESX-related user data directly from the interface.
+- **Admin Controls:** Full control over user attributes, including job assignments, inventory, and more, with an easy-to-use interface.
+
+### 5. Vehicle-Manager
+Comprehensive vehicle control for your server:
+- **Vehicle Management:** Grant, remove, or edit vehicles in the server with ease.
+- **Customization Options:** Tailor vehicles to align with the theme and specific needs of your RP server.
+
 
 ## Roadmap
 
-- Additional browser support
-- More integrations
-- **Job Creation:** Implement a user-friendly interface for creating jobs with customizable attributes.
-- **Job Editing:** Develop tools for modifying existing jobs.
-- **Job Managing:** Integrate comprehensive management features for jobs, including boss menus, grades, and salaries.
-- **Farming Creation:** Create detailed configurations for developing farming activities.
-- **Farming Managing:** Build management tools for overseeing farming operations and resources.
-- **Farming Editing:** Add advanced settings to enhance farming complexity.
-- **Shop Management:** Develop features to manage in-game shops, including inventory and pricing.
-- **Door Lock Configuration:** Implement management tools for configuring and securing door locks.
-- **Data Handling:** Enhance MySQL data and character data management capabilities.
-- **User Management:** Create features for managing user accounts, permissions, and roles.
-- **Vehicle Management:** Develop tools for vehicle management, including spawning, customization, and ownership.
+### Job-Manager
+- [ ] Finalize and implement the Stash System.
+- [ ] Adding A System to add employees in the tablet
+- [ ] Expand customization options for the BossMenu.
+- [ ] Add more features to the custom Interactions system.
+
+### Farming-Manager
+- [ ] Implement customizable Farming Spots.
+- [ ] Develop a comprehensive cutscene and animation editor.
+- [ ] Expand features based on user feedback.
+
+### Door-Manager
+- [ ] Finalize door creation and management functionalities.
+- [ ] Integrate advanced keypad and item-based locking mechanisms.
+- [ ] Introduce more customization features for door management.
+
+### User-Manager
+- [ ] Enhance user attribute management features.
+- [ ] Implement detailed user logs and history tracking.
+
+### Vehicle-Manager
+- [ ] Add advanced vehicle editing options.
+- [ ] Implement vehicle history tracking for better server management.
+
+# Menu Systems
+All current menus in Ludaro-Manager are written using esx_menu_default and NativeUI. Future updates will include support for more advanced menu systems, such as ox_lib, radial menus, and esx_context.
+
 
 ## Dependencies
 
-This script is dependent on:
+Ludaro-Manager relies on the following scripts and libraries:
 - [es_extended (prior version 1.6.0)](https://github.com/esx-framework/esx_core)
 - [ox_lib](https://github.com/overextended/ox_lib)
-- [oxmysql](https://github.com/overextended/ox_lib)
+- [oxmysql](https://github.com/overextended/oxmysql)
 
 ## Technologies Used
 
-- TailwindCSS
-- Vue
-- Vue Router
+- **TailwindCSS:** For responsive and modern UI design.
+- **Vue:** A powerful frontend framework for building user interfaces.
+- **Vue Router:** Manages navigation between different sections of the manager.
+- **ox_lib:** Manages callback functions
 
 ## Screenshots
-Preview:
-https://streamable.com/lp9kde
 
-https://github.com/user-attachments/assets/8ebdce70-d3d7-41ca-bc83-ad765cb68e62
+Take a sneak peek at Ludaro-Manager in action:
 
+[Preview 1](https://streamable.com/lp9kde)
 
 ## Documentation
 
-[Documentation](https://github.com/Ludaro1024/ludaro_manager/wiki)
-
-## Features
-
-- Live previews
-- Fullscreen mode
-- Cross-platform
-
-### JOBS
-
-- **Job Creation:** Easily create new jobs for your RP server with customizable attributes.
-- **Job Editing:** Modify existing jobs to fit the evolving needs of your community.
-- **Job Managing:** Comprehensive tools for managing job-related aspects such as boss menus, grades, and salaries.
-
-### FARMING
-
-- **Farming Creation:** Develop farming activities with detailed configurations.
-- **Farming Managing:** Oversee farming operations and resources.
-- **Farming Editing:** Enhance farming complexity with advanced settings and options.
+For a more detailed explanation of features and how to use them, please refer to the [full documentation](https://github.com/Ludaro1024/ludaro_manager/wiki).
 
 
-### DOORLOCK
+## Contribution and Feedback
 
-- Configure and manage door locks to secure various locations within your RP environment.
+We encourage contributions and feedback! Feel free to submit issues, suggestions, or pull requests to help improve Ludaro-Manager. Your input is invaluable in making this tool better for everyone.
 
-### DATA (MYSQL, CHARDATA)
+## License
 
-- Efficiently handle MySQL data and character data for smooth server operations.
+Ludaro-Manager is open-source and available for free under the MIT License.
 
-### USERS
-
-- Manage user accounts, permissions, and roles with ease.
-
-### VEHICLES
-
-- Oversee vehicle management, including spawning, customization, and ownership.
-
-Join the community and help improve Ludaro-Manager by contributing to its development!
+---

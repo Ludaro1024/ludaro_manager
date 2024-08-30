@@ -7,7 +7,7 @@ if Config.Menu == "NativeUI" then
         menu:AddItem(onDutyItem)
         onDutyItem.Activated = function(sender, item)
             if item == onDutyItem then
-                TriggerServerEvent('your_resource:onDuty')
+                onDuty()
             end
         end
 
@@ -15,7 +15,7 @@ if Config.Menu == "NativeUI" then
         menu:AddItem(offDutyItem)
         offDutyItem.Activated = function(sender, item)
             if item == offDutyItem then
-                TriggerServerEvent('your_resource:offDuty')
+               offDuty()
             end
         end
 

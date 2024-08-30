@@ -7,9 +7,7 @@ end)
 RegisterNUICallback('GetDebugLevel', function(data, cb)
     print("getting debug level")
     
-    debugLevel = Debuglevel or 0
-    
-    print("Debug level is:", debugLevel)
+    debugLevel = ui_functions_getDebugLevel()
     
     -- Send back the debug level in a table format
     cb({ DebugLevel = debugLevel })
