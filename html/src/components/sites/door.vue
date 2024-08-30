@@ -1,14 +1,14 @@
 <template>
-    <div class="under-construction">
-      <div class="message">
-        <span class="text">🚧 Under Construction 👷‍♀️🚧</span>
-        <br>
-        <span class="text">This site is not available right now.</span>
-      </div>
+  <div class="under-construction">
+    <div class="message">
+      <span class="text">{{ $t('underConstruction') }}</span>
+      <br>
+      <span class="text">{{ $t('unavailable') }}</span>
     </div>
-  </template>
-  
-  <style>
+  </div>
+</template>
+
+<style>
     .under-construction {
       display: flex;
       justify-content: center;
@@ -33,4 +33,3 @@
       color: #333;
     }
   </style>
-  

@@ -10,7 +10,7 @@ EditableFunctions = {
         
         isoffical = data.isoffical
         weight = data.weight
-        EditableFunctions.Notify('Inventory system not found')
+        EditableFunctions.Notify('Inventory system not found implement your own..')
     end
 
 }

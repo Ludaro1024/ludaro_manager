@@ -151,9 +151,9 @@
   "spawnName": "Spawn-Name",
   "societyManagement": "Gesellschaftsverwaltung",
   "jobManagement": "Job-Verwaltung",
-  "farmingManagement": "Anbau-Verwaltung",
-  "doorManagement": "Türverwaltung",
-  "dataManagement": "Datenverwaltung",
+  "farmingManagement": "Anbau-Verwaltung 👷‍♀️🚧",
+  "doorManagement": "Türverwaltung 👷‍♀️🚧",
+  "dataManagement": "Datenverwaltung 👷‍♀️🚧",
   "wiki": "Wiki",
   "home": "Startseite",
   "deposit": "Einzahlen",
@@ -162,5 +162,7 @@
   "jobName": "Job Name",
   "jobLabel": "Job Bezeichnung",
   "whitelisted": "Whitelisted",
-  "societyPaid": "Gesellschaf bezahlt"
+  "societyPaid": "Gesellschaf bezahlt",
+  "underConstruction": "🚧 Wird gebaut 👷‍♀️🚧",
+  "unavailable": "Diese Seite ist derzeit nicht verfügbar und wird derzeit erstellt.. bitte Schaue später erneut vorbei."
 }

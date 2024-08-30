@@ -1,4 +1,6 @@
 <template>
+
+<div v-if="showFarming" class="farming-management-container">
   <div class="farming-management-container">
     <h2 class="text-2xl font-bold mb-4 text-white">{{ $t('farmingSpots') }}</h2>
 
@@ -169,9 +171,60 @@
       </div>
     </div>
   </div>
+</div>
+
+  <div v-else class="under-construction">
+    <div class="message">
+      <span class="text">{{ $t('underConstruction') }}</span>
+      <br>
+      <span class="text">{{ $t('unavailable') }}</span>
+    </div>
+  </div>
 </template>
 
 <script setup>
+
+// debug handling 
+const showFarming = ref(false);  // This flag will control whether to show the farming component
+
+
+const debugLevel = ref(0);
+const fetchDebugLevel = async () => {
+  try {
+    const response = await fetch(`https://${GetParentResourceName()}/GetDebugLevel`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify({})
+    });
+
+    // Parse the JSON response
+    const data = await response.json();
+    
+    console.log(data.DebugLevel);
+    // Ensure the debug level is correctly set
+    debugLevel.value = data.DebugLevel || 0;
+    if (debugLevel.value > 3) {
+      showFarmingComponent()
+    }
+  } catch (error) {
+    console.error('Failed to fetch debug level:', error);
+  }
+};
+
+
+const showFarmingComponent = () => {
+      showFarming.value = true;  // Set the flag to true, which will make the farming component visible
+      fetchFarmingSpots();
+      fetchJobs();
+      fetchAnimations();
+      fetchSocieties();
+    };
+
+
+
+// debug handling end
 import { ref, onMounted } from 'vue';
 
 const farmingSpots = ref([]);
@@ -509,56 +562,34 @@ const removeAdditionalCoord = (index) => {
   farmingSpot.value.additionalCoords.splice(index, 1);
 };
 
-onMounted(() => {
-  fetchFarmingSpots();
-  fetchJobs();
-  fetchAnimations();
-  fetchSocieties();
-});
+fetchDebugLevel();
+
+
 </script>
 
 
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: #1f2937;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 900px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.farming-management-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.farming-spots-list {
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
-.coords-input-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.text-white {
-  color: white;
-}
-</style>
+<style>
+    .under-construction {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 1rem;
+      background-color: #d6d8f0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    .text {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #333;
+    }
+  </style>

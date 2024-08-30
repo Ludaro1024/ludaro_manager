@@ -151,9 +151,9 @@
   "spawnName": "Spawn Name",
   "societyManagement": "Society Management",
   "jobManagement": "Job Management",
-  "farmingManagement": "Farming Management",
-  "doorManagement": "Door Management",
-  "dataManagement": "Data Management",
+  "farmingManagement": "Farming Management👷‍♀️🚧",
+  "doorManagement": "Door Management👷‍♀️🚧",
+  "dataManagement": "Data Management👷‍♀️🚧",
   "wiki": "Wiki",
   "home": "Home",
   "deposit": "Deposit",
@@ -162,6 +162,7 @@
   "jobName": "Job Name",
   "jobLabel": "Job Label",
   "whitelisted": "Whitelisted",
-  "societyPaid": "Society Paid"
-  
+  "societyPaid": "Society Paid",
+  "underConstruction": "🚧 Under Construction 👷‍♀️🚧",
+  "unavailable": "This site is not available right now and is being worked on. Please check back later."
 }
