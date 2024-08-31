@@ -46,7 +46,7 @@ Config.KeyMapping = {
     -- Key: "F4"
     -- Command Name: "-openinteractions"
     -- Display Label: "Open Job Interactions"
-    openInteractions = {"F4", "-openinteractions", "Open Job Interactions"},
+    openInteractions = {"F4", "openinteractions", "Open Job Interactions"},
 }
 
 -- Extra Off-Duty Jobs

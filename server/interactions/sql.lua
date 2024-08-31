@@ -11,11 +11,13 @@ function interactions_getInteractionsFromPlayer(source)
     Debug(3, "Fetching interactions from database for player ID: " .. source)
 
     local job = framework_getJob(source)
+   
     local interactions = MySQL.scalar.await('SELECT ludaro_manager_interactions FROM jobs WHERE name = @name', {
         ['@name'] = job 
     })
 
     local returntable = {}
+    if interactions == nil then return returntable end
     interactions = json.decode(interactions)
 
     for _, interactionName in pairs(interactions) do
