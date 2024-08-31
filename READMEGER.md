@@ -118,6 +118,6 @@ Klaro! schreib mir gerne einfach hier ein Issue rein, oder auf meinem  [Discord]
 
 ## Lizenz
 
-Ludaro-Manager ist Open-Source und kostenlos unter der MIT-Lizenz verfügbar.
+Ludaro-Manager ist Open-Source und kostenlos unter der GNU-Lizenz verfügbar.
 
 ---

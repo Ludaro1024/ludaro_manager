@@ -122,6 +122,6 @@ Yes! surely! im here to make this script for you, the community and i want you t
 
 ## License
 
-Ludaro-Manager is open-source and available for free under the MIT License.
+Ludaro-Manager is open-source and available for free under the GNU License.
 
 ---
