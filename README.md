@@ -90,7 +90,9 @@ Ludaro-Manager relies on the following scripts and libraries:
 
 Take a sneak peek at Ludaro-Manager in action:
 
-[Preview 1](https://streamable.com/lp9kde)
+
+https://github.com/user-attachments/assets/a268e75a-a03c-4e96-b34b-6dbb0c13e590
+
 
 ## Documentation
 
@@ -100,6 +102,9 @@ For a more detailed explanation of features and how to use them, please refer to
 ## Contribution and Feedback
 
 We encourage contributions and feedback! Feel free to submit issues, suggestions, or pull requests to help improve Ludaro-Manager. Your input is invaluable in making this tool better for everyone.
+
+# Discord 
+if you need any help be free to join my [Discord](https://discord.ludaro.de) and ask there :) even if it isnt ludaro_manager related, but be sure to ping me (Ludaro) if you want a quick answer!
 
 ## License
 
