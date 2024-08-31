@@ -106,6 +106,20 @@ We encourage contributions and feedback! Feel free to submit issues, suggestions
 # Discord 
 if you need any help be free to join my [Discord](https://discord.ludaro.de) and ask there :) even if it isnt ludaro_manager related, but be sure to ping me (Ludaro) if you want a quick answer!
 
+# FAQ
+
+## What brought u to do this script?
+I havent seen an all around manager for free around, and i wanted to try making my first script with a javascript framework so here we go!
+
+## What about other Frameworks except ESX?
+Qbox will be Accepted eventually 
+
+and QB? [No,](https://gist.github.com/mk3ext/82e03ab491ace82427d217785314474d#user-content-fn-10-2aa19ec9cc82ac1effbbf83015c5c71d)
+
+
+# Can you Help me Implement [FEATURE] ?
+Yes! surely! im here to make this script for you, the community and i want you to enjoy it, this script lives from you and your contribution be free to create an Issue if you have a feature you would love to see or write me on my [discord](https://discord.ludaro.de)
+
 ## License
 
 Ludaro-Manager is open-source and available for free under the MIT License.

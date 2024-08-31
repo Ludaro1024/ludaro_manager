@@ -105,6 +105,17 @@ Wenn du bei Irgendwas hilfe brauchst kannst du auch gerne dem [Discord](https://
 
 Damit ich dir am Schnellsten Antworte ping mich (Ludaro) gerne :)
 
+## Warum machst du dieses Script?
+Ich hab bisjetzt keinen Allround-Manager for free gesehen, und dachte mir.. Wieso nicht? ich wollte sowieso mal lernen wie Javascript Frameworks (Vue Etc) gehen :)
+
+## Was ist mit Anderen Frameworks?
+Qbox wird letzendlich irgendwann eingebaut,
+
+QB? [Nein,](https://gist.github.com/mk3ext/82e03ab491ace82427d217785314474d#user-content-fn-10-2aa19ec9cc82ac1effbbf83015c5c71d)
+
+# Kannst du mir helfen [FEATURE] einzubauen?
+Klaro! schreib mir gerne einfach hier ein Issue rein, oder auf meinem  [Discord](https://discord.ludaro.de) eine nachricht, und ich bin gerne offen das script hier so gut wie euch zu machen :) das script wird nur besser mit vorschlägen!
+
 ## Lizenz
 
 Ludaro-Manager ist Open-Source und kostenlos unter der MIT-Lizenz verfügbar.
