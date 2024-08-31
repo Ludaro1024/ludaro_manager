@@ -48,7 +48,7 @@ function parkin(source, vehicle)
     
     MySQL.Sync.execute(
         "UPDATE owned_vehicles SET stored = @stored, vehicle = @vehicle WHERE plate = @plate AND (owner = @identifier OR owner = @job)", 
-        {['@stored'] = 0, ['@plate'] = plate, ['@vehicle'] = json.encode(vehicle), ['@identifier'] = identifier, ['@job'] = job}
+        {['@stored'] = 1, ['@plate'] = plate, ['@vehicle'] = json.encode(vehicle), ['@identifier'] = identifier, ['@job'] = job}
     )
     
     return true
@@ -75,7 +75,7 @@ function parkout(source, vehicle)
     
     MySQL.Sync.execute(
         "UPDATE owned_vehicles SET stored = @stored WHERE plate = @plate AND (owner = @identifier OR owner = @job)", 
-        {['@stored'] = 1, ['@plate'] = plate, ['@identifier'] = identifier , ['@job'] = job}
+        {['@stored'] = 0, ['@plate'] = plate, ['@identifier'] = identifier , ['@job'] = job}
     )
     
     return true

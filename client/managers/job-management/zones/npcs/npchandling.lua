@@ -24,7 +24,7 @@ function jobmanagement_zones_npcs_createNPC(coords, model, heading, name)
     end
 
     -- Create the NPC at the specified coordinates
-    local npc = CreatePed(4, model, coords.x, coords.y, coords.z - 1.5, heading, false, false)
+    local npc = CreatePed(4, model, coords.x, coords.y, getGroundCoords(coords), heading, false, false)
     SetEntityAsMissionEntity(npc, true, true)
     SetBlockingOfNonTemporaryEvents(npc, true)
     FreezeEntityPosition(npc, true)
@@ -101,3 +101,12 @@ AddEventHandler('onResourceStop', function(resourceName)
         jobmanagement_zones_npcs_deleteAllNPCs()
     end
 end)
+
+function getGroundCoords(coords)
+    coords = vector3(coords.x, coords.y, coords.z)
+   local success, groundZ, normal = GetGroundZAndNormalFor_3dCoord(coords.x, coords.y, coords.z)
+   return groundZ or coords.z
+end
+
+
+

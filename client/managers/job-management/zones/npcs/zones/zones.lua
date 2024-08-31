@@ -17,6 +17,8 @@ function job_management_zones_npcs_Allowed(accessjob, accessgrade, job, grade, t
     if type == "onoffduty" then
         job = string.gsub(job, "_offduty", "")
     end
+   
+
     grade = grade or 0
     accessgrade = accessgrade or 0
     return accessjob == job and accessgrade <= grade
@@ -42,6 +44,7 @@ function job_management_zones_npcs_NPCZones(data)
         local npcspawnName = npcName .. "_" .. managerData.openType
         
         -- Handling clothes type
+     
         if managerData.openType == "clothes" then
             local npcSettings = managerData.npcSettings
             if npcSettings then
@@ -52,6 +55,8 @@ function job_management_zones_npcs_NPCZones(data)
             end
             managerData.openType = "clothes"
         end
+
+       
 
         -- Handling stashes type
         if managerData.openType == "stashes" then
@@ -69,7 +74,7 @@ function job_management_zones_npcs_NPCZones(data)
                         inside = function(self)
                             if self.coords then
                                 local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
-                                if inrange and job_management_zones_npcs_Allowed(npcName, stash.grade, job, grade, nil) then
+                                if inrange and job_management_zones_npcs_Allowed(npcName, stash.grade, job, grade, managerData.openType) then
                                     EditableFunctions.ShowHelpNotification(Locale("open_menu", managerData.openType))
                                     if IsControlJustReleased(0, 38) then
                                         openMenu(stash, npcName)
@@ -92,10 +97,11 @@ function job_management_zones_npcs_NPCZones(data)
 
         -- Handling direct NPCs
         if managerData and managerData.type == "npc" and managerData.coords then
-            local coords = vec3(managerData.coords.x, managerData.coords.y, getGroundCoords(managerData.coords))
-            local size = vec3(managerData.npcRange or Config.SpawnRange, managerData.npcRange or Config.SpawnRange, managerData.npcRange or Config.SpawnRange)
+           
+            local coords = vec3(managerData.coords.x, managerData.coords.y, managerData.coords.z)
+            local size = vec3(Config.SpawnRange,Config.SpawnRange, Config.SpawnRange)
             local rotation = 200.0
-
+           
             local box = lib.zones.box({
                 coords = coords,
                 size = size,
@@ -104,7 +110,7 @@ function job_management_zones_npcs_NPCZones(data)
                 inside = function(self)
                     if self.coords then
                         local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
-                        if inrange and job_management_zones_npcs_Allowed(npcName, managerData.grade, job, grade, nil) then
+                        if inrange and job_management_zones_npcs_Allowed(npcName, managerData.grade, job, grade, managerData.openType) then
                             EditableFunctions.ShowHelpNotification(Locale("open_menu", managerData.openType))
                             if IsControlJustReleased(0, 38) then
                                 openMenu(managerData, npcName)
@@ -119,6 +125,8 @@ function job_management_zones_npcs_NPCZones(data)
                     jobmanagement_zones_npcs_deleteNPCByName(npcspawnName)
                 end
             })
+
+        
 
             table.insert(zones, box)
         end
@@ -157,17 +165,4 @@ end
 -- Otherwise, it returns the ground Z coordinate + 1.5 (for npc height)
 -- @param coords (vector3): The input coordinates (X, Y, Z).
 -- @return z (number): The appropriate Z coordinate, either the ground Z or the original Z.
-
-function getGroundCoords(coords)
-    coords = vector3(coords.x, coords.y, coords.z)
-    local hit, entityHit, endCoords, surfaceNormal, materialHash = lib.raycast.fromCoords(coords, coords - vec3(0, 0, 2), 4294967295)
-    if hit then
-        return endCoords.z + 1.5
-    else
-      
-        return coords.z
-    end
-end
-
-
 

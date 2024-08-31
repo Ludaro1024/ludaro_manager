@@ -1,4 +1,4 @@
-Debuglevel = 0
+Debuglevel = 0 -- 1 to 4
 function Debug(level, message)
     if level == nil then level = 4 end
     if  Debuglevel >= level then
