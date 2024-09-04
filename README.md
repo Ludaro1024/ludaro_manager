@@ -1,122 +1,127 @@
-
 # Ludaro-Manager
 
-**为非技术型的 FiveM RP 用户提供的免费管理工具！**
+**A Free Manager for Not-so-Tech-Savvy FiveM RP Individuals!**
 
-Ludaro-Manager 是一款为可能不擅长技术的用户设计的综合工具，帮助他们高效管理 FiveM 角色扮演服务器。该工具包括五个主要子类别，每个类别侧重于服务器管理的不同方面，使您的 FiveM RP 体验更加流畅且用户友好。
+Ludaro-Manager is a comprehensive tool designed for users who might not be tech-savvy, helping them efficiently manage their FiveM Roleplay servers. This tool includes five main sub-categories, each focusing on different aspects of server management, making your FiveM RP experience more streamlined and user-friendly.
 
-## 子类别
+## Sub-Categories
 
-### 1. 职位管理器
-轻松管理所有与职位相关的任务，具有以下功能：
-- **老板菜单（根据等级访问）：** 允许拥有适当等级的玩家管理员工的招聘、解雇和晋升。
-- **服装菜单（带有服装选项）：** 提供基于员工工作角色的可定制服装选项。
-- **管理员的员工系统：** 专为管理员设计的系统，用于管理员工，包括添加或删除员工并调整职位详情。
-- **等级管理标签：** 一个简单的界面，用于修改或设置职位中的等级，确保适当的角色层次结构。
-- **独立的上下班系统：** 员工可以独立打卡上下班，支持完整的导出功能。
-- **储物系统：**（即将推出）为每个职位提供可定制的存储系统，启用与角色相关的储物空间。
-- **自定义互动系统：** 一个灵活的功能，您可以实现并自定义与工作相关的互动，增强角色扮演场景。
+### 1. Job-Manager
+Easily manage all job-related tasks with the following features:
+- **BossMenu (Grade Accessible):** Allows players with appropriate grades to manage employee hiring, firing, and promotions.
+- **Clothing Menu (With Outfits):** Provides customizable outfit options for employees based on their job roles.
+- **Employee System for Admins:** A dedicated system for admins to manage employees, including adding or removing them, and adjusting job details.
+- **Grade Management Tab:** A straightforward interface to modify or set grades within jobs, ensuring proper role hierarchy.
+- **Standalone On/Off Duty System:** Allows employees to clock in and out of their jobs independently, with full export support.
+- **Stash System:** (Upcoming) A customizable storage system for each job, enabling role-specific stashes.
+- **Custom Interactions System:** A versatile feature where you can implement and customize job-specific interactions, enhancing roleplay scenarios.
 
-### 2. 农业管理器（即将推出）🚧👷‍♀️
-目前正在开发中，农业管理器将包括：
-- **农场点：** 管理各种农业位置，每个位置都有特定的工具、等级要求以及可定制的代码执行。
-- **自定义动画/过场动画：** 通过每个农业活动的独特动画或过场动画增强角色扮演体验。
-- **未来功能：** 根据社区反馈和不断变化的服务器需求添加额外功能和改进。
+### 2. Farming-Manager (Coming Soon) 🚧👷‍♀️
+Currently under development, the Farming Manager will include:
+- **Farming Spots:** Manage various farming locations, each with specific tools, grade requirements, and customizable code execution.
+- **Custom Animations/Cutscenes:** Enhance the roleplay experience with unique animations or cutscenes for each farming activity.
+- **Future Features:** Additional functionalities and improvements based on community feedback and evolving server needs.
 
-### 3. 门管理器（即将推出）🚧👷‍♀️
-一个直观的系统，用于管理服务器中的门：
-- **门创建：** 轻松创建和自定义游戏世界中的门。
-- **密码键盘和锁系统：** 将键盘集成或使用特定物品锁门，增加安全性和真实性。
-- **高级自定义：** 实现适合您服务器独特需求的自定义功能。
+### 3. Door-Manager (Coming Soon) 🚧👷‍♀️
+An intuitive system to manage doors within your server:
+- **Door Creation:** Easily create and customize doors in the game world.
+- **Keypad and Lock Systems:** Integrate keypads or lock doors with specific items, adding layers of security and realism.
+- **Advanced Customization:** Implement custom functionalities that suit your server's unique requirements.
 
-### 4. 用户管理器
-简化用户管理：
-- **用户管理：** 直接从界面编辑和管理所有 ESX 相关的用户数据。
-- **管理员控制：** 通过易于使用的界面完全控制用户属性，包括职位分配、库存等。
+### 4. User-Manager
+Simplify user management with:
+- **User Management:** Edit and manage all ESX-related user data directly from the interface.
+- **Admin Controls:** Full control over user attributes, including job assignments, inventory, and more, with an easy-to-use interface.
 
-### 5. 车辆管理器
-为您的服务器提供全面的车辆控制：
-- **车辆管理：** 轻松授予、移除或编辑服务器中的车辆。
-- **自定义选项：** 根据您的 RP 服务器主题和特定需求定制车辆。
+### 5. Vehicle-Manager
+Comprehensive vehicle control for your server:
+- **Vehicle Management:** Grant, remove, or edit vehicles in the server with ease.
+- **Customization Options:** Tailor vehicles to align with the theme and specific needs of your RP servers.
 
-## 路线图
 
-### 职位管理器
-- [ ] 完善并实现储物系统。
-- [ ] 添加一个可以在平板电脑中添加员工的系统。
-- [ ] 扩展老板菜单的自定义选项。
-- [ ] 为自定义互动系统添加更多功能。
+## Roadmap
 
-### 农业管理器
-- [ ] 实现可自定义的农场点。
-- [ ] 开发全面的过场动画和动画编辑器。
-- [ ] 根据用户反馈扩展功能。
+### Job-Manager
+- [ ] Finalize and implement the Stash System.
+- [ ] Adding A System to add employees in the tablet
+- [ ] Expand customization options for the BossMenu.
+- [ ] Add more features to the custom Interactions system.
 
-### 门管理器
-- [ ] 完成门的创建和管理功能。
-- [ ] 集成高级的密码键盘和基于物品的锁定机制。
-- [ ] 为门管理引入更多自定义功能。
+### Farming-Manager
+- [ ] Implement customizable Farming Spots.
+- [ ] Develop a comprehensive cutscene and animation editor.
+- [ ] Expand features based on user feedback.
 
-### 用户管理器
-- [ ] 增强用户属性管理功能。
-- [ ] 实现详细的用户日志和历史记录追踪。
+### Door-Manager
+- [ ] Finalize door creation and management functionalities.
+- [ ] Integrate advanced keypad and item-based locking mechanisms.
+- [ ] Introduce more customization features for door management.
 
-### 车辆管理器
-- [ ] 添加高级的车辆编辑选项。
-- [ ] 实现车辆历史追踪以更好地管理服务器。
+### User-Manager
+- [ ] Enhance user attribute management features.
+- [ ] Implement detailed user logs and history tracking.
 
-### 标记管理器
-- 即将推出？
+### Vehicle-Manager
+- [ ] Add advanced vehicle editing options.
+- [ ] Implement vehicle history tracking for better server management.
 
-## 菜单系统
-Ludaro-Manager 中的所有当前菜单均使用 esx_menu_default 和 NativeUI 编写。未来的更新将包括支持更多高级菜单系统，如 ox_lib、圆形菜单和 esx_context。
+### Blips-Manager
+- Soon?
 
-## 依赖项
+# Menu Systems
+All current menus in Ludaro-Manager are written using esx_menu_default and NativeUI. Future updates will include support for more advanced menu systems, such as ox_lib, radial menus, and esx_context.
 
-Ludaro-Manager 依赖以下脚本和库：
-- [es_extended（版本 1.6.0 之前）](https://github.com/esx-framework/esx_core)
+
+## Dependencies
+
+Ludaro-Manager relies on the following scripts and libraries:
+- [es_extended (prior version 1.6.0)](https://github.com/esx-framework/esx_core)
 - [ox_lib](https://github.com/overextended/ox_lib)
 - [oxmysql](https://github.com/overextended/oxmysql)
 
-## 使用的技术
+## Technologies Used
 
-- **TailwindCSS：** 用于响应式和现代的 UI 设计。
-- **Vue：** 用于构建用户界面的强大前端框架。
-- **Vue Router：** 管理管理器不同部分之间的导航。
-- **ox_lib：** 管理回调函数。
+- **TailwindCSS:** For responsive and modern UI design.
+- **Vue:** A powerful frontend framework for building user interfaces.
+- **Vue Router:** Manages navigation between different sections of the manager.
+- **ox_lib:** Manages callback functions
 
-## 截图
+## Screenshots
 
-抢先看看 Ludaro-Manager 的实际操作：
+Take a sneak peek at Ludaro-Manager in action:
 
 
 https://github.com/user-attachments/assets/a268e75a-a03c-4e96-b34b-6dbb0c13e590
 
-## 文档
 
-有关功能的详细说明和使用方法，请参阅[完整文档](https://github.com/Ludaro1024/ludaro_manager/wiki)。
+## Documentation
 
-## 贡献和反馈
+For a more detailed explanation of features and how to use them, please refer to the [full documentation](https://github.com/Ludaro1024/ludaro_manager/wiki).
 
-我们鼓励贡献和反馈！欢迎提交问题、建议或拉取请求，以帮助改进 Ludaro-Manager。您的意见对于让这个工具变得更好至关重要。
+
+## Contribution and Feedback
+
+We encourage contributions and feedback! Feel free to submit issues, suggestions, or pull requests to help improve Ludaro-Manager. Your input is invaluable in making this tool better for everyone.
 
 # Discord 
-如果您需要任何帮助，欢迎加入我的[Discord](https://discord.ludaro.de)并在那里提问 :) 即使与 Ludaro_Manager 无关，也请确保在您想快速获得答案时 @我（Ludaro）！
+if you need any help be free to join my [Discord](https://discord.ludaro.de) and ask there :) even if it isnt ludaro_manager related, but be sure to ping me (Ludaro) if you want a quick answer!
 
-# 常见问题
+# FAQ
 
-## 你为什么要做这个脚本？
-我还没见过免费的全方位管理器，而且我想尝试用 JavaScript 框架制作我的第一个脚本，所以就有了这个项目！
+## What brought u to do this script?
+I havent seen an all around manager for free around, and i wanted to try making my first script with a javascript framework so here we go!
 
-## 除了 ESX 还有其他框架吗？
-Qbox 未来会支持
+## What about other Frameworks except ESX?
+Qbox will be Accepted eventually 
 
-那 QB 呢？ [不会，](https://gist.github.com/mk3ext/82e03ab491ace82427d217785314474d#user-content-fn-10-2aa19ec9cc82ac1effbbf83015c5c71d)
+and QB? [No,](https://gist.github.com/mk3ext/82e03ab491ace82427d217785314474d#user-content-fn-10-2aa19ec9cc82ac1effbbf83015c5c71d)
 
 
-# 你能帮我实现 [功能] 吗？
-当然可以！我在这里为你们开发这个脚本，我希望你们能喜欢使用这个脚本。这个脚本因你们的贡献而生存，欢迎提出你想看到的功能或通过我的[Discord](https://discord.ludaro.de)联系我。
+# Can you Help me Implement [FEATURE] ?
+Yes! surely! im here to make this script for you, the community and i want you to enjoy it, this script lives from you and your contribution be free to create an Issue if you have a feature you would love to see or write me on my [discord](https://discord.ludaro.de)
 
-## 许可证
+## License
 
-Ludaro-Manager 是开源的，并在 GNU 许可证下免费提供。
+Ludaro-Manager is open-source and available for free under the GNU License.
+
+---
