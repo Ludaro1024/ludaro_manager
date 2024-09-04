@@ -1,2 +1,7 @@
+# Set README.md as the default readme
 README.md export-ignore
 README.md merge=union
+
+# Prevent ZHCN-README.md from being used as the default readme
+ZHCN-README.md linguist-documentation
+ZHCN-README.md export-ignore
