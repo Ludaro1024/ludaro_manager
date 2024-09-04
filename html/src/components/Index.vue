@@ -27,7 +27,8 @@ updateItems();
 
 const languages = {
   en: 'English',
-  de: 'Deutsch'
+  de: 'Deutsch',
+  zhcn: '简体中文.',
 };
 
 const setActiveItem = (itemName, route) => {

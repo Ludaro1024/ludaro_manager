@@ -139,13 +139,13 @@
   "npcRange": "NPC-Reichweite",
   "bobUpAndDown": "Auf und ab wippen",
   "faceCamera": "Zur Kamera schauen",
-  "jobInfo": "Job-Informationen",
+  "jobinfo": "Job-Informationen",
   "clothing": "Kleidung",
   "stashes": "Verstecke",
   "employees": "Mitarbeiter",
-  "onOffDuty": "Dienst an/aus",
+  "onoffduty": "Dienst an/aus",
   "interactions": "Interaktionen",
-  "bossMenu": "Boss-Menü",
+  "bossmenu": "Boss-Menü",
   "grades": "Ränge",
   "label": "Etikett",
   "spawnName": "Spawn-Name",
@@ -164,5 +164,9 @@
   "whitelisted": "Whitelisted",
   "societyPaid": "Gesellschaf bezahlt",
   "underConstruction": "🚧 Wird gebaut 👷‍♀️🚧",
-  "unavailable": "Diese Seite ist derzeit nicht verfügbar und wird derzeit erstellt.. bitte Schaue später erneut vorbei."
+  "unavailable": "Diese Seite ist derzeit nicht verfügbar und wird derzeit erstellt.. bitte Schaue später erneut vorbei.",
+  "price": "Preis",
+  "grade": "Rang",
+  "activeplayers": "Aktive Spieler",
+  "error" : "Fehler "
 }

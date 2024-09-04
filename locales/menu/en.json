@@ -139,13 +139,13 @@
   "npcRange": "NPC Range",
   "bobUpAndDown": "Bob Up and Down",
   "faceCamera": "Face Camera",
-  "jobInfo": "Job Info",
+  "jobinfo": "Job Info",
   "clothing": "Clothing",
   "stashes": "Stashes",
   "employees": "Employees",
-  "onOffDuty": "On/Off Duty",
+  "onoffduty": "On/Off Duty",
   "interactions": "Interactions",
-  "bossMenu": "Boss Menu",
+  "bossmenu": "Boss Menu",
   "grades": "Grades",
   "label": "Label",
   "spawnName": "Spawn Name",
@@ -164,5 +164,9 @@
   "whitelisted": "Whitelisted",
   "societyPaid": "Society Paid",
   "underConstruction": "🚧 Under Construction 👷‍♀️🚧",
-  "unavailable": "This site is not available right now and is being worked on. Please check back later."
+  "unavailable": "This site is not available right now and is being worked on. Please check back later.",
+  "price": "Price",
+  "grade": "Grade",
+  "activeplayers": "Active Players",
+  "error" : "Error "
 }

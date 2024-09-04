@@ -3,8 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Index from './components/Index.vue';
 
-const sites = ['/', 'testsite2']; // insert your sites here if you want to use the uncommented things at the bottom
-let currentIndex = 0;
+
 
 const displayUI = {
   index: ref(false),

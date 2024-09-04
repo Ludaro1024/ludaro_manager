@@ -89,7 +89,7 @@ function TableDump(o)
         end
         return s .. '} '
     else
-        return (tostring(o))
+        return print(tostring(o))
     end
 end
 
@@ -205,7 +205,7 @@ function DrawTexture(TxtDictionary, TxtName, X, Y, Width, Height, Heading, R, G,
     DrawSprite(tostring(TxtDictionary) or "", tostring(TxtName) or "", X + Width * 0.5, Y + Height * 0.5, Width, Height, tonumber(Heading) or 0, tonumber(R) or 255, tonumber(G) or 255, tonumber(B) or 255, tonumber(A) or 255)
 end
 
-function _table(node)
+function print_table(node)
     -- to make output beautiful
     local function tab(amt)
         local str = ""
@@ -290,5 +290,5 @@ function _table(node)
     table.insert(output, output_str)
     output_str = table.concat(output)
 
-    (output_str)
+    print(output_str)
 end

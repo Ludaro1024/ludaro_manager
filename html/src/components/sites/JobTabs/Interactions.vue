@@ -57,12 +57,12 @@ export default {
         // ;
       } catch (error) {
         console.error('Failed to fetch available interactions:', error);
-        this.error = 'Failed to load interactions. Please try again later.';
+        this.error = $t('error');
       }
     },
     async addInteraction() {
       if (!this.newInteraction) {
-        this.error = 'Please select a valid interaction.';
+        this.error = $t('error');
         return;
       }
 
@@ -72,7 +72,7 @@ export default {
         this.job.interactions = [];
       }
       if (this.job.interactions.includes(this.newInteraction)) {
-        this.error = 'This interaction is already added.';
+        this.error =  $t('error');
         return;
       }
 
@@ -95,11 +95,11 @@ export default {
           this.newInteraction = '';
           this.$emit('update-job', this.job);
         } else {
-          this.error = 'Failed to add interaction. Please try again.';
+          this.error =  $t('error');
         }
       } catch (error) {
         console.error('Failed to add interaction:', error);
-        this.error = 'Failed to add interaction. Please try again.';
+        this.error =  $t('error');
       }
     },
     async removeInteraction(index) {
@@ -123,11 +123,11 @@ export default {
           this.job.interactions.splice(index, 1);
           this.$emit('update-job', this.job);
         } else {
-          this.error = 'Failed to remove interaction. Please try again.';
+          this.error =  $t('error');
         }
       } catch (error) {
         console.error('Failed to remove interaction:', error);
-        this.error = 'Failed to remove interaction. Please try again.';
+        this.error =  $t('error');
       }
     }
   }

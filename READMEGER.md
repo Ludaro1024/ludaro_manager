@@ -121,3 +121,4 @@ Klaro! schreib mir gerne einfach hier ein Issue rein, oder auf meinem  [Discord]
 Ludaro-Manager ist Open-Source und kostenlos unter der GNU-Lizenz verfügbar.
 
 ---
+

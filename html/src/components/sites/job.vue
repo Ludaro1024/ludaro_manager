@@ -15,7 +15,7 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{
                 $t('whitelisted') }}</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{
-                $t('activePlayers') }}</th>
+                $t('activeplayers') }}</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{
                 $t('societyPaid') }}</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{
@@ -73,7 +73,7 @@
           <nav class="flex mb-4 border-b border-gray-600">
             <a v-for="tab in tabs" :key="tab" @click="activeTab = tab"
               class="cursor-pointer p-2 rounded-t-lg text-white" :class="activeTab === tab ? 'bg-blue-600' : ''">{{
-                $t(tab) }}</a>
+                $t(tab.toLowerCase()) }}</a>
           </nav>
           <component :is="activeTabComponent" :job="jobs[editingJobName]" @update-job="updateJob"></component>
         </div>

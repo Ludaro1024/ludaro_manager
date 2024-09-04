@@ -5,13 +5,14 @@ import router from "./router"
 import { createI18n } from 'vue-i18n'
 import en from '../../locales/menu/en.json';
 import de from '../../locales/menu/de.json';
+import zhcn from '../../locales/menu/zhcn.json';
 const locale = localStorage.getItem('locale') || 'en';
 
 
 const i18n = createI18n({
   locale: locale,
   messages: {
-    en: en, de: de
+    en: en, de: de, zhcn: zhcn
   }
 });
 
