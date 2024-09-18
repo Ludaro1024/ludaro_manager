@@ -47,7 +47,7 @@ MySQL.ready(function()
             Debug(3, string.format("No missing columns found in table '%s'.", tableName))
         end
     end
-    print
+
 
     --- Creates the 'ludaro_manager_interactions' table if it does not already exist and inserts default data.
     -- @return nil This function creates the table and inserts default data directly in the database.
