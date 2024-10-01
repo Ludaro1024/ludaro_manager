@@ -4,7 +4,7 @@ lua54("yes")
 name("ludaro_manager")
 author("Ludaro")
 description("Ludaro Manager is a FiveM resource that allows you to manage your server with ease. It includes a lot of features that will help you manage your server.")
-version("1.0")
+version("1.1")
 
 client_scripts({
 	"client/NativeUILua/Wrapper/Utility.lua",
