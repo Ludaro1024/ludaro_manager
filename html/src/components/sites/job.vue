@@ -4,7 +4,7 @@
       <span class="text-2xl text-white">{{ $t('loading') }}</span>
     </div>
     <div v-else class="container mx-auto p-4 overflow-auto max-h-[90vh]">
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto max-h-[60vh] overflow-y-auto">
         <table class="min-w-full divide-y divide-gray-200 bg-gray-800 text-white">
           <thead>
             <tr>
@@ -486,4 +486,11 @@ body {
   font-family: Arial, sans-serif;
   background-color: transparent;
 }
+
+
+.overflow-x-auto {
+  max-height: 50rem; /* Set a fixed height limit */
+  overflow-y: auto;  /* Enable vertical scrolling */
+}
+
 </style>

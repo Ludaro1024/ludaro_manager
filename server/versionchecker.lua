@@ -15,15 +15,66 @@ if not owner or not repoName then
     return
 end
 
--- Function to perform the HTTP request and check for updates
-local function checkVersion()
-    local url = "https://api.github.com/repos/" .. owner .. "/" .. repoName .. "/contents/" .. scriptname
+-- Function to retrieve changelog for a specific version with return
+function getChangelogForVersion(version)
+    local changelogUrl = "https://raw.githubusercontent.com/" .. owner .. "/" .. repoName .. "/main/" .. scriptname .. "/" .. version .. ".json"
+    local result, isFinished = nil, false
     
+    PerformHttpRequest(changelogUrl, function(statusCode, response, headers)
+        if statusCode == 200 then
+            local data = json.decode(response)
+            result = data or nil -- Return data if valid, else nil
+        else
+            result = nil -- HTTP request failed
+        end
+        isFinished = true
+    end, "GET", "", {["Content-Type"] = "application/json"})
+
+    -- Wait until the request is finished
+    while not isFinished do
+        Wait(0)
+    end
+
+    return result
+end
+
+-- Function to get changelogs for all versions, including versions below and one above if outdated, with return
+function getAllChangelogs()
+    local changelogs = {}
+    local version = currentversion
+
+    -- Check versions below the current version
+    while version >= 0 do
+        local changelog = getChangelogForVersion(version)
+        if changelog then
+            table.insert(changelogs, changelog)
+        end
+        version = version - 1
+    end
+
+    -- Check one version above the current version (for the latest version if outdated)
+    local aboveVersion = getChangelogForVersion(currentversion + 1)
+    if aboveVersion then
+        table.insert(changelogs, aboveVersion)
+    end
+
+    return changelogs
+end
+
+-- Register callback to fetch all changelogs (now using return, not callback)
+lib.callback.register("ludaro_manager:getChangelog", function(source)
+    local changelogs = getAllChangelogs()
+    return changelogs
+end)
+
+-- Function to perform the HTTP request and check for updates (no change here)
+function checkVersion()
+    local url = "https://api.github.com/repos/" .. owner .. "/" .. repoName .. "/contents/" .. scriptname
+    local highestVersion = currentversion
+    local versionFiles = {}
+
     PerformHttpRequest(url, function(statusCode, response, headers)
         if statusCode == 200 then
-            local highestVersion = currentversion
-            local versionFiles = {}
-
             local files = json.decode(response)
             if files and type(files) == "table" then
                 for _, file in ipairs(files) do
@@ -60,7 +111,7 @@ local function checkVersion()
                         end
                     end, "GET", "", {["Content-Type"] = "application/json"})
                 else
-                    print("^2[Ludaro-Manager]^0 | ^0You are using the latest " .. "version" ..  " (" .. currentversion ..  ") of " .. scriptname .. ". and are up to date!^0" )
+                    print("^2[Ludaro-Manager]^0 | ^0You are using the latest version (" .. currentversion .. ") of " .. scriptname .. ". and are up to date!^0")
                 end
             else
                 print("^1Error: Invalid response format from directory listing.^0")
@@ -71,9 +122,6 @@ local function checkVersion()
     end, "GET", "", {["Content-Type"] = "application/json"})
 end
 
--- Call the function to check the version
+-- Initial check for updates
 checkVersion()
--- from  https://github.com/Ludaro1024/LudaroVersionChecker/blob/main/versionchecker.lua
-
-
 

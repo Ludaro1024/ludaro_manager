@@ -12,6 +12,7 @@
   "dependencies": {
     "@ckpack/vue-color": "^1.6.0",
     "axios": "^1.6.8",
+    "date-fns": "^4.1.0",
     "rippleui": "^1.12.1",
     "vue": "^3.4.21",
     "vue-i18n": "^9.13.1",

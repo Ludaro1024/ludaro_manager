@@ -1,6 +1,6 @@
 <template>
     <div class="iframe-container">
-      <iframe src="https://github.com/Ludaro1024/ludaro_manager/wiki" class="iframe-content" frameborder="0"></iframe>
+      <iframe src="https://ludaro.de" class="iframe-content" frameborder="0"></iframe>
     </div>
   </template>
   

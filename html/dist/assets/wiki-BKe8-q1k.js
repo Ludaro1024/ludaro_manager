@@ -1,0 +1,1 @@
+import{_ as e,c as t,d as a,a as c}from"./index-CaC7F69X.js";const o={},r={class:"iframe-container"},s=c("iframe",{src:"https://github.com/Ludaro1024/ludaro_manager/wiki",class:"iframe-content",frameborder:"0"},null,-1),n=[s];function i(_,d){return a(),t("div",r,n)}const m=e(o,[["render",i]]);export{m as default};

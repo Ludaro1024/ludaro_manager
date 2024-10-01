@@ -4,7 +4,8 @@ RegisterNUICallback("getVehicles", function(data, cb)
     local result = {}
     
     for _, vehicle in pairs(vehicles) do
-        modelhash = json.decode(vehicle.vehicle).model
+        
+        modelhash = json.decode(vehicle.vehicle)?.model
         vehicleModelName = GetDisplayNameFromVehicleModel(modelhash)
         table.insert(result, {
             owner = vehicle.owner,  -- Identifier
