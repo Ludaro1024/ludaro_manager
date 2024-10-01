@@ -168,5 +168,11 @@
   "price": "价格",
   "grade": "等级",
   "activeplayers": "活跃玩家",
-  "error": "错误"
+  "error": "错误",
+  "title": "Ludaro-Manager Tablet",
+  "titleDesc": "适用于您所有需求的管理器！",
+  "quickAccess": "快速访问",
+  "fetchingChangelog": "获取更新日志...",
+  "nochangelog": "没有可用的更新日志。",
+  "recentUpdates": "最近更新（更新日志）"
 }

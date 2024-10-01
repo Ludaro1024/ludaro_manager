@@ -168,5 +168,11 @@
   "price": "Preis",
   "grade": "Rang",
   "activeplayers": "Aktive Spieler",
-  "error" : "Fehler "
+  "error" : "Fehler ",
+  "title": "Ludaro-Manager Tablet",
+  "titleDesc": "Der Manager für alles!",
+  "quickAccess": "Schneller zugriff:",
+  "fetchingChangelog": "Hole Changelog...",
+  "nochangelog": "Kein Changelog verfügbar.",
+    "recentUpdates": "Neuste Änderungen (Changelog)"
 }

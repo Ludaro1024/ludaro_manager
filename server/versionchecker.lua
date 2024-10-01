@@ -38,24 +38,27 @@ function getChangelogForVersion(version)
     return result
 end
 
--- Function to get changelogs for all versions, including versions below and one above if outdated, with return
+-- Function to get changelogs for all versions, including versions below and above the current one
 function getAllChangelogs()
     local changelogs = {}
-    local version = currentversion
+    local version = math.floor(currentversion * 10) -- Start with version as an integer multiplied by 10 (e.g., 10 for version 1.0)
 
-    -- Check versions below the current version
+    -- Check versions below the current version (e.g., 1.0, 0.9, 0.8, etc.)
     while version >= 0 do
-        local changelog = getChangelogForVersion(version)
+        local changelog = getChangelogForVersion(version / 10) -- Convert integer back to decimal (e.g., 10 -> 1.0)
         if changelog then
             table.insert(changelogs, changelog)
         end
         version = version - 1
     end
 
-    -- Check one version above the current version (for the latest version if outdated)
-    local aboveVersion = getChangelogForVersion(currentversion + 1)
-    if aboveVersion then
-        table.insert(changelogs, aboveVersion)
+    -- Check versions above the current version (e.g., 1.1, 1.2, 1.3, etc.)
+    local aboveVersion = math.floor(currentversion * 10) + 1
+    local nextChangelog = getChangelogForVersion(aboveVersion / 10)
+    while nextChangelog do
+        table.insert(changelogs, nextChangelog)
+        aboveVersion = aboveVersion + 1
+        nextChangelog = getChangelogForVersion(aboveVersion / 10)
     end
 
     return changelogs
@@ -124,4 +127,3 @@ end
 
 -- Initial check for updates
 checkVersion()
-
