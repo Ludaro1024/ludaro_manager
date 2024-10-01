@@ -17,8 +17,8 @@
         </div>
       </section>
   
-      <section class="recent-updates mt-12 text-center">
-        <h2 class="text-3xl font-semibold mb-6 text-white">Recent Updates</h2>
+      <section class="recent-updates mt-12 text-center mb-6">
+        <h2 class="text-3xl font-semibold mt-6 text-white">Recent Updates</h2>
         <div v-if="loading" class="text-gray-400">
           <p>Fetching changelog...</p>
         </div>
@@ -55,10 +55,10 @@
   const router = useRouter();
   
   const quickAccessItems = [
-    { route: 'job', name: t('jobManagement'), description: t('manageJobs') },
-    { route: 'farming', name: t('farmingManagement'), description: t('manageFarming') },
-    { route: 'shop', name: t('shopManagement'), description: t('manageShops') },
-    { route: 'vehicle', name: t('vehicleManagement'), description: t('manageVehicles') },
+    { route: 'job', name: t('jobManagement')},
+    { route: 'farming', name: t('farmingManagement')},
+    { route: 'user', name: t('userManagement')},
+    { route: 'vehicle', name: t('vehicleManagement') },
   ];
   
   const changelog = ref([]);
