@@ -18,6 +18,8 @@ local function job_management_zones_marker_Allowed(accessjob, accessgrade, job, 
         job = string.gsub(job, "_offduty", "")
     end
 
+   
+
     grade = grade or 0
     accessgrade = accessgrade or 0
 
@@ -36,11 +38,17 @@ end
     @param jobname (string): The name of the job related to the marker.
 ]]
 local function processMarker(marker, jobname)
+if marker.openType == nil then
+    return
+end
+
+    local job, grade = jobmanagement_zones_npcs_getJobandGrade() --reused from npc because i was too lazy
     if marker.type == "marker" then
         local coords = vec3(marker.coords.x, marker.coords.y, marker.coords.z)
         local size = vec3(Config.SpawnRange, Config.SpawnRange, Config.SpawnRange)
         local rotation = 200.0
-
+        grade = marker?.grade or 0
+        job = jobname
         -- Default marker data
         local defaultmarkerdata = {
             markerId = 1,
@@ -52,12 +60,19 @@ local function processMarker(marker, jobname)
 
         -- Apply default data if not provided
         marker.marker = marker.marker or {}
-        marker.marker.markerId = marker.marker.markerId or defaultmarkerdata.markerId
-        marker.marker.markerScale = marker.marker.markerScale or defaultmarkerdata.markerScale
+        marker.marker.markerId = (marker.marker.markerId and marker.marker.markerId ~= 0) and marker.marker.markerId or defaultmarkerdata.markerId
+        if type(marker.marker.markerScale) ~= "number" then
+            marker.marker.markerScale = defaultmarkerdata.markerScale
+        else
+            marker.marker.markerScale = tonumber(marker.marker.markerScale) or defaultmarkerdata.markerScale
+            if math.type(marker.marker.markerScale) == "integer" then
+            marker.marker.markerScale = marker.marker.markerScale + 0.0
+            end
+        end
         marker.marker.markerColor = marker.marker.markerColor or defaultmarkerdata.markerColor
         marker.marker.bobUpAndDown = marker.marker.bobUpAndDown or defaultmarkerdata.bobUpAndDown
         marker.marker.faceCamera = marker.marker.faceCamera or defaultmarkerdata.faceCamera
-
+ 
         -- Create the marker zone
         local box = lib.zones.box({
             coords = coords,
@@ -67,9 +82,11 @@ local function processMarker(marker, jobname)
             debug = Debuglevel >= 4,
             job = job,
             grade = grade,
-            parentName = jobname,
+            marker = marker,
+            parentName = marker.openType,
             inside = function(self)
                 -- Draw the marker
+                
                 DrawMarker(
                     self.marker.marker.markerId, 
                     self.coords.x, self.coords.y, self.coords.z, 
@@ -82,8 +99,8 @@ local function processMarker(marker, jobname)
 
                 -- Check if the player is within range and allowed access
                 local inrange = #(GetEntityCoords(PlayerPedId()) - self.coords) < Config.Range
-
-                if inrange and job_management_zones_marker_Allowed(self.parentName, self.grade, self.job, self.grade) then
+                    
+                if inrange and job_management_zones_marker_Allowed(self.job, self.grade, job, grade) then
                     EditableFunctions.ShowHelpNotification(Locale("open_menu", self.parentName))
                     if IsControlJustReleased(0, 38) then
                         openMenu(self.marker, self.parentName)
@@ -108,10 +125,13 @@ function job_management_zones_marker_createMarkerZones(dataa)
     local job, grade = jobmanagement_zones_npcs_getJobandGrade()
 
     -- Iterate over the data to create marker zones
+
     for _, v in pairs(dataa) do
         for key, section in pairs(v.data) do
+      
             if type(section) == "table" and section.type == "marker" then
                 -- Process the marker directly if it's of type "marker"
+              
                 processMarker(section, v.name)
             elseif type(section) == "table" then
                 -- Iterate over nested sections if they are tables

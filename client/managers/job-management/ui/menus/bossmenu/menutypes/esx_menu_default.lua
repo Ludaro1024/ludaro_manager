@@ -19,6 +19,7 @@ if Config.Menu == "esx_menu_default" then
         }, function(data, menu)
             local value = data.current.value
             if value == 'society' then
+                bossmenuData.society.money = (bossmenuData and bossmenuData.society and bossmenuData.society.money or 0)
                 openSocietyMenu(bossmenuData.society, jobName)
             elseif value == 'employees' then
                 openEmployeeMenu(bossmenuData.employees, jobName, players, bossmenuData.grades, playerGrade)

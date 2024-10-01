@@ -24,7 +24,7 @@ if Config.Menu == "NativeUI" then
         _menuPool:ControlDisablingEnabled(false)
 
         local societyMoneyItem = NativeUI.CreateItem(Locale("current_money"), "")
-        societyMoneyItem:RightLabel("$" .. bossmenuData.society.money)
+        societyMoneyItem:RightLabel("$" .. (bossmenuData and bossmenuData.society and bossmenuData.society.money or 0))
         societySubMenu.SubMenu:AddItem(societyMoneyItem)
 
         local depositMoneyItem = NativeUI.CreateItem(Locale("deposit_money"), "")
