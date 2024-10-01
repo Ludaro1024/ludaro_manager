@@ -114,7 +114,7 @@ I havent seen an all around manager for free around, and i wanted to try making 
 ## What about other Frameworks except ESX?
 Qbox will be Accepted eventually 
 
-and QB? [No,](https://gist.github.com/mk3ext/82e03ab491ace82427d217785314474d#user-content-fn-10-2aa19ec9cc82ac1effbbf83015c5c71d)
+and QB? [Not right now maybe later because of the controversy surrounding it.](https://gist.github.com/mk3ext/82e03ab491ace82427d217785314474d#user-content-fn-10-2aa19ec9cc82ac1effbbf83015c5c71d)
 
 
 # Can you Help me Implement [FEATURE] ?
