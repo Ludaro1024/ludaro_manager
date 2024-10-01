@@ -65,7 +65,7 @@ end
     @return boolean: Returns true if the vehicle was successfully retrieved, false otherwise.
 ]]
 function parkout(source, vehicle)
-    vehicle = vehicle or json.decode(vehicle)
+    vehicle = json.decode(vehicle)
     local identifier = framework_getPlayerIdenntifierFromSource(source)
     local plate = vehicle.plate
     local job = framework_getJob(source)
